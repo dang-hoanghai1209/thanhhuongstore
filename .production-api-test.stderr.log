@@ -1,0 +1,22 @@
+Failed to create checkout order: CheckoutConfigurationError: Thiếu cấu hình tài khoản ngân hàng
+    at getBankTransferDetails (webpack-internal:///(rsc)/./src/app/api/checkout/route.ts:28:15)
+    at POST (webpack-internal:///(rsc)/./src/app/api/checkout/route.ts:67:66)
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async C:\Users\Administrator\.gemini\antigravity\scratch\vivastore\node_modules\next\dist\compiled\next-server\app-route.runtime.dev.js:6:55038
+    at async ek.execute (C:\Users\Administrator\.gemini\antigravity\scratch\vivastore\node_modules\next\dist\compiled\next-server\app-route.runtime.dev.js:6:45808)
+    at async ek.handle (C:\Users\Administrator\.gemini\antigravity\scratch\vivastore\node_modules\next\dist\compiled\next-server\app-route.runtime.dev.js:6:56292)
+    at async doRender (C:\Users\Administrator\.gemini\antigravity\scratch\vivastore\node_modules\next\dist\server\base-server.js:1377:42)
+    at async cacheEntry.responseCache.get.routeKind (C:\Users\Administrator\.gemini\antigravity\scratch\vivastore\node_modules\next\dist\server\base-server.js:1599:28)
+    at async DevServer.renderToResponseWithComponentsImpl (C:\Users\Administrator\.gemini\antigravity\scratch\vivastore\node_modules\next\dist\server\base-server.js:1507:28)
+    at async DevServer.renderPageComponent (C:\Users\Administrator\.gemini\antigravity\scratch\vivastore\node_modules\next\dist\server\base-server.js:1931:24)
+    at async DevServer.renderToResponseImpl (C:\Users\Administrator\.gemini\antigravity\scratch\vivastore\node_modules\next\dist\server\base-server.js:1969:32)
+    at async DevServer.pipeImpl (C:\Users\Administrator\.gemini\antigravity\scratch\vivastore\node_modules\next\dist\server\base-server.js:920:25)
+    at async NextNodeServer.handleCatchallRenderRequest (C:\Users\Administrator\.gemini\antigravity\scratch\vivastore\node_modules\next\dist\server\next-server.js:272:17)
+    at async DevServer.handleRequestImpl (C:\Users\Administrator\.gemini\antigravity\scratch\vivastore\node_modules\next\dist\server\base-server.js:816:17)
+    at async C:\Users\Administrator\.gemini\antigravity\scratch\vivastore\node_modules\next\dist\server\dev\next-dev-server.js:339:20
+    at async Span.traceAsyncFn (C:\Users\Administrator\.gemini\antigravity\scratch\vivastore\node_modules\next\dist\trace\trace.js:154:20)
+    at async DevServer.handleRequest (C:\Users\Administrator\.gemini\antigravity\scratch\vivastore\node_modules\next\dist\server\dev\next-dev-server.js:336:24)
+    at async invokeRender (C:\Users\Administrator\.gemini\antigravity\scratch\vivastore\node_modules\next\dist\server\lib\router-server.js:174:21)
+    at async handleRequest (C:\Users\Administrator\.gemini\antigravity\scratch\vivastore\node_modules\next\dist\server\lib\router-server.js:353:24)
+    at async requestHandlerImpl (C:\Users\Administrator\.gemini\antigravity\scratch\vivastore\node_modules\next\dist\server\lib\router-server.js:377:13)
+    at async Server.requestListener (C:\Users\Administrator\.gemini\antigravity\scratch\vivastore\node_modules\next\dist\server\lib\start-server.js:141:13)

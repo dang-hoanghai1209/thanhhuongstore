@@ -1,0 +1,11 @@
+  ▲ Next.js 14.2.4
+  - Local:        http://localhost:3014
+  - Environments: .env
+
+ ✓ Starting...
+ ✓ Ready in 3.6s
+ ✓ Compiled /src/middleware in 176ms (73 modules)
+ ○ Compiling /api/admin/products ...
+ ✓ Compiled /api/admin/products in 754ms (156 modules)
+ GET /api/admin/products 401 in 974ms
+[?25h

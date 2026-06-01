@@ -1,0 +1,131 @@
+'use client';
+
+import React from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import {
+  ClipboardList,
+  ShoppingBag,
+  Settings,
+  Users,
+  TrendingUp,
+  LayoutDashboard
+} from 'lucide-react';
+
+interface SidebarItem {
+  name: string;
+  href: string;
+  icon: React.ComponentType<{ className?: string }>;
+}
+
+const sidebarItems: SidebarItem[] = [
+  {
+    name: 'Tổng quan',
+    href: '/admin',
+    icon: LayoutDashboard,
+  },
+  {
+    name: 'Đơn hàng',
+    href: '/admin/orders',
+    icon: ClipboardList,
+  },
+  {
+    name: 'Sản phẩm',
+    href: '/admin/products',
+    icon: ShoppingBag,
+  },
+  {
+    name: 'Khách hàng',
+    href: '/admin/customers',
+    icon: Users,
+  },
+  {
+    name: 'Banners & Marketing',
+    href: '/admin/banners',
+    icon: TrendingUp,
+  },
+  {
+    name: 'Cấu hình',
+    href: '/admin/coupons',
+    icon: Settings,
+  },
+];
+
+export default function AdminLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const pathname = usePathname();
+
+  return (
+    <div className="min-h-screen bg-slate-50 flex">
+      {/* Sticky Sidebar */}
+      <aside className="w-64 bg-white border-r border-slate-200 flex flex-col shrink-0 sticky top-0 h-[calc(100vh-64px)] z-10 hidden md:flex">
+        {/* Sidebar Header */}
+        <div className="h-16 flex items-center px-6 border-b border-slate-100">
+          <div className="flex items-center gap-2">
+            <span className="text-xl font-bold tracking-tight bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+              Thanh Hương Admin
+            </span>
+          </div>
+        </div>
+
+        {/* Navigation items */}
+        <nav className="flex-grow px-4 py-6 space-y-1 overflow-y-auto">
+          {sidebarItems.map((item) => {
+            const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
+            const Icon = item.icon;
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-semibold transition ${
+                  isActive
+                    ? 'bg-blue-50 text-blue-600'
+                    : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                }`}
+              >
+                <Icon className={`w-5 h-5 ${isActive ? 'text-blue-600' : 'text-slate-400 group-hover:text-slate-500'}`} />
+                {item.name}
+              </Link>
+            );
+          })}
+        </nav>
+
+        {/* Sidebar Footer */}
+        <div className="p-4 border-t border-slate-100">
+          <Link
+            href="/"
+            className="flex items-center justify-center gap-2 w-full py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg transition"
+          >
+            Quay lại Cửa hàng
+          </Link>
+        </div>
+      </aside>
+
+      {/* Main Content Area */}
+      <div className="flex-grow flex flex-col min-w-0">
+        {/* Mobile menu indicator row (small screen only) */}
+        <header className="h-14 bg-white border-b border-slate-200 flex items-center justify-between px-6 md:hidden">
+          <span className="text-sm font-bold text-slate-800">Thanh Hương Admin</span>
+          <div className="flex gap-2">
+            <Link href="/admin/orders" className="text-xs text-blue-600 font-semibold px-2 py-1 bg-blue-50 rounded">
+              Đơn hàng
+            </Link>
+            <Link href="/admin/products" className="text-xs text-slate-600 px-2 py-1 rounded">
+              Sản phẩm
+            </Link>
+          </div>
+        </header>
+
+        {/* Page children container */}
+        <main className="flex-grow p-4 md:p-8 max-w-7xl w-full mx-auto">
+          <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-4 md:p-8 min-h-[calc(100vh-140px)]">
+            {children}
+          </div>
+        </main>
+      </div>
+    </div>
+  );
+}
