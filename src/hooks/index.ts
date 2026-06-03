@@ -55,7 +55,7 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
 // ==========================================
 export function useCart() {
   const { items, setItems, openCart } = useCartStore();
-  const { user, accessToken } = useAuthStore();
+  const { user } = useAuthStore();
   const { addToast } = useUIStore();
   const [loading, setLoading] = useState(false);
 
@@ -63,14 +63,10 @@ export function useCart() {
 
   // 1. Fetch Cart Items from Server
   const fetchCart = useCallback(async () => {
-    if (!accessToken) return;
+    if (!user) return;
     setLoading(true);
     try {
-      const res = await fetch('/api/cart', {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      const res = await fetch('/api/cart');
       if (res.ok) {
         const data = await res.json();
         setItems(data.items || []);
@@ -80,11 +76,11 @@ export function useCart() {
     } finally {
       setLoading(false);
     }
-  }, [accessToken, setItems]);
+  }, [user, setItems]);
 
   // 2. Add Item to Cart
   const addItem = useCallback(async (variantId: string, quantity: number = 1) => {
-    if (!accessToken) {
+    if (!user) {
       addToast('warning', 'Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng');
       return;
     }
@@ -94,7 +90,6 @@ export function useCart() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify({ variantId, quantity }),
       });
@@ -114,11 +109,11 @@ export function useCart() {
     } finally {
       setLoading(false);
     }
-  }, [accessToken, addToast, setItems, openCart]);
+  }, [user, addToast, setItems, openCart]);
 
   // 3. Update Cart Item Quantity
   const updateQuantity = useCallback(async (variantId: string, quantity: number) => {
-    if (!accessToken) return;
+    if (!user) return;
     if (quantity <= 0) {
       // Remove item if quantity is set to 0 or less
       removeItem(variantId);
@@ -137,7 +132,6 @@ export function useCart() {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify({ variantId, quantity }),
       });
@@ -156,11 +150,11 @@ export function useCart() {
       addToast('error', 'Lỗi kết nối khi cập nhật số lượng');
       console.error(error);
     }
-  }, [accessToken, items, setItems, addToast]);
+  }, [user, items, setItems, addToast]);
 
   // 4. Remove Item from Cart
   const removeItem = useCallback(async (variantId: string) => {
-    if (!accessToken) return;
+    if (!user) return;
 
     // Optimistic update
     const previousItems = [...items];
@@ -169,9 +163,6 @@ export function useCart() {
     try {
       const res = await fetch(`/api/cart?variantId=${variantId}`, {
         method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
       });
 
       const data = await res.json();
@@ -189,11 +180,11 @@ export function useCart() {
       addToast('error', 'Lỗi kết nối khi xóa sản phẩm');
       console.error(error);
     }
-  }, [accessToken, items, setItems, addToast]);
+  }, [user, items, setItems, addToast]);
 
   // 5. Clear all items
   const clearCart = useCallback(async () => {
-    if (!accessToken) return;
+    if (!user) return;
     
     const previousItems = [...items];
     setItems([]);
@@ -201,9 +192,6 @@ export function useCart() {
     try {
       const res = await fetch('/api/cart?all=1', {
         method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
       });
 
       const data = await res.json();
@@ -218,7 +206,7 @@ export function useCart() {
       setItems(previousItems);
       console.error(error);
     }
-  }, [accessToken, items, setItems, addToast]);
+  }, [user, items, setItems, addToast]);
 
   return {
     items,

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
+import { useRouter } from 'next/navigation';
 import { 
   Mail, 
   Lock, 
@@ -14,8 +15,12 @@ import {
   Sparkles, 
   Shield 
 } from 'lucide-react';
+import { useAuthStore } from '@/store';
 
 export default function RegisterPage() {
+  const router = useRouter();
+  const setAuth = useAuthStore((state) => state.setAuth);
+
   // Input fields state
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -30,6 +35,7 @@ export default function RegisterPage() {
   const [acceptTerms, setAcceptTerms] = useState(false);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   // Password matching check
   const passwordsMatch = useMemo(() => {
@@ -53,21 +59,70 @@ export default function RegisterPage() {
     return { label: 'Rất mạnh', score: 100, color: 'bg-emerald-500' };
   }, [password]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!passwordsMatch || !acceptTerms) return;
 
     setLoading(true);
     setSuccess(false);
+    setError(null);
 
-    // Simulate 2-second registration process
-    setTimeout(() => {
-      setLoading(false);
+    try {
+      const response = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify({
+          firstName,
+          lastName,
+          email,
+          phone: phone || undefined,
+          password,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || result.message || 'Đăng ký thất bại. Vui lòng thử lại.');
+      }
+
+      // Proactively verify cookie/session with /api/auth/me
+      const meResponse = await fetch('/api/auth/me');
+      if (meResponse.ok) {
+        const meResult = await meResponse.json();
+        if (meResult?.user) {
+          // Auto login
+          setAuth({
+            id: meResult.user.id,
+            email: meResult.user.email,
+            phone: meResult.user.phone ?? null,
+            firstName: meResult.user.firstName ?? '',
+            lastName: meResult.user.lastName ?? '',
+            role: meResult.user.role,
+            isActive: meResult.user.isActive,
+          });
+          setSuccess(true);
+          setTimeout(() => {
+            router.replace('/account');
+            router.refresh();
+          }, 1500);
+          return;
+        }
+      }
+
+      // Fallback if me check fails, go to login page
       setSuccess(true);
-      
-      // Auto clear alert
-      setTimeout(() => setSuccess(false), 5000);
-    }, 2000);
+      setTimeout(() => {
+        router.replace('/login?message=' + encodeURIComponent('Đăng ký thành công! Vui lòng đăng nhập lại.'));
+      }, 1500);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Đăng ký thất bại. Vui lòng kiểm tra thông tin.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -82,8 +137,16 @@ export default function RegisterPage() {
             <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
             <div className="space-y-0.5">
               <p className="font-bold">Đăng ký tài khoản thành công!</p>
-              <p className="text-[10px] text-emerald-600 font-normal">Một email xác nhận đã được gửi đi. Đang chuẩn bị chuyển hướng...</p>
+              <p className="text-[10px] text-emerald-600 font-normal">Hệ thống đang chuẩn bị chuyển hướng bạn...</p>
             </div>
+          </div>
+        )}
+
+        {/* Error registration banner */}
+        {error && (
+          <div className="mb-6 p-4 bg-red-50 border border-red-100 rounded-brand-md text-red-700 text-xs font-semibold flex items-center gap-3 shadow-sm animate-fadeIn">
+            <AlertTriangle className="w-5 h-5 text-red-500 shrink-0" />
+            <span>{error}</span>
           </div>
         )}
 

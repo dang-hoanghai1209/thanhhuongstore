@@ -38,6 +38,7 @@ export async function POST(request: NextRequest) {
         name: true,
         firstName: true,
         lastName: true,
+        phone: true,
       },
     });
 
@@ -70,7 +71,9 @@ export async function POST(request: NextRequest) {
         name: user.name,
         firstName: user.firstName,
         lastName: user.lastName,
+        phone: user.phone,
         role: user.role,
+        isActive: user.isActive,
       },
     });
 

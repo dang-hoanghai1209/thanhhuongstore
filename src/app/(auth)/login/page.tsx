@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { 
   Mail, 
   Lock, 
@@ -9,33 +10,96 @@ import {
   EyeOff, 
   Loader2, 
   CheckCircle2, 
+  AlertCircle,
   Sparkles, 
   Chrome, 
   Facebook 
 } from 'lucide-react';
+import { useAuthStore } from '@/store';
+
+type LoginResponse = {
+  accessToken?: string;
+  user?: {
+    id: string;
+    email: string;
+    phone?: string | null;
+    firstName?: string | null;
+    lastName?: string | null;
+    role: 'CUSTOMER' | 'WHOLESALE' | 'ADMIN';
+    isActive: boolean;
+  };
+  message?: string;
+  error?: string;
+};
 
 export default function LoginPage() {
+  const router = useRouter();
+  const setAuth = useAuthStore((state) => state.setAuth);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !password) return;
 
     setLoading(true);
     setSuccess(false);
+    setError(null);
 
-    // Simulate 2-second API loading effect
-    setTimeout(() => {
-      setLoading(false);
-      setSuccess(true);
+    try {
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
+      const result = (await response.json()) as LoginResponse;
+
+      if (!response.ok || !result.user) {
+        throw new Error(result.message || result.error || 'Email hoặc mật khẩu không chính xác.');
+      }
+
+      // Verify if cookie is set and working by calling /api/auth/me
+      const meResponse = await fetch('/api/auth/me');
+      if (!meResponse.ok) {
+        throw new Error('Đăng nhập chưa hoàn tất, vui lòng thử lại.');
+      }
       
-      // Auto clear success message after 4s
-      setTimeout(() => setSuccess(false), 4000);
-    }, 2000);
+      const meResult = await meResponse.json();
+      if (!meResult?.user) {
+        throw new Error('Đăng nhập chưa hoàn tất, vui lòng thử lại.');
+      }
+
+      setAuth({
+        id: meResult.user.id,
+        email: meResult.user.email,
+        phone: meResult.user.phone ?? null,
+        firstName: meResult.user.firstName ?? '',
+        lastName: meResult.user.lastName ?? '',
+        role: meResult.user.role,
+        isActive: meResult.user.isActive,
+      });
+      setSuccess(true);
+
+      const nextUrl = new URLSearchParams(window.location.search).get('next');
+      const redirectTarget = nextUrl?.startsWith('/') ? nextUrl : meResult.user.role === 'ADMIN' ? '/admin' : '/account';
+
+      router.replace(redirectTarget);
+      router.refresh();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Đăng nhập thất bại.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -52,6 +116,13 @@ export default function LoginPage() {
               <p className="font-bold">Đăng nhập thành công!</p>
               <p className="text-[10px] text-emerald-600 font-normal">Hệ thống đang chuyển hướng bạn về Trang chủ...</p>
             </div>
+          </div>
+        )}
+
+        {error && (
+          <div className="mb-6 p-4 bg-red-50 border border-red-100 rounded-brand-md text-red-700 text-xs font-semibold flex items-center gap-3 shadow-sm animate-fadeIn">
+            <AlertCircle className="w-5 h-5 text-red-500 shrink-0" />
+            <span>{error}</span>
           </div>
         )}
 

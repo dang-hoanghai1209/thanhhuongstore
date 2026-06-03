@@ -4,12 +4,21 @@ import {
   ACCESS_TOKEN_COOKIE_NAME,
   REFRESH_TOKEN_COOKIE_NAME,
   accessTokenCookieOptions,
+  clearAccessTokenCookieOptions,
+  clearLegacyRefreshTokenCookieOptions,
+  clearRefreshTokenCookieOptions,
   getRefreshTokenExpiration,
   hashRefreshToken,
   refreshTokenCookieOptions,
 } from '@/lib/auth-session';
 import { generateAccessToken, generateRefreshToken, verifyRefreshToken } from '@/lib/auth';
 import prisma from '@/lib/prisma';
+
+function clearAuthCookies(response: NextResponse) {
+  response.cookies.set(ACCESS_TOKEN_COOKIE_NAME, '', clearAccessTokenCookieOptions);
+  response.cookies.set(REFRESH_TOKEN_COOKIE_NAME, '', clearRefreshTokenCookieOptions);
+  response.cookies.set(REFRESH_TOKEN_COOKIE_NAME, '', clearLegacyRefreshTokenCookieOptions);
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -18,13 +27,20 @@ export async function POST(request: NextRequest) {
     const refreshToken = request.cookies.get(REFRESH_TOKEN_COOKIE_NAME)?.value ?? tokenFromBody;
 
     if (!refreshToken) {
-      return NextResponse.json({ message: 'Refresh token is required.' }, { status: 401 });
+      const response = NextResponse.json({ message: 'Refresh token is required.' }, { status: 401 });
+      clearAuthCookies(response);
+      return response;
     }
 
     const payload = await verifyRefreshToken(refreshToken);
 
     if (!payload) {
-      return NextResponse.json({ message: 'Refresh token is invalid or expired.' }, { status: 401 });
+      const response = NextResponse.json(
+        { message: 'Refresh token is invalid or expired.' },
+        { status: 401 },
+      );
+      clearAuthCookies(response);
+      return response;
     }
 
     const storedToken = await prisma.refreshToken.findUnique({
@@ -47,7 +63,12 @@ export async function POST(request: NextRequest) {
       storedToken.expiresAt <= new Date() ||
       !storedToken.user.isActive
     ) {
-      return NextResponse.json({ message: 'Refresh token is invalid or expired.' }, { status: 401 });
+      const response = NextResponse.json(
+        { message: 'Refresh token is invalid or expired.' },
+        { status: 401 },
+      );
+      clearAuthCookies(response);
+      return response;
     }
 
     const accessToken = generateAccessToken(storedToken.user);

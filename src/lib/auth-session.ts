@@ -22,8 +22,32 @@ export const refreshTokenCookieOptions: Partial<ResponseCookie> = {
   httpOnly: true,
   sameSite: 'strict',
   secure,
-  path: '/api/auth',
+  path: '/',
   maxAge: REFRESH_TOKEN_MAX_AGE_SECONDS,
+};
+
+export const clearAccessTokenCookieOptions: Partial<ResponseCookie> = {
+  httpOnly: true,
+  sameSite: 'strict',
+  secure,
+  path: '/',
+  maxAge: 0,
+};
+
+export const clearRefreshTokenCookieOptions: Partial<ResponseCookie> = {
+  httpOnly: true,
+  sameSite: 'strict',
+  secure,
+  path: '/',
+  maxAge: 0,
+};
+
+export const clearLegacyRefreshTokenCookieOptions: Partial<ResponseCookie> = {
+  httpOnly: true,
+  sameSite: 'strict',
+  secure,
+  path: '/api/auth',
+  maxAge: 0,
 };
 
 export function hashRefreshToken(token: string) {

@@ -16,6 +16,8 @@ import {
 } from 'lucide-react';
 import MiniCart from '@/components/cart/MiniCart';
 import { useCartStore } from '@/store/useCartStore';
+import { useAuthStore } from '@/store';
+import { useRouter } from 'next/navigation';
 
 // Navigation Items structure for Mega Menu
 const navItems = [
@@ -67,9 +69,49 @@ export default function Header() {
   const cartItems = useCartStore((state) => state.items);
   const openCart = useCartStore((state) => state.openCart);
 
+  const user = useAuthStore((state) => state.user);
+  const clearAuth = useAuthStore((state) => state.clearAuth);
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/auth/logout', { method: 'POST' });
+    } catch (e) {
+      console.error('Logout failed:', e);
+    }
+    clearAuth();
+    router.replace('/');
+    router.refresh();
+  };
+
   useEffect(() => {
     setMounted(true);
-  }, []);
+
+    const checkSession = async () => {
+      const cachedUser = useAuthStore.getState().user;
+
+      try {
+        const res = await fetch('/api/auth/me');
+        if (!res.ok) {
+          if (cachedUser) {
+            clearAuth();
+            router.refresh();
+          }
+        } else {
+          const data = await res.json();
+          useAuthStore.setState({ user: data.user });
+        }
+      } catch (e) {
+        console.error('Session verify failed on app mount:', e);
+        if (cachedUser) {
+          clearAuth();
+          router.refresh();
+        }
+      }
+    };
+
+    checkSession();
+  }, [clearAuth, router]);
 
   const totalItemsCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
 
@@ -214,13 +256,60 @@ export default function Header() {
             <div className="flex items-center gap-4 shrink-0">
               
               {/* Account icon */}
-              <Link
-                href="/login"
-                className="p-2.5 rounded-brand-md text-gray-500 hover:bg-gray-50 hover:text-gray-900 transition"
-                title="Tài khoản"
-              >
-                <User className="w-5 h-5" />
-              </Link>
+              {mounted && user ? (
+                <div className="relative group">
+                  <button className="flex items-center gap-1.5 p-2 rounded-brand-md text-gray-500 hover:bg-gray-50 hover:text-gray-900 transition">
+                    <User className="w-5 h-5" />
+                    <span className="hidden md:inline text-xs font-bold text-gray-700">
+                      {user.firstName}
+                    </span>
+                  </button>
+                  <div className="absolute right-0 top-full mt-2 w-48 bg-white border border-gray-100 rounded-brand-md shadow-lg py-2 hidden group-hover:block animate-fadeIn z-50">
+                    <div className="px-4 py-2 border-b border-gray-50">
+                      <p className="text-xs font-bold text-gray-800">{user.lastName} {user.firstName}</p>
+                      <p className="text-[10px] text-gray-400 truncate">{user.email}</p>
+                    </div>
+                    {user.role === 'ADMIN' && (
+                      <Link href="/admin" className="block px-4 py-2 text-xs font-bold text-blue-600 hover:bg-slate-50 transition">
+                        Quản trị
+                      </Link>
+                    )}
+                    <Link href="/account" className="block px-4 py-2 text-xs font-bold text-gray-700 hover:bg-gray-50 transition">
+                      Tài khoản
+                    </Link>
+                    <Link href="/account/orders" className="block px-4 py-2 text-xs font-bold text-gray-700 hover:bg-gray-50 transition">
+                      Đơn hàng
+                    </Link>
+                    <button
+                      onClick={handleLogout}
+                      className="w-full text-left px-4 py-2 text-xs font-bold text-red-600 hover:bg-red-50 transition border-t border-gray-50 mt-1"
+                    >
+                      Đăng xuất
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div className="hidden sm:flex items-center gap-1.5 text-xs font-bold text-gray-700">
+                  <Link href="/login" className="hover:text-brand-600 transition">
+                    Đăng nhập
+                  </Link>
+                  <span className="text-gray-300">/</span>
+                  <Link href="/register" className="hover:text-brand-600 transition">
+                    Đăng ký
+                  </Link>
+                </div>
+              )}
+
+              {/* Account icon (Mobile fallback trigger or guest fallback) */}
+              {(!mounted || !user) && (
+                <Link
+                  href="/login"
+                  className="sm:hidden p-2.5 rounded-brand-md text-gray-500 hover:bg-gray-50 hover:text-gray-900 transition"
+                  title="Tài khoản"
+                >
+                  <User className="w-5 h-5" />
+                </Link>
+              )}
 
               {/* Cart Icon */}
               <button
@@ -283,6 +372,74 @@ export default function Header() {
               />
               <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
             </form>
+
+            {/* Mobile User Section */}
+            <div className="pb-4 border-b border-gray-100">
+              {mounted && user ? (
+                <div className="space-y-3">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-brand-50 flex items-center justify-center text-brand-600">
+                      <User className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <p className="text-xs font-extrabold text-gray-800">{user.lastName} {user.firstName}</p>
+                      <p className="text-[10px] text-gray-400 uppercase tracking-wider">{user.role}</p>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 gap-2 pt-2">
+                    {user.role === 'ADMIN' && (
+                      <Link
+                        href="/admin"
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="text-xs font-bold text-blue-600 hover:text-blue-700 py-1"
+                      >
+                        🛡️ Trang quản trị
+                      </Link>
+                    )}
+                    <Link
+                      href="/account"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="text-xs font-bold text-gray-700 hover:text-brand-600 py-1"
+                    >
+                      👤 Tài khoản
+                    </Link>
+                    <Link
+                      href="/account/orders"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="text-xs font-bold text-gray-700 hover:text-brand-600 py-1"
+                    >
+                      📦 Đơn hàng
+                    </Link>
+                    <button
+                      onClick={() => {
+                        setMobileMenuOpen(false);
+                        handleLogout();
+                      }}
+                      className="text-xs font-bold text-red-600 hover:text-red-700 text-left py-1"
+                    >
+                      🚪 Đăng xuất
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex gap-4">
+                  <Link
+                    href="/login"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex-1 py-2.5 text-center text-xs font-bold text-gray-700 border border-gray-200 rounded-brand-md bg-white hover:bg-gray-50 transition"
+                  >
+                    Đăng nhập
+                  </Link>
+                  <Link
+                    href="/register"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex-1 py-2.5 text-center text-xs font-bold text-white bg-brand-600 rounded-brand-md hover:bg-brand-700 transition"
+                  >
+                    Đăng ký
+                  </Link>
+                </div>
+              )}
+            </div>
 
             {/* Mobile Nav Links list */}
             <div className="flex-1 space-y-6">

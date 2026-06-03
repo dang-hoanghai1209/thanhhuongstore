@@ -18,9 +18,7 @@ export interface AuthUser {
 
 interface AuthState {
   user: AuthUser | null;
-  accessToken: string | null;
-  refreshToken: string | null;
-  setAuth: (user: AuthUser, accessToken: string, refreshToken: string) => void;
+  setAuth: (user: AuthUser) => void;
   clearAuth: () => void;
   updateUser: (partial: Partial<AuthUser>) => void;
 }
@@ -29,11 +27,8 @@ export const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
       user: null,
-      accessToken: null,
-      refreshToken: null,
-      setAuth: (user, accessToken, refreshToken) =>
-        set({ user, accessToken, refreshToken }),
-      clearAuth: () => set({ user: null, accessToken: null, refreshToken: null }),
+      setAuth: (user) => set({ user }),
+      clearAuth: () => set({ user: null }),
       updateUser: (partial) =>
         set((state) => ({
           user: state.user ? { ...state.user, ...partial } : null,
@@ -41,7 +36,6 @@ export const useAuthStore = create<AuthState>()(
     }),
     {
       name: 'Thanh Hương Storestore-auth-storage',
-      skipHydration: true, // Let StoreHydration call rehydrate() on useEffect mount
     }
   )
 );

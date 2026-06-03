@@ -1,6 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-import { ACCESS_TOKEN_COOKIE_NAME, REFRESH_TOKEN_COOKIE_NAME, hashRefreshToken } from '@/lib/auth-session';
+import {
+  ACCESS_TOKEN_COOKIE_NAME,
+  REFRESH_TOKEN_COOKIE_NAME,
+  clearAccessTokenCookieOptions,
+  clearLegacyRefreshTokenCookieOptions,
+  clearRefreshTokenCookieOptions,
+  hashRefreshToken,
+} from '@/lib/auth-session';
 import prisma from '@/lib/prisma';
 
 export async function POST(request: NextRequest) {
@@ -16,16 +23,9 @@ export async function POST(request: NextRequest) {
 
   const response = NextResponse.json({ success: true });
 
-  response.cookies.set(ACCESS_TOKEN_COOKIE_NAME, '', {
-    httpOnly: true,
-    path: '/',
-    maxAge: 0,
-  });
-  response.cookies.set(REFRESH_TOKEN_COOKIE_NAME, '', {
-    httpOnly: true,
-    path: '/api/auth',
-    maxAge: 0,
-  });
+  response.cookies.set(ACCESS_TOKEN_COOKIE_NAME, '', clearAccessTokenCookieOptions);
+  response.cookies.set(REFRESH_TOKEN_COOKIE_NAME, '', clearRefreshTokenCookieOptions);
+  response.cookies.set(REFRESH_TOKEN_COOKIE_NAME, '', clearLegacyRefreshTokenCookieOptions);
 
   return response;
 }

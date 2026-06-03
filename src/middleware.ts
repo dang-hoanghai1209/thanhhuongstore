@@ -11,6 +11,10 @@ function redirectToLogin(request: NextRequest) {
   return NextResponse.redirect(loginUrl);
 }
 
+function redirectToForbidden(request: NextRequest) {
+  return NextResponse.redirect(new URL('/', request.url));
+}
+
 export async function middleware(request: NextRequest) {
   const token = request.cookies.get(ACCESS_TOKEN_COOKIE_NAME)?.value;
 
@@ -21,8 +25,12 @@ export async function middleware(request: NextRequest) {
   try {
     const payload = await verifyAccessToken(token);
 
-    if (payload?.role !== 'ADMIN') {
+    if (!payload) {
       return redirectToLogin(request);
+    }
+
+    if (request.nextUrl.pathname.startsWith('/admin') && payload.role !== 'ADMIN') {
+      return redirectToForbidden(request);
     }
   } catch (error) {
     console.error('Admin middleware auth configuration error:', error);
@@ -34,5 +42,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/admin/:path*'],
+  matcher: ['/admin/:path*', '/account/:path*'],
 };

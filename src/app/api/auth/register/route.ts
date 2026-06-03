@@ -51,7 +51,9 @@ export async function POST(request: NextRequest) {
         name: true,
         firstName: true,
         lastName: true,
+        phone: true,
         role: true,
+        isActive: true,
       },
     });
 
