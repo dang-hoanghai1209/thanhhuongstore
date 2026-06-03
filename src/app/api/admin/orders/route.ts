@@ -1,4 +1,4 @@
-import { OrderStatus } from '../../../../../node_modules/.prisma/app-client-v2';
+import { OrderStatus, PaymentStatus } from '@prisma/client';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 
@@ -7,7 +7,10 @@ import prisma from '@/lib/prisma';
 
 const updateOrderSchema = z.object({
   orderId: z.string().trim().min(1, 'orderId không được để trống'),
-  status: z.enum(['PENDING', 'CONFIRMED', 'SHIPPING', 'COMPLETED', 'CANCELLED']),
+  status: z.enum(['PENDING', 'CONFIRMED', 'SHIPPING', 'COMPLETED', 'CANCELLED']).optional(),
+  paymentStatus: z.enum(['PENDING', 'PAID', 'FAILED', 'REFUNDED']).optional(),
+}).refine((value) => value.status || value.paymentStatus, {
+  message: 'status or paymentStatus is required',
 });
 
 const orderInclude = {
@@ -28,7 +31,7 @@ const orderInclude = {
   },
 } as const;
 
-function toDatabaseStatus(status: z.infer<typeof updateOrderSchema>['status']) {
+function toDatabaseStatus(status: NonNullable<z.infer<typeof updateOrderSchema>['status']>) {
   return status === 'COMPLETED' ? OrderStatus.DELIVERED : status;
 }
 
@@ -106,9 +109,10 @@ export async function PATCH(request: NextRequest) {
       );
     }
 
-    const targetStatus = toDatabaseStatus(payload.data.status);
+    const targetStatus = payload.data.status ? toDatabaseStatus(payload.data.status) : undefined;
+    const targetPaymentStatus = payload.data.paymentStatus as PaymentStatus | undefined;
 
-    await prisma.$transaction(async (tx) => {
+    const updatedOrder = await prisma.$transaction(async (tx) => {
       // 1. Find the order first
       const order = await tx.order.findUnique({
         where: { id: payload.data.orderId },
@@ -137,7 +141,11 @@ export async function PATCH(request: NextRequest) {
         }
       }
       // If transitioning FROM CANCELLED to a non-cancelled state, check and decrement stock
-      else if (originalStatus === OrderStatus.CANCELLED && targetStatus !== OrderStatus.CANCELLED) {
+      else if (
+        targetStatus &&
+        originalStatus === OrderStatus.CANCELLED &&
+        targetStatus !== OrderStatus.CANCELLED
+      ) {
         for (const item of order.items) {
           if (item.variantId) {
             const variant = await tx.productVariant.findUnique({
@@ -158,18 +166,33 @@ export async function PATCH(request: NextRequest) {
         }
       }
 
-      // 3. Update the order status
-      await tx.order.update({
+      const nextStatus =
+        targetPaymentStatus === PaymentStatus.PAID && order.status === OrderStatus.PENDING
+          ? OrderStatus.CONFIRMED
+          : targetPaymentStatus === PaymentStatus.REFUNDED
+            ? OrderStatus.REFUNDED
+            : targetStatus;
+
+      // 3. Update the order status/payment status
+      return tx.order.update({
         where: { id: payload.data.orderId },
         data: {
-          status: targetStatus,
+          ...(nextStatus ? { status: nextStatus } : {}),
+          ...(targetPaymentStatus ? { paymentStatus: targetPaymentStatus } : {}),
+        },
+        select: {
+          id: true,
+          status: true,
+          paymentStatus: true,
         },
       });
     });
 
     return NextResponse.json({
-      orderId: payload.data.orderId,
-      status: payload.data.status,
+      orderId: updatedOrder.id,
+      status: payload.data.status ?? updatedOrder.status,
+      databaseStatus: updatedOrder.status,
+      paymentStatus: updatedOrder.paymentStatus,
     });
   } catch (error) {
     console.error('Failed to update admin order:', error);

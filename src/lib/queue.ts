@@ -26,10 +26,10 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-const SMTP_FROM = process.env.SMTP_FROM || 'Thanh Hương Store <no-reply@Thanh Hương Storestore.vn>';
+const SMTP_FROM = process.env.SMTP_FROM || 'Thanh Hương Store <no-reply@thanhhuongstore.vn>';
 
 // Worker processing logic
-if (process.env.NODE_ENV === 'production' || process.env.START_EMAIL_WORKER === 'true') {
+if (process.env.START_EMAIL_WORKER === 'true') {
   console.log('Registering email worker tasks...');
 
   emailQueue.process(5, async (job) => {

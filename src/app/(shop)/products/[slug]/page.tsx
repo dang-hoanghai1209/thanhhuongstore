@@ -8,6 +8,69 @@ interface ProductDetailPageProps {
   };
 }
 
+export async function generateMetadata({ params }: ProductDetailPageProps) {
+  const { slug } = params;
+  
+  const product = await prisma.product.findUnique({
+    where: { 
+      slug,
+      isActive: true 
+    },
+    select: {
+      name: true,
+      category: {
+        select: {
+          name: true
+        }
+      },
+      images: {
+        select: {
+          url: true,
+          isPrimary: true
+        }
+      }
+    }
+  });
+
+  if (!product) {
+    return {
+      title: 'Không tìm thấy sản phẩm - Thanh Hương Store',
+    };
+  }
+
+  const primaryImage = product.images.find(img => img.isPrimary) || product.images[0];
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  const ogImageUrl = primaryImage
+    ? primaryImage.url.startsWith('http')
+      ? primaryImage.url
+      : `${baseUrl}${primaryImage.url}`
+    : `${baseUrl}/images/default-product.jpg`;
+
+  const metaDescription = `Mua ${product.name} chính hãng chất lượng cao tại Thanh Hương Store. Dòng sản phẩm ${product.category?.name || ''} cao cấp dệt sợi tự nhiên kháng khuẩn, mềm mại, thoải mái tối đa.`;
+
+  return {
+    title: `${product.name} - Thanh Hương Store`,
+    description: metaDescription,
+    alternates: {
+      canonical: `${baseUrl}/products/${slug}`,
+    },
+    openGraph: {
+      title: `${product.name} - Thanh Hương Store`,
+      description: metaDescription,
+      images: [
+        {
+          url: ogImageUrl,
+          width: 800,
+          height: 1000,
+          alt: product.name,
+        },
+      ],
+      type: 'website',
+      url: `${baseUrl}/products/${slug}`,
+    },
+  };
+}
+
 export default async function ProductDetailPage({ params }: ProductDetailPageProps) {
   const { slug } = params;
 

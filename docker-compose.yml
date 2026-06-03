@@ -1,52 +1,69 @@
-version: '3.8'
+name: thanhhuongstore
 
 services:
   postgres:
     image: postgres:15-alpine
-    container_name: Thanh Hương Storestore-db
+    container_name: thanhhuongstore-postgres
     restart: always
     environment:
-      POSTGRES_USER: Thanh Hương Storestore
+      POSTGRES_USER: thanhhuongstore
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: Thanh Hương Storestore_db
+      POSTGRES_DB: thanhhuongstore_db
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - thanhhuongstore_postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U Thanh Hương Storestore -d Thanh Hương Storestore_db"]
+      test: ["CMD-SHELL", "pg_isready -U thanhhuongstore -d thanhhuongstore_db"]
       interval: 10s
       timeout: 5s
       retries: 5
 
   redis:
     image: redis:7-alpine
-    container_name: Thanh Hương Storestore-redis
+    container_name: thanhhuongstore-redis
     restart: always
     command: redis-server --requirepass ${REDIS_PASSWORD}
     ports:
       - "6379:6379"
     volumes:
-      - redis_data:/data
+      - thanhhuongstore_redis_data:/data
     healthcheck:
       test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
       interval: 10s
       timeout: 5s
       retries: 5
 
+  migrate:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: migrator
+    container_name: thanhhuongstore-migrate
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://thanhhuongstore:${POSTGRES_PASSWORD}@postgres:5432/thanhhuongstore_db
+      DIRECT_URL: postgresql://thanhhuongstore:${POSTGRES_PASSWORD}@postgres:5432/thanhhuongstore_db
+    restart: "no"
+
   nextjs:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: Thanh Hương Storestore-app
+    container_name: thanhhuongstore_app
     restart: always
     depends_on:
       postgres:
         condition: service_healthy
       redis:
         condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
     environment:
-      DATABASE_URL: postgresql://Thanh Hương Storestore:${POSTGRES_PASSWORD}@postgres:5432/Thanh Hương Storestore_db
+      DATABASE_URL: postgresql://thanhhuongstore:${POSTGRES_PASSWORD}@postgres:5432/thanhhuongstore_db
+      DIRECT_URL: postgresql://thanhhuongstore:${POSTGRES_PASSWORD}@postgres:5432/thanhhuongstore_db
       REDIS_URL: redis://:${REDIS_PASSWORD}@redis:6379
       JWT_SECRET: ${JWT_SECRET}
       JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
@@ -64,33 +81,43 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - uploads_data:/app/public/uploads
+      - thanhhuongstore_uploads_data:/app/public/uploads
 
   nginx:
     image: nginx:alpine
-    container_name: Thanh Hương Storestore-nginx
+    container_name: thanhhuongstore-nginx
     restart: always
     ports:
       - "80:80"
       - "443:443"
     volumes:
       - ./nginx/conf.d:/etc/nginx/conf.d:ro
-      - certbot_etc:/etc/letsencrypt:ro
-      - certbot_var:/var/www/certbot:ro
+      - thanhhuongstore_uploads_data:/app/public/uploads:ro
+      - thanhhuongstore_certbot_etc:/etc/letsencrypt:ro
+      - thanhhuongstore_certbot_var:/var/www/certbot:ro
     depends_on:
       - nextjs
 
   certbot:
     image: certbot/certbot
-    container_name: Thanh Hương Storestore-certbot
+    container_name: thanhhuongstore-certbot
     volumes:
-      - certbot_etc:/etc/letsencrypt
-      - certbot_var:/var/www/certbot
+      - thanhhuongstore_certbot_etc:/etc/letsencrypt
+      - thanhhuongstore_certbot_var:/var/www/certbot
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 
 volumes:
-  postgres_data:
-  redis_data:
-  uploads_data:
-  certbot_etc:
-  certbot_var:
+  thanhhuongstore_postgres_data:
+    name: thanhhuongstore-postgres-data
+  thanhhuongstore_redis_data:
+    name: thanhhuongstore-redis-data
+  thanhhuongstore_uploads_data:
+    name: thanhhuongstore-uploads-data
+  thanhhuongstore_certbot_etc:
+    name: thanhhuongstore-certbot-etc
+  thanhhuongstore_certbot_var:
+    name: thanhhuongstore-certbot-var
+
+networks:
+  default:
+    name: thanhhuongstore-network

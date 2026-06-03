@@ -26,6 +26,18 @@ interface CartStore {
   clearCart: () => void;
 }
 
+// Migrate cart data from old brand to new brand key
+if (typeof window !== 'undefined') {
+  try {
+    const oldCart = window.localStorage.getItem('vivastore-cart-storage');
+    if (oldCart && !window.localStorage.getItem('thanhhuongstore-cart-storage')) {
+      window.localStorage.setItem('thanhhuongstore-cart-storage', oldCart);
+    }
+  } catch (e) {
+    console.error('Failed to migrate cart storage:', e);
+  }
+}
+
 export const useCartStore = create<CartStore>()(
   persist(
     (set) => ({
@@ -66,7 +78,7 @@ export const useCartStore = create<CartStore>()(
       clearCart: () => set({ items: [] })
     }),
     {
-      name: 'vivastore-cart-storage', // Key for LocalStorage persistence
+      name: 'thanhhuongstore-cart-storage', // Key for LocalStorage persistence
     }
   )
 );

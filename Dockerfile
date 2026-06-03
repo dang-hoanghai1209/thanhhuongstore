@@ -6,7 +6,12 @@ WORKDIR /app
 COPY package.json package-lock.json* ./
 RUN npm ci
 
-# Stage 2: Rebuild the source code only when needed
+# Stage 2: Run production database migrations with Prisma CLI and schema available
+FROM deps AS migrator
+COPY prisma ./prisma
+CMD ["npx", "prisma", "migrate", "deploy"]
+
+# Stage 3: Rebuild the source code only when needed
 FROM node:18-alpine AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
@@ -17,7 +22,7 @@ ENV NEXT_TELEMETRY_DISABLED 1
 RUN npx prisma generate
 RUN npm run build
 
-# Stage 3: Production image, copy all the files and run next
+# Stage 4: Production image, copy all the files and run next
 FROM node:18-alpine AS runner
 WORKDIR /app
 
@@ -39,7 +44,7 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 # Setup uploads directory volume point
-RUN mkdir -p public/uploads && chown -R nextjs:nodejs public/uploads
+RUN mkdir -p public/uploads/products && chown -R nextjs:nodejs public/uploads
 
 USER nextjs
 

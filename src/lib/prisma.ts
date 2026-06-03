@@ -1,4 +1,4 @@
-import { PrismaClient } from '../../node_modules/.prisma/app-client-v2';
+import { PrismaClient } from '@prisma/client';
 
 const directDatabaseUrl = process.env.DIRECT_URL ?? process.env.DATABASE_URL;
 

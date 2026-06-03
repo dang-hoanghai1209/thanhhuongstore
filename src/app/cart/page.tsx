@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { 
   Trash2, 
   Plus, 
@@ -11,84 +11,36 @@ import {
   ShieldCheck, 
   Truck 
 } from 'lucide-react';
-
-// ==========================================
-// INITIAL MOCK CART DATA
-// ==========================================
-interface CartItem {
-  id: string;
-  name: string;
-  slug: string;
-  categoryName: string;
-  size: string;
-  color: string;
-  price: number;
-  quantity: number;
-  imageUrl: string;
-  stock: number;
-}
-
-const initialCartItems: CartItem[] = [
-  {
-    id: "item1",
-    name: "Vớ Cổ Ngắn Cotton Premium Thấm Hút",
-    slug: "vo-co-ngan-cotton-premium",
-    categoryName: "Vớ Thời Trang",
-    size: "M",
-    color: "Trắng",
-    price: 45000,
-    quantity: 2,
-    imageUrl: "https://images.unsplash.com/photo-1582966772680-860e372bb558?auto=format&fit=crop&w=300&q=80",
-    stock: 10
-  },
-  {
-    id: "item2",
-    name: "Bikini Thun Ý Hai Mảnh Họa Tiết Tropical",
-    slug: "bikini-thun-y-hai-manh-tropical",
-    categoryName: "Bikini Nữ",
-    size: "S",
-    color: "Hồng Neon",
-    price: 290000,
-    quantity: 1,
-    imageUrl: "https://images.unsplash.com/photo-1608231387042-66d1773070a5?auto=format&fit=crop&w=300&q=80",
-    stock: 5
-  },
-  {
-    id: "item3",
-    name: "Quần Lót Nam Trunk Modal Tre Kháng Khuẩn",
-    slug: "quan-lot-nam-trunk-modal-tre",
-    categoryName: "Quần Lót Nam",
-    size: "L",
-    color: "Xám Ghi",
-    price: 85000,
-    quantity: 3,
-    imageUrl: "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=300&q=80",
-    stock: 15
-  }
-];
+import { useCartStore } from '@/store/useCartStore';
+import { EmptyState, LoadingSpinner } from '@/components/ui/States';
 
 export default function CartPage() {
-  const [cartItems, setCartItems] = useState<CartItem[]>(initialCartItems);
+  const [mounted, setMounted] = useState(false);
+  const cartItems = useCartStore((state) => state.items);
+  const removeItem = useCartStore((state) => state.removeItem);
+  const updateQuantity = useCartStore((state) => state.updateQuantity);
+  
   const [couponCode, setCouponCode] = useState('');
   const [appliedCoupon, setAppliedCoupon] = useState<{ code: string; discount: number } | null>(null);
   const [couponError, setCouponError] = useState<string | null>(null);
 
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   // Handle Quantity Change
   const updateQty = (id: string, action: 'inc' | 'dec') => {
-    setCartItems(prev => prev.map(item => {
-      if (item.id === id) {
-        const newQty = action === 'inc' ? item.quantity + 1 : item.quantity - 1;
-        if (newQty > 0 && newQty <= item.stock) {
-          return { ...item, quantity: newQty };
-        }
-      }
-      return item;
-    }));
+    const item = cartItems.find(i => i.id === id);
+    if (!item) return;
+    const newQty = action === 'inc' ? item.quantity + 1 : item.quantity - 1;
+    if (newQty > 0 && newQty <= item.stock) {
+      updateQuantity(id, newQty);
+    }
   };
 
   // Delete Item
   const deleteItem = (id: string) => {
-    setCartItems(prev => prev.filter(item => item.id !== id));
+    removeItem(id);
   };
 
   // Calculate Subtotal (Decimal Arithmetic ready)
@@ -104,8 +56,8 @@ export default function CartPage() {
 
     if (!code) return;
 
-    if (code === 'Thanh Hương StoreSTORE10') {
-      setAppliedCoupon({ code: 'Thanh Hương StoreSTORE10', discount: 10 }); // 10% discount
+    if (code === 'STORE10') {
+      setAppliedCoupon({ code: 'STORE10', discount: 10 }); // 10% discount
       setCouponCode('');
     } else if (code === 'FREESHIP') {
       setAppliedCoupon({ code: 'FREESHIP', discount: 30000 }); // Fixed 30k discount
@@ -118,7 +70,7 @@ export default function CartPage() {
   // Calculate discount amount
   const discountAmount = useMemo(() => {
     if (!appliedCoupon) return 0;
-    if (appliedCoupon.code === 'Thanh Hương StoreSTORE10') {
+    if (appliedCoupon.code === 'STORE10') {
       return Math.round(subtotal * 0.1);
     }
     if (appliedCoupon.code === 'FREESHIP') {
@@ -132,24 +84,26 @@ export default function CartPage() {
     return Math.max(0, subtotal - discountAmount);
   }, [subtotal, discountAmount]);
 
+  // LOADING / HYDRATION STATE
+  if (!mounted) {
+    return (
+      <main className="min-h-screen bg-[#FAF9F6] flex flex-col items-center justify-center py-20 px-4">
+        <LoadingSpinner message="Đang tải giỏ hàng..." />
+      </main>
+    );
+  }
+
   // EMPTY STATE RENDER
   if (cartItems.length === 0) {
     return (
       <main className="min-h-screen bg-[#FAF9F6] flex flex-col items-center justify-center py-20 px-4 text-center">
-        <div className="w-24 h-24 rounded-full bg-brand-50 flex items-center justify-center text-brand-600 mb-6 shadow-xs animate-float">
-          <ShoppingBag className="w-10 h-10" />
-        </div>
-        <h1 className="text-xl sm:text-2xl font-black text-gray-900 tracking-tight">Giỏ hàng của bạn đang trống</h1>
-        <p className="text-xs sm:text-sm text-gray-500 mt-2 max-w-sm leading-relaxed">
-          Có vẻ như bạn chưa chọn được sản phẩm ưng ý. Hãy quay lại cửa hàng để tiếp tục chọn sắm nhé!
-        </p>
-        <a 
-          href="/"
-          className="mt-8 px-8 py-3.5 bg-brand-600 hover:bg-brand-700 text-white rounded-brand-md text-sm font-bold transition shadow-md hover:shadow-lg flex items-center gap-2"
-        >
-          Tiếp tục mua sắm
-          <ArrowRight className="w-4 h-4" />
-        </a>
+        <EmptyState
+          title="Giỏ hàng của bạn đang trống"
+          description="Có vẻ như bạn chưa chọn được sản phẩm ưng ý. Hãy quay lại cửa hàng để tiếp tục chọn sắm nhé!"
+          icon={<ShoppingBag className="w-8 h-8 text-gray-400" />}
+          actionLabel="Tiếp tục mua sắm"
+          actionHref="/products"
+        />
       </main>
     );
   }
@@ -194,7 +148,7 @@ export default function CartPage() {
                       {item.categoryName}
                     </span>
                     <h3 className="text-xs sm:text-sm font-bold text-gray-900 line-clamp-1 hover:text-brand-600 transition">
-                      <a href={`/products/${item.slug}`}>{item.name}</a>
+                      <a href="/products">{item.name}</a>
                     </h3>
                     <p className="text-[10px] text-gray-400 mt-0.5 font-bold">
                       Phân loại: {item.color} / Size {item.size}

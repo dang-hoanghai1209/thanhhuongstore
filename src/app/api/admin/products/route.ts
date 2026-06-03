@@ -1,5 +1,5 @@
 import { randomUUID } from 'crypto';
-import { Prisma } from '../../../../../node_modules/.prisma/app-client-v2';
+import { Prisma } from '@prisma/client';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 

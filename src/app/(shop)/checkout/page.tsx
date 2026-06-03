@@ -17,6 +17,30 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { useCartStore } from '@/store/useCartStore';
+import { EmptyState, LoadingSpinner } from '@/components/ui/States';
+
+type PaymentMethod = 'COD' | 'BANK_TRANSFER' | 'VNPAY';
+
+type CheckoutResponse = {
+  orderId: string;
+  orderNumber?: string;
+  status?: string;
+  paymentStatus?: string;
+  paymentMethod?: PaymentMethod;
+  totalAmount?: number;
+  bankTransfer?: {
+    bankId?: string;
+    bankName?: string;
+    accountNumber?: string;
+    accountNo?: string;
+    accountName?: string;
+    amount?: number;
+    transferContent?: string;
+    qrImageUrl?: string;
+  };
+  message?: string;
+  error?: string;
+};
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -29,6 +53,7 @@ export default function CheckoutPage() {
   const [phone, setPhone] = useState('');
   const [address, setAddress] = useState('');
   const [notes, setNotes] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('COD');
   
   // Submit & Error Handling States
   const [loading, setLoading] = useState(false);
@@ -81,6 +106,7 @@ export default function CheckoutPage() {
       phone: phone.trim(),
       address: address.trim(),
       notes: notes.trim(),
+      paymentMethod,
       items: items.map(item => ({
         id: item.id,
         quantity: Number(item.quantity)
@@ -97,15 +123,55 @@ export default function CheckoutPage() {
         body: JSON.stringify(payload),
       });
 
-      const result = await response.json();
+      const result = (await response.json()) as CheckoutResponse;
 
       if (!response.ok) {
         throw new Error(result.message || 'Đặt hàng thất bại. Vui lòng kiểm tra lại thông tin.');
       }
 
       // Success flow
+      if (paymentMethod === 'VNPAY') {
+        const vnpayResponse = await fetch('/api/payment/vnpay/create', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ orderId: result.orderId })
+        });
+        const vnpayResult = await vnpayResponse.json();
+        if (!vnpayResponse.ok) {
+          throw new Error(vnpayResult.error || 'Không thể tạo liên kết thanh toán VNPay.');
+        }
+        if (vnpayResult.paymentUrl) {
+          clearCart();
+          window.location.href = vnpayResult.paymentUrl;
+          return;
+        }
+      }
+
       clearCart();
-      router.push('/checkout/success');
+      const checkoutTotal = Number(result.totalAmount ?? total);
+      const params = new URLSearchParams({
+        orderId: result.orderId,
+        orderNumber: result.orderNumber || '',
+        paymentMethod: result.paymentMethod || paymentMethod,
+        total: String(checkoutTotal),
+      });
+
+      if (result.bankTransfer) {
+        const accountNumber = result.bankTransfer.accountNumber || result.bankTransfer.accountNo || '';
+
+        params.append('bankName', result.bankTransfer.bankName || '');
+        params.append('accountNumber', accountNumber);
+        params.append('accountNo', accountNumber);
+        params.append('accountName', result.bankTransfer.accountName || '');
+        params.append('bankCode', result.bankTransfer.bankId || '');
+        params.append('amount', String(result.bankTransfer.amount ?? checkoutTotal));
+        params.append('transferContent', result.bankTransfer.transferContent || '');
+        params.append('qrImageUrl', result.bankTransfer.qrImageUrl || '');
+      }
+
+      router.push(`/checkout/success?${params.toString()}`);
     } catch (err: any) {
       setError(err.message || 'Đã xảy ra lỗi kết nối với máy chủ. Vui lòng thử lại sau.');
     } finally {
@@ -113,26 +179,25 @@ export default function CheckoutPage() {
     }
   };
 
-  if (!mounted) return null;
+  if (!mounted) {
+    return (
+      <main className="min-h-screen bg-[#FAF9F6] flex flex-col items-center justify-center py-20 px-4">
+        <LoadingSpinner message="Đang chuẩn bị thanh toán..." />
+      </main>
+    );
+  }
 
   // Empty cart redirect view
   if (items.length === 0) {
     return (
       <main className="min-h-screen bg-[#FAF9F6] flex flex-col items-center justify-center py-20 px-4 text-center">
-        <div className="w-20 h-20 rounded-full bg-brand-50 flex items-center justify-center text-brand-600 mb-6 shadow-xs animate-float">
-          <ShoppingBag className="w-10 h-10" />
-        </div>
-        <h1 className="text-xl sm:text-2xl font-black text-gray-900 tracking-tight">Giỏ hàng trống</h1>
-        <p className="text-xs sm:text-sm text-gray-500 mt-2 max-w-sm leading-relaxed">
-          Hiện tại giỏ hàng của bạn đang trống, không thể thực hiện thủ tục thanh toán. Vui lòng quay lại chọn sản phẩm.
-        </p>
-        <Link 
-          href="/products"
-          className="mt-8 px-8 py-3.5 bg-brand-600 hover:bg-brand-700 text-white rounded-brand-md text-sm font-bold transition shadow-md hover:shadow-lg flex items-center gap-2"
-        >
-          Quay lại mua sắm
-          <ChevronRight className="w-4 h-4" />
-        </Link>
+        <EmptyState
+          title="Giỏ hàng trống"
+          description="Hiện tại giỏ hàng của bạn đang trống, không thể thực hiện thủ tục thanh toán. Vui lòng quay lại chọn sản phẩm."
+          icon={<ShoppingBag className="w-8 h-8 text-gray-400" />}
+          actionLabel="Quay lại mua sắm"
+          actionHref="/products"
+        />
       </main>
     );
   }
@@ -252,15 +317,69 @@ export default function CheckoutPage() {
                 Phương thức thanh toán
               </h2>
 
-              <div className="p-4 bg-brand-50/50 border border-brand-200/50 rounded-brand-md flex items-center gap-4 relative">
-                <div className="w-8 h-8 rounded-full bg-brand-100 flex items-center justify-center text-brand-600 shrink-0">
-                  <CreditCard className="w-4 h-4" />
+              <div className="space-y-3">
+                {/* COD Radio */}
+                <div 
+                  onClick={() => setPaymentMethod('COD')}
+                  className={`p-4 border rounded-brand-md flex items-center gap-4 relative cursor-pointer transition ${
+                    paymentMethod === 'COD' 
+                      ? 'bg-brand-50/50 border-brand-500' 
+                      : 'border-gray-200 hover:border-gray-300'
+                  }`}
+                >
+                  <div className="w-8 h-8 rounded-full bg-brand-100 flex items-center justify-center text-brand-600 shrink-0">
+                    <Truck className="w-4.5 h-4.5 text-brand-600" />
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="text-xs font-extrabold text-gray-900">Thanh toán khi nhận hàng (COD)</h4>
+                    <p className="text-[10px] text-gray-400 font-semibold mt-0.5">Khách hàng kiểm tra hàng trước khi thanh toán cho shipper.</p>
+                  </div>
+                  <span className={`w-4.5 h-4.5 rounded-full border-4 ${
+                    paymentMethod === 'COD' ? 'border-brand-600 bg-white' : 'border-gray-300 bg-white'
+                  }`} />
                 </div>
-                <div className="flex-1">
-                  <h4 className="text-xs font-extrabold text-gray-900">Thanh toán khi nhận hàng (COD)</h4>
-                  <p className="text-[10px] text-gray-400 font-semibold mt-0.5">Khách hàng kiểm tra hàng trước khi thanh toán cho shipper.</p>
+
+                {/* BANK TRANSFER Radio */}
+                <div 
+                  onClick={() => setPaymentMethod('BANK_TRANSFER')}
+                  className={`p-4 border rounded-brand-md flex items-center gap-4 relative cursor-pointer transition ${
+                    paymentMethod === 'BANK_TRANSFER' 
+                      ? 'bg-brand-50/50 border-brand-500' 
+                      : 'border-gray-200 hover:border-gray-300'
+                  }`}
+                >
+                  <div className="w-8 h-8 rounded-full bg-brand-100 flex items-center justify-center text-brand-600 shrink-0">
+                    <CreditCard className="w-4.5 h-4.5 text-brand-600" />
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="text-xs font-extrabold text-gray-900">Chuyển khoản ngân hàng (BANK_TRANSFER)</h4>
+                    <p className="text-[10px] text-gray-400 font-semibold mt-0.5">Thanh toán chuyển khoản qua ngân hàng trước khi giao nhận hàng.</p>
+                  </div>
+                  <span className={`w-4.5 h-4.5 rounded-full border-4 ${
+                    paymentMethod === 'BANK_TRANSFER' ? 'border-brand-600 bg-white' : 'border-gray-300 bg-white'
+                  }`} />
                 </div>
-                <span className="w-4.5 h-4.5 rounded-full border-4 border-brand-600 bg-white" />
+
+                {/* VNPAY Radio */}
+                <div 
+                  onClick={() => setPaymentMethod('VNPAY')}
+                  className={`p-4 border rounded-brand-md flex items-center gap-4 relative cursor-pointer transition ${
+                    paymentMethod === 'VNPAY' 
+                      ? 'bg-brand-50/50 border-brand-500' 
+                      : 'border-gray-200 hover:border-gray-300'
+                  }`}
+                >
+                  <div className="w-8 h-8 rounded-full bg-brand-100 flex items-center justify-center text-brand-600 shrink-0">
+                    <CreditCard className="w-4.5 h-4.5 text-brand-600" />
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="text-xs font-extrabold text-gray-900">Cổng thanh toán VNPay (VNPAY)</h4>
+                    <p className="text-[10px] text-gray-400 font-semibold mt-0.5">Thanh toán trực tuyến bằng thẻ ATM, Mobile Banking hoặc QR Code qua VNPay.</p>
+                  </div>
+                  <span className={`w-4.5 h-4.5 rounded-full border-4 ${
+                    paymentMethod === 'VNPAY' ? 'border-brand-600 bg-white' : 'border-gray-300 bg-white'
+                  }`} />
+                </div>
               </div>
             </div>
 

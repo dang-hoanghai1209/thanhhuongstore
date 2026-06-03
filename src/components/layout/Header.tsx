@@ -114,7 +114,7 @@ export default function Header() {
             {/* 2. Brand Logo */}
             <Link href="/" className="flex items-center gap-2 text-brand-600 shrink-0">
               <div className="w-9 h-9 rounded-brand-md bg-brand-600 flex items-center justify-center text-white font-black text-base shadow-sm">
-                V
+                TH
               </div>
               <span className="text-base sm:text-lg font-black uppercase tracking-widest">Thanh Hương Store</span>
             </Link>
@@ -260,9 +260,9 @@ export default function Header() {
             <div className="flex items-center justify-between pb-4 border-b border-gray-100">
               <div className="flex items-center gap-2 text-brand-600">
                 <div className="w-8 h-8 rounded-brand-sm bg-brand-600 flex items-center justify-center text-white font-black text-sm shadow-xs">
-                  V
+                  TH
                 </div>
-                <span className="text-sm font-black uppercase tracking-widest">Viva Store</span>
+                <span className="text-sm font-black uppercase tracking-widest">Thanh Hương Store</span>
               </div>
               <button
                 onClick={() => setMobileMenuOpen(false)}
@@ -311,8 +311,8 @@ export default function Header() {
             {/* Mobile Footer Area */}
             <div className="pt-6 border-t border-gray-100 text-xs text-gray-400 space-y-2">
               <p>📍 Hotline: 0912.345.678</p>
-              <p>✉️ Email: support@vivastore.vn</p>
-              <p className="text-[10px] text-gray-300 pt-2">© 2026 Viva Store. All rights reserved.</p>
+              <p>✉️ Email: support@thanhhuongstore.vn</p>
+              <p className="text-[10px] text-gray-300 pt-2">© 2026 Thanh Hương Store. All rights reserved.</p>
             </div>
 
           </div>

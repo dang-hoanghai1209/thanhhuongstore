@@ -1,6 +1,6 @@
 'use server';
 
-import { OrderStatus } from '../../../node_modules/.prisma/app-client-v2';
+import { OrderStatus } from '@prisma/client';
 
 import prisma from '@/lib/prisma';
 
@@ -147,7 +147,7 @@ export async function getAdminDashboardAction(): Promise<
         return [];
       }
 
-      const soldQuantity = group._sum.quantity ?? 0;
+      const soldQuantity = group._sum?.quantity ?? 0;
       const retailPrice = toSafeNumber(variant.retailPrice);
 
       return [

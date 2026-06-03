@@ -1,8 +1,9 @@
 import { randomUUID } from 'crypto';
-import { Prisma } from '../../../../node_modules/.prisma/app-client-v2';
-import { NextResponse } from 'next/server';
+import { Prisma } from '@prisma/client';
+import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 
+import { optionalAuth } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 import { FREE_SHIPPING_THRESHOLD, SHIPPING_FEE, BANK_CONFIG } from '@/lib/constants';
 
@@ -13,7 +14,30 @@ function getBankTransferDetails() {
     bankId: BANK_CONFIG.bankCode,
     accountNumber: BANK_CONFIG.accountNo,
     accountName: BANK_CONFIG.accountName,
-    bankName: BANK_CONFIG.bankName
+    bankName: BANK_CONFIG.bankName,
+  };
+}
+
+function getBankTransferPayload({
+  amount,
+  orderNumber,
+}: {
+  amount: number;
+  orderNumber: string;
+}) {
+  const bankTransfer = getBankTransferDetails();
+  const transferContent = `THANH HUONG ${orderNumber}`;
+  const qrParams = new URLSearchParams({
+    amount: String(Math.round(amount)),
+    addInfo: transferContent,
+    accountName: bankTransfer.accountName,
+  });
+
+  return {
+    ...bankTransfer,
+    amount,
+    transferContent,
+    qrImageUrl: `https://img.vietqr.io/image/${bankTransfer.bankId}-${bankTransfer.accountNumber}-compact2.png?${qrParams.toString()}`,
   };
 }
 
@@ -24,7 +48,7 @@ const checkoutSchema = z.object({
   phone: z.string().trim().optional(),
   address: z.string().trim().min(1, 'Địa chỉ không được để trống'),
   notes: z.string().trim().max(1000, 'Ghi chú không được vượt quá 1000 ký tự').optional(),
-  paymentMethod: z.enum(['COD', 'BANK_TRANSFER']).default('COD'),
+  paymentMethod: z.enum(['COD', 'BANK_TRANSFER', 'VNPAY']).default('COD'),
   items: z
     .array(
       z.object({
@@ -35,8 +59,14 @@ const checkoutSchema = z.object({
     .min(1, 'Giỏ hàng phải có ít nhất 1 sản phẩm'),
 });
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
+    const authResult = await optionalAuth(request);
+
+    if (authResult instanceof NextResponse) {
+      return authResult;
+    }
+
     const body = await request.json();
     const payload = checkoutSchema.safeParse(body);
 
@@ -53,7 +83,6 @@ export async function POST(request: Request) {
     const customerName = payload.data.customerName ?? payload.data.fullName;
     const phoneNumber = payload.data.phoneNumber ?? payload.data.phone;
     const { address, notes, paymentMethod, items } = payload.data;
-    const bankTransfer = getBankTransferDetails();
 
     if (!customerName || !phoneNumber) {
       return NextResponse.json(
@@ -157,6 +186,7 @@ export async function POST(request: Request) {
       return tx.order.create({
         data: {
           orderNumber: `ORD-${Date.now()}-${randomUUID().slice(0, 8).toUpperCase()}`,
+          userId: authResult?.userId,
           customerName,
           phoneNumber,
           address,
@@ -177,16 +207,31 @@ export async function POST(request: Request) {
         select: {
           id: true,
           status: true,
+          orderNumber: true,
+          totalAmount: true,
+          paymentStatus: true,
         },
       });
     });
 
+    const totalAmount = Number(order.totalAmount);
+    const bankTransfer =
+      paymentMethod === 'BANK_TRANSFER'
+        ? getBankTransferPayload({
+            amount: totalAmount,
+            orderNumber: order.orderNumber,
+          })
+        : undefined;
+
     return NextResponse.json(
       {
         orderId: order.id,
+        orderNumber: order.orderNumber,
         status: order.status,
+        paymentStatus: order.paymentStatus,
         paymentMethod,
-        bankTransfer,
+        totalAmount,
+        ...(bankTransfer ? { bankTransfer } : {}),
       },
       { status: 200 },
     );

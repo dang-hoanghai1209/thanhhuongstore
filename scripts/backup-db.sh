@@ -2,8 +2,8 @@
 
 # Configuration
 BACKUP_DIR="/backups"
-DB_NAME="Thanh Hương Storestore_db"
-DB_USER="Thanh Hương Storestore"
+DB_NAME="thanhhuongstore_db"
+DB_USER="thanhhuongstore"
 DB_HOST="postgres"
 DATE=$(date +%Y%m%d_%H%M%S)
 BACKUP_FILE="${BACKUP_DIR}/${DB_NAME}_backup_${DATE}.sql.gz"

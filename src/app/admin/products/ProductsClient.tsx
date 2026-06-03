@@ -12,7 +12,9 @@ import {
   AlertTriangle,
   ToggleLeft,
   ToggleRight,
-  Eye
+  Eye,
+  Upload,
+  Loader2
 } from 'lucide-react';
 import { createProductAction, updateProductAction, toggleProductActiveAction } from './actions';
 
@@ -84,12 +86,71 @@ export default function ProductsClient({ initialProducts, categories }: Products
   const [toasts, setToasts] = useState<Toast[]>([]);
   const [saving, setSaving] = useState(false);
 
+  // Image Upload state
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+
   const showToast = (message: string, type: 'success' | 'error') => {
     const id = Math.random().toString();
     setToasts((prev) => [...prev, { id, message, type }]);
     setTimeout(() => {
       setToasts((prev) => prev.filter((t) => t.id !== id));
     }, 4000);
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate format
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg'];
+    if (!allowedTypes.includes(file.type.toLowerCase())) {
+      setUploadError('Định dạng ảnh không hợp lệ. Chỉ chấp nhận JPG, JPEG, PNG hoặc WEBP.');
+      showToast('Định dạng ảnh không hợp lệ', 'error');
+      return;
+    }
+
+    // Validate size (5MB limit)
+    if (file.size > 5 * 1024 * 1024) {
+      setUploadError('Kích thước ảnh vượt quá 5MB.');
+      showToast('Kích thước ảnh tối đa là 5MB', 'error');
+      return;
+    }
+
+    setIsUploading(true);
+    setUploadError(null);
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || `Upload thất bại với mã lỗi ${response.status}`);
+      }
+
+      const data = await response.json();
+      if (data.url) {
+        setFormImageUrl(data.url);
+        showToast('Tải ảnh lên thành công', 'success');
+      } else {
+        throw new Error('Không nhận được URL ảnh từ máy chủ.');
+      }
+    } catch (err: any) {
+      console.error('Image upload error:', err);
+      const errMsg = err instanceof Error ? err.message : 'Không thể tải ảnh lên.';
+      setUploadError(errMsg);
+      showToast(errMsg, 'error');
+    } finally {
+      setIsUploading(false);
+      // Reset input value to allow selecting the same file again
+      e.target.value = '';
+    }
   };
 
   const handleOpenAddModal = () => {
@@ -99,6 +160,8 @@ export default function ProductsClient({ initialProducts, categories }: Products
     setFormIsActive(true);
     setFormImageUrl('');
     setFormDescription('');
+    setUploadError(null);
+    setIsUploading(false);
     setFormVariants([
       { sku: '', size: 'M', color: 'Đen', colorHex: '#000000', retailPrice: 120000, wholesalePrice: 90000, stock: 50 }
     ]);
@@ -112,6 +175,8 @@ export default function ProductsClient({ initialProducts, categories }: Products
     setFormIsActive(product.isActive);
     setFormImageUrl(product.images.find(img => img.isPrimary)?.url || '');
     setFormDescription(''); // placeholder
+    setUploadError(null);
+    setIsUploading(false);
     setFormVariants(product.variants.map(v => ({
       id: v.id,
       sku: v.sku,
@@ -486,14 +551,85 @@ export default function ProductsClient({ initialProducts, categories }: Products
                 {/* Right col - Media and Description */}
                 <div className="space-y-4">
                   <div>
+                    <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Ảnh đại diện sản phẩm</label>
+                    
+                    {/* Image Upload Box & Preview */}
+                    <div className="border border-dashed border-slate-300 rounded-2xl p-4 bg-slate-50 hover:bg-slate-50/80 transition-colors flex flex-col items-center justify-center min-h-[140px] relative mb-3">
+                      {isUploading ? (
+                        <div className="flex flex-col items-center justify-center space-y-2">
+                          <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
+                          <span className="text-xs font-medium text-slate-500">Đang tải ảnh lên...</span>
+                        </div>
+                      ) : formImageUrl ? (
+                        <div className="w-full flex flex-col items-center">
+                          <div className="relative group w-32 h-32 rounded-xl overflow-hidden border border-slate-200 shadow-xs mb-2">
+                            <img
+                              src={formImageUrl}
+                              alt="Xem trước ảnh sản phẩm"
+                              className="w-full h-full object-cover transition duration-300 group-hover:scale-105"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => setFormImageUrl('')}
+                              className="absolute top-1 right-1 p-1 bg-red-600/90 text-white rounded-full hover:bg-red-700 transition shadow-sm opacity-0 group-hover:opacity-100 focus:opacity-100"
+                              title="Xóa ảnh"
+                            >
+                              <X className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+                          <span className="text-[11px] text-slate-400 truncate max-w-full px-2" title={formImageUrl}>
+                            {formImageUrl.startsWith('/uploads/') ? formImageUrl.split('/').pop() : formImageUrl}
+                          </span>
+                        </div>
+                      ) : (
+                        <div className="flex flex-col items-center justify-center text-center">
+                          <ImageIcon className="w-8 h-8 text-slate-400 mb-2" />
+                          <span className="text-xs font-semibold text-slate-600 mb-1">Chưa có ảnh đại diện</span>
+                          <span className="text-[10px] text-slate-400">Hỗ trợ JPG, PNG, WEBP (Tối đa 5MB)</span>
+                        </div>
+                      )}
+
+                      {/* File input button wrapper */}
+                      {!isUploading && (
+                        <div className="mt-3">
+                          <label className="cursor-pointer inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 rounded-lg text-xs font-semibold shadow-xs transition select-none">
+                            <Upload className="w-3.5 h-3.5 text-slate-500" />
+                            Chọn ảnh từ máy
+                            <input
+                              type="file"
+                              accept="image/*"
+                              className="hidden"
+                              onChange={handleImageUpload}
+                            />
+                          </label>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Upload error feedback */}
+                    {uploadError && (
+                      <div className="mt-2 text-xs font-medium text-red-600 bg-red-50 border border-red-100 rounded-lg p-2 flex items-start gap-1.5 mb-3 animate-fadeIn">
+                        <AlertTriangle className="w-3.5 h-3.5 shrink-0 mt-0.5" />
+                        <span>{uploadError}</span>
+                      </div>
+                    )}
+                  </div>
+
+                  <div>
                     <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Đường dẫn ảnh đại diện (URL)</label>
                     <input
                       type="text"
-                      placeholder="Nhập link ảnh hoặc để trống để dùng ảnh mặc định"
+                      placeholder="Hoặc dán URL ảnh trực tiếp vào đây..."
                       value={formImageUrl}
-                      onChange={(e) => setFormImageUrl(e.target.value)}
+                      onChange={(e) => {
+                        setFormImageUrl(e.target.value);
+                        if (uploadError) setUploadError(null);
+                      }}
                       className="w-full bg-white border border-slate-200 px-4 py-2.5 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-shadow"
                     />
+                    <p className="text-[10px] text-slate-400 mt-1">
+                      Giữ nguyên flow nhập link ảnh tự thiết kế hoặc link CDN bên ngoài.
+                    </p>
                   </div>
 
                   <div>

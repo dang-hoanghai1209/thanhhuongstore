@@ -1,4 +1,4 @@
-import { PrismaClient, SizeType } from '../node_modules/.prisma/seed-client';
+import { PrismaClient, SizeType } from '@prisma/client';
 
 const directDatabaseUrl = process.env.DIRECT_URL ?? process.env.DATABASE_URL;
 
@@ -351,9 +351,6 @@ const products: ProductSeed[] = [
 
 async function clearDatabase() {
   await prisma.$transaction([
-    prisma.verificationToken.deleteMany(),
-    prisma.session.deleteMany(),
-    prisma.account.deleteMany(),
     prisma.passwordReset.deleteMany(),
     prisma.refreshToken.deleteMany(),
     prisma.wholesaleProfile.deleteMany(),

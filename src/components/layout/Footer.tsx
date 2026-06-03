@@ -34,7 +34,7 @@ export default function Footer() {
         <div className="space-y-4">
           <div className="flex items-center gap-2 text-brand-600">
             <div className="w-8 h-8 rounded-brand-sm bg-brand-600 flex items-center justify-center text-white font-black text-sm shadow-xs">
-              V
+              TH
             </div>
             <span className="text-sm font-black uppercase tracking-widest">Thanh Hương Store</span>
           </div>
@@ -70,7 +70,7 @@ export default function Footer() {
           <h4 className="text-xs font-black text-gray-900 uppercase tracking-widest">Kết nối với chúng tôi</h4>
           <div className="space-y-2.5 text-xs">
             <p className="flex items-center gap-2"><Phone className="w-4 h-4 text-brand-600" /> 0912.345.678</p>
-            <p className="flex items-center gap-2"><Mail className="w-4 h-4 text-brand-600" /> support@Thanh Hương Storestore.vn</p>
+            <p className="flex items-center gap-2"><Mail className="w-4 h-4 text-brand-600" /> support@thanhhuongstore.vn</p>
           </div>
           <div className="flex gap-3 pt-2">
             <a href="#" className="p-2 bg-gray-50 hover:bg-brand-50 hover:text-brand-600 rounded-full border border-gray-100 transition shadow-xs">

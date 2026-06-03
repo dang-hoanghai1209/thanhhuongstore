@@ -97,7 +97,7 @@ export default function MiniCart({ isOpen: propIsOpen, onClose: propOnClose }: M
               <div className="space-y-1.5">
                 <h4 className="text-sm font-bold text-gray-900">Giỏ hàng đang trống</h4>
                 <p className="text-xs text-gray-400 max-w-[260px] mx-auto leading-relaxed">
-                  Hãy lấp đầy giỏ hàng của bạn bằng những bộ nội y thiết kế chất lượng nhất từ Viva Store.
+                  Hãy lấp đầy giỏ hàng của bạn bằng những bộ nội y thiết kế chất lượng nhất từ Thanh Hương Store.
                 </p>
               </div>
               <button 

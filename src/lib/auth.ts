@@ -1,101 +1,109 @@
 import jwt from 'jsonwebtoken';
 import { NextRequest, NextResponse } from 'next/server';
+
 import prisma from '@/lib/prisma';
-import { User, UserRole } from '@prisma/client';
+import { ACCESS_TOKEN_COOKIE_NAME } from '@/lib/auth-cookies';
+import {
+  AuthPayload,
+  AuthRole,
+  getAccessTokenSecret,
+  getRefreshTokenSecret,
+  verifyAccessToken,
+  verifyRefreshToken,
+} from '@/lib/jwt';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'fallback-access-token-secret-must-be-very-long-and-random-64-characters';
-const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'fallback-refresh-token-secret-must-be-very-long-and-random-64-characters';
+export { verifyAccessToken, verifyRefreshToken };
+export type { AuthPayload };
 
-export interface AuthPayload {
-  userId: string;
-  email: string;
-  role: UserRole;
+interface TokenUser {
+  id: string;
+  email: string | null;
+  role: AuthRole;
 }
 
-export function generateAccessToken(user: Pick<User, 'id' | 'email' | 'role'>): string {
-  return jwt.sign(
-    { userId: user.id, email: user.email, role: user.role } as AuthPayload,
-    JWT_SECRET,
-    { expiresIn: '15m' }
-  );
-}
-
-export function generateRefreshToken(user: Pick<User, 'id' | 'email' | 'role'>): string {
-  return jwt.sign(
-    { userId: user.id, email: user.email, role: user.role } as AuthPayload,
-    JWT_REFRESH_SECRET,
-    { expiresIn: '7d' }
-  );
-}
-
-export function verifyAccessToken(token: string): AuthPayload | null {
-  try {
-    return jwt.verify(token, JWT_SECRET) as AuthPayload;
-  } catch (error) {
-    return null;
+function createPayload(user: TokenUser, tokenType: 'access' | 'refresh') {
+  if (!user.email) {
+    throw new Error('Cannot issue a JWT for a user without an email address.');
   }
+
+  return {
+    userId: user.id,
+    email: user.email,
+    role: user.role,
+    tokenType,
+  };
 }
 
-export function verifyRefreshToken(token: string): AuthPayload | null {
-  try {
-    return jwt.verify(token, JWT_REFRESH_SECRET) as AuthPayload;
-  } catch (error) {
-    return null;
-  }
+export function generateAccessToken(user: TokenUser): string {
+  return jwt.sign(createPayload(user, 'access'), getAccessTokenSecret(), {
+    expiresIn: '15m',
+  });
 }
 
-/**
- * Validates the request auth header or cookies.
- * Returns the AuthPayload (user info) if valid, or a NextResponse (401) on failure.
- */
-export async function requireAuth(req: NextRequest): Promise<AuthPayload | NextResponse> {
+export function generateRefreshToken(user: TokenUser): string {
+  return jwt.sign(createPayload(user, 'refresh'), getRefreshTokenSecret(), {
+    expiresIn: '7d',
+  });
+}
+
+function getRequestAccessToken(req: NextRequest) {
   const authHeader = req.headers.get('Authorization');
-  let token: string | null = null;
 
-  if (authHeader && authHeader.startsWith('Bearer ')) {
-    token = authHeader.substring(7);
-  } else {
-    // Check fallback cookie
-    const tokenCookie = req.cookies.get('access_token');
-    if (tokenCookie) {
-      token = tokenCookie.value;
-    }
+  if (authHeader?.startsWith('Bearer ')) {
+    return authHeader.slice(7);
   }
 
-  if (!token) {
-    return NextResponse.json({ error: 'Không tìm thấy mã xác thực (Unauthorized)' }, { status: 401 });
-  }
+  return req.cookies.get(ACCESS_TOKEN_COOKIE_NAME)?.value ?? null;
+}
 
-  const payload = verifyAccessToken(token);
+async function authenticateToken(token: string): Promise<AuthPayload | NextResponse> {
+  const payload = await verifyAccessToken(token);
+
   if (!payload) {
-    return NextResponse.json({ error: 'Mã xác thực không hợp lệ hoặc đã hết hạn' }, { status: 401 });
+    return NextResponse.json({ error: 'Authentication token is invalid or expired.' }, { status: 401 });
   }
 
-  // Double check if user is still active in DB
   const user = await prisma.user.findUnique({
     where: { id: payload.userId },
-    select: { isActive: true },
+    select: { isActive: true, role: true },
   });
 
-  if (!user || !user.isActive) {
-    return NextResponse.json({ error: 'Tài khoản đã bị khóa hoặc không tồn tại' }, { status: 401 });
+  if (!user?.isActive) {
+    return NextResponse.json({ error: 'User account is missing or inactive.' }, { status: 401 });
+  }
+
+  if (user.role !== payload.role) {
+    return NextResponse.json({ error: 'Authentication token role is stale.' }, { status: 401 });
   }
 
   return payload;
 }
 
-/**
- * Validates request authorization and asserts the user role is ADMIN.
- * Returns AuthPayload if admin, or NextResponse (401/403) on failure.
- */
+export async function optionalAuth(req: NextRequest): Promise<AuthPayload | NextResponse | null> {
+  const token = getRequestAccessToken(req);
+
+  return token ? authenticateToken(token) : null;
+}
+
+export async function requireAuth(req: NextRequest): Promise<AuthPayload | NextResponse> {
+  const authResult = await optionalAuth(req);
+
+  if (!authResult) {
+    return NextResponse.json({ error: 'Authentication token is required.' }, { status: 401 });
+  }
+
+  return authResult;
+}
+
 export async function requireAdmin(req: NextRequest): Promise<AuthPayload | NextResponse> {
   const authResult = await requireAuth(req);
+
   if (authResult instanceof NextResponse) {
     return authResult;
   }
 
-  if (authResult.role !== UserRole.ADMIN) {
-    return NextResponse.json({ error: 'Không có quyền truy cập (Forbidden)' }, { status: 403 });
+  if (authResult.role !== 'ADMIN') {
+    return NextResponse.json({ error: 'Administrator access is required.' }, { status: 403 });
   }
 
   return authResult;
