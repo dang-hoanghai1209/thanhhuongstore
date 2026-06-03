@@ -56,14 +56,17 @@ interface RevenueItem {
 }
 
 interface AnalyticsData {
-  totalRevenue: number;
-  totalOrders: number;
-  totalCustomers: number;
-  totalProducts: number;
-  newOrders: NewOrder[];
+  summary: {
+    totalRevenue: number;
+    totalOrders: number;
+    totalCustomers: number;
+    totalProducts: number;
+  };
+  recentOrders: NewOrder[];
   lowStockProducts: LowStockProduct[];
+  ordersByStatus: Array<{ status: string; count: number }>;
   orderStatusBreakdown: Record<string, number>;
-  recentRevenue?: RevenueItem[];
+  revenueByDay: RevenueItem[];
 }
 
 interface AdminDashboardClientProps {
@@ -71,29 +74,113 @@ interface AdminDashboardClientProps {
   topSellers: TopSellerProduct[];
 }
 
+const toSafeNumber = (value: unknown) => {
+  const numberValue = Number(value ?? 0);
+
+  return Number.isFinite(numberValue) ? numberValue : 0;
+};
+
+const toSafeText = (value: unknown, fallback = '') => {
+  return typeof value === 'string' && value.trim().length > 0 ? value : fallback;
+};
+
+const createFallbackId = (prefix: string, index: number) => `${prefix}-${index}`;
+
+const normalizeAnalyticsData = (payload: any): AnalyticsData => {
+  const summarySource = payload?.summary ?? payload?.overview ?? payload ?? {};
+  const rawRevenue = Array.isArray(payload?.revenueByDay)
+    ? payload.revenueByDay
+    : Array.isArray(payload?.revenueByDate)
+      ? payload.revenueByDate
+      : Array.isArray(payload?.recentRevenue)
+        ? payload.recentRevenue
+        : [];
+  const rawOrders = Array.isArray(payload?.recentOrders)
+    ? payload.recentOrders
+    : Array.isArray(payload?.newOrders)
+      ? payload.newOrders
+      : [];
+  const rawLowStock = Array.isArray(payload?.lowStockProducts) ? payload.lowStockProducts : [];
+  const rawOrdersByStatus = payload?.ordersByStatus;
+  const ordersByStatus = Array.isArray(rawOrdersByStatus)
+    ? rawOrdersByStatus.map((item: any) => ({
+        status: toSafeText(item?.status, 'UNKNOWN'),
+        count: toSafeNumber(item?.count ?? item?._count),
+      }))
+    : Object.entries(
+        rawOrdersByStatus && typeof rawOrdersByStatus === 'object'
+          ? rawOrdersByStatus
+          : payload?.orderStatusBreakdown && typeof payload.orderStatusBreakdown === 'object'
+            ? payload.orderStatusBreakdown
+            : {},
+      ).map(([status, count]) => ({
+        status,
+        count: toSafeNumber(count),
+      }));
+
+  return {
+    summary: {
+      totalRevenue: toSafeNumber(summarySource.totalRevenue),
+      totalOrders: toSafeNumber(summarySource.totalOrders),
+      totalCustomers: toSafeNumber(summarySource.totalCustomers),
+      totalProducts: toSafeNumber(summarySource.totalProducts),
+    },
+    recentOrders: rawOrders.map((order: any, index: number) => ({
+      id: toSafeText(order?.id, createFallbackId('order', index)),
+      orderNumber: toSafeText(order?.orderNumber, order?.id ?? ''),
+      customerName: toSafeText(order?.customerName, 'Khach hang'),
+      totalAmount: toSafeNumber(order?.totalAmount),
+      status: toSafeText(order?.status, 'PENDING'),
+      createdAt: toSafeText(order?.createdAt),
+    })),
+    lowStockProducts: rawLowStock.map((product: any, index: number) => ({
+      id: toSafeText(product?.id ?? product?.variantId ?? product?.productId, createFallbackId('stock', index)),
+      name: toSafeText(product?.name ?? product?.productName, 'San pham'),
+      stock: toSafeNumber(product?.stock),
+      sku: toSafeText(product?.sku, 'N/A'),
+    })),
+    ordersByStatus,
+    orderStatusBreakdown: Object.fromEntries(
+      ordersByStatus.map((item) => [item.status, item.count]),
+    ),
+    revenueByDay: rawRevenue.map((item: any) => ({
+      date: toSafeText(item?.date),
+      amount: toSafeNumber(item?.amount ?? item?.revenue),
+    })),
+  };
+};
+
 export default function AdminDashboardClient({ stats, topSellers }: AdminDashboardClientProps) {
   const [data, setData] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const formatVND = (value: number) => {
-    return value.toLocaleString('vi-VN') + ' đ';
+  const formatVND = (value: unknown) => {
+    return toSafeNumber(value).toLocaleString('vi-VN') + ' đ';
+  };
+
+  const formatNumber = (value: unknown) => {
+    return toSafeNumber(value).toLocaleString('vi-VN');
   };
 
   const getStatusLabel = (status: string) => {
-    switch (status.toUpperCase()) {
+    const normalizedStatus = toSafeText(status, 'UNKNOWN').toUpperCase();
+
+    switch (normalizedStatus) {
       case 'PENDING': return 'Chờ xử lý';
       case 'CONFIRMED': return 'Đã xác nhận';
       case 'SHIPPING': return 'Đang giao';
       case 'DELIVERED':
       case 'COMPLETED': return 'Đã giao';
       case 'CANCELLED': return 'Đã hủy';
-      default: return status;
+      default: return normalizedStatus;
     }
   };
 
   const getStatusColor = (status: string) => {
-    switch (status.toUpperCase()) {
+    const normalizedStatus = toSafeText(status, 'UNKNOWN').toUpperCase();
+
+    switch (normalizedStatus) {
       case 'PENDING': return 'bg-amber-50 text-amber-700 border-amber-200';
       case 'CONFIRMED': return 'bg-blue-50 text-blue-700 border-blue-200';
       case 'SHIPPING': return 'bg-purple-50 text-purple-700 border-purple-200';
@@ -114,7 +201,7 @@ export default function AdminDashboardClient({ stats, topSellers }: AdminDashboa
         throw new Error(errText.error || `Mã lỗi HTTP: ${res.status}`);
       }
       const json = await res.json();
-      setData(json);
+      setData(normalizeAnalyticsData(json));
     } catch (err: any) {
       console.error('Fetch analytics error:', err);
       setError(err instanceof Error ? err.message : 'Không thể kết nối đến máy chủ.');
@@ -127,7 +214,21 @@ export default function AdminDashboardClient({ stats, topSellers }: AdminDashboa
     fetchAnalytics();
   }, []);
 
-  const maxQty = topSellers.length > 0 ? Math.max(...topSellers.map(s => s.quantitySold)) : 100;
+  const safeStats = {
+    totalRevenue: toSafeNumber(stats?.totalRevenue),
+    totalOrders: toSafeNumber(stats?.totalOrders),
+    pendingOrders: toSafeNumber(stats?.pendingOrders),
+    totalProducts: toSafeNumber(stats?.totalProducts),
+  };
+  const safeTopSellers = Array.isArray(topSellers)
+    ? topSellers.map((seller, index) => ({
+        productId: toSafeText(seller?.productId, createFallbackId('seller', index)),
+        name: toSafeText(seller?.name, 'San pham'),
+        quantitySold: toSafeNumber(seller?.quantitySold),
+        imageUrl: seller?.imageUrl ?? null,
+      }))
+    : [];
+  const maxQty = Math.max(...safeTopSellers.map((seller) => seller.quantitySold), 1);
 
   // Render Loading Skeletal State
   if (loading) {
@@ -160,10 +261,10 @@ export default function AdminDashboardClient({ stats, topSellers }: AdminDashboa
 
   // Determine actual metrics to display
   // Use loaded API data if successful, otherwise fallback to server-side queried stats props
-  const displayRevenue = data ? data.totalRevenue : stats.totalRevenue;
-  const displayOrders = data ? data.totalOrders : stats.totalOrders;
-  const displayProducts = data ? data.totalProducts : stats.totalProducts;
-  const displayCustomers = data ? data.totalCustomers : null; // null triggers "Chờ API..." fallback on error
+  const displayRevenue = data ? data.summary.totalRevenue : safeStats.totalRevenue;
+  const displayOrders = data ? data.summary.totalOrders : safeStats.totalOrders;
+  const displayProducts = data ? data.summary.totalProducts : safeStats.totalProducts;
+  const displayCustomers = data ? data.summary.totalCustomers : null; // null triggers fallback on API error
 
   return (
     <div className="space-y-8 animate-fadeIn">
@@ -219,7 +320,7 @@ export default function AdminDashboardClient({ stats, topSellers }: AdminDashboa
           </div>
           <div>
             <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Tổng đơn hàng</p>
-            <p className="text-xl font-bold text-slate-800 mt-1">{displayOrders} đơn</p>
+            <p className="text-xl font-bold text-slate-800 mt-1">{formatNumber(displayOrders)} đơn</p>
           </div>
         </div>
 
@@ -231,7 +332,7 @@ export default function AdminDashboardClient({ stats, topSellers }: AdminDashboa
           <div>
             <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Khách hàng</p>
             <p className="text-xl font-bold text-slate-800 mt-1">
-              {displayCustomers !== null ? `${displayCustomers} khách` : 'Chờ API...'}
+              {displayCustomers !== null ? `${formatNumber(displayCustomers)} khách` : 'Chờ API...'}
             </p>
           </div>
         </div>
@@ -243,7 +344,7 @@ export default function AdminDashboardClient({ stats, topSellers }: AdminDashboa
           </div>
           <div>
             <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Tổng sản phẩm</p>
-            <p className="text-xl font-bold text-slate-800 mt-1">{displayProducts} mã</p>
+            <p className="text-xl font-bold text-slate-800 mt-1">{formatNumber(displayProducts)} mã</p>
           </div>
         </div>
       </div>
@@ -255,7 +356,7 @@ export default function AdminDashboardClient({ stats, topSellers }: AdminDashboa
         <div className="lg:col-span-2 space-y-8">
           
           {/* 1. Recent Revenue Chart (if success and has data) */}
-          {data && data.recentRevenue && data.recentRevenue.length > 0 && (
+          {data && data.revenueByDay.length > 0 && (
             <div className="bg-white border border-slate-200/80 p-6 rounded-2xl shadow-sm space-y-6">
               <div>
                 <h3 className="text-base font-bold text-slate-800 flex items-center gap-2">
@@ -268,8 +369,8 @@ export default function AdminDashboardClient({ stats, topSellers }: AdminDashboa
               {/* Bar Chart Representation */}
               <div className="h-48 flex items-end justify-between gap-2 pt-4 px-2">
                 {(() => {
-                  const maxAmt = Math.max(...data.recentRevenue.map(r => r.amount), 1);
-                  return data.recentRevenue.map((item, idx) => {
+                  const maxAmt = Math.max(...data.revenueByDay.map(r => r.amount), 1);
+                  return data.revenueByDay.map((item, idx) => {
                     const pct = (item.amount / maxAmt) * 100;
                     return (
                       <div key={idx} className="flex-1 flex flex-col items-center gap-2 group h-full justify-end">
@@ -296,7 +397,7 @@ export default function AdminDashboardClient({ stats, topSellers }: AdminDashboa
           )}
 
           {/* 2. Order Status Breakdown (if success) */}
-          {data && data.orderStatusBreakdown && (
+          {data && Object.keys(data.orderStatusBreakdown).length > 0 && (
             <div className="bg-white border border-slate-200/80 p-6 rounded-2xl shadow-sm space-y-6">
               <div>
                 <h3 className="text-base font-bold text-slate-800 flex items-center gap-2">
@@ -309,16 +410,17 @@ export default function AdminDashboardClient({ stats, topSellers }: AdminDashboa
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {(() => {
                   const breakdown = data.orderStatusBreakdown;
-                  const total = Object.values(breakdown).reduce((a, b) => a + b, 0) || 1;
+                  const total = Object.values(breakdown).reduce((a, b) => a + toSafeNumber(b), 0) || 1;
                   return Object.entries(breakdown).map(([status, count]) => {
-                    const pct = Math.round((count / total) * 100);
+                    const safeCount = toSafeNumber(count);
+                    const pct = Math.round((safeCount / total) * 100);
                     return (
                       <div key={status} className="border border-slate-105 p-4 rounded-xl space-y-2">
                         <div className="flex justify-between items-center">
                           <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold border ${getStatusColor(status)}`}>
                             {getStatusLabel(status)}
                           </span>
-                          <span className="text-xs font-bold text-slate-500">{count} đơn ({pct}%)</span>
+                          <span className="text-xs font-bold text-slate-500">{formatNumber(safeCount)} đơn ({pct}%)</span>
                         </div>
                         <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
                           <div 
@@ -360,10 +462,10 @@ export default function AdminDashboardClient({ stats, topSellers }: AdminDashboa
               </div>
 
               <div className="space-y-5">
-                {topSellers.length === 0 ? (
+                {safeTopSellers.length === 0 ? (
                   <p className="text-sm text-slate-400 text-center py-6">Chưa có số liệu xu hướng bán hàng.</p>
                 ) : (
-                  topSellers.map((item, index) => {
+                  safeTopSellers.map((item, index) => {
                     const percentage = maxQty > 0 ? (item.quantitySold / maxQty) * 100 : 0;
                     
                     return (
@@ -388,7 +490,7 @@ export default function AdminDashboardClient({ stats, topSellers }: AdminDashboa
                               {item.name}
                             </span>
                             <span className="text-xs font-bold text-slate-500 shrink-0">
-                              {item.quantitySold} sản phẩm
+                              {formatNumber(item.quantitySold)} sản phẩm
                             </span>
                           </div>
                           
@@ -424,10 +526,10 @@ export default function AdminDashboardClient({ stats, topSellers }: AdminDashboa
               </div>
 
               <div className="space-y-4">
-                {data.newOrders.length === 0 ? (
+                {data.recentOrders.length === 0 ? (
                   <p className="text-xs text-slate-400 text-center py-4">Không có đơn hàng mới nào.</p>
                 ) : (
-                  data.newOrders.map(order => (
+                  data.recentOrders.map(order => (
                     <div key={order.id} className="flex justify-between items-start border-b border-slate-100 pb-3 last:border-0 last:pb-0">
                       <div className="space-y-1">
                         <div className="flex items-center gap-2">
@@ -473,7 +575,7 @@ export default function AdminDashboardClient({ stats, topSellers }: AdminDashboa
                         prod.stock === 0 ? 'bg-red-100 text-red-800' :
                         prod.stock <= 5 ? 'bg-amber-100 text-amber-800' : 'bg-yellow-100 text-yellow-800'
                       }`}>
-                        Còn {prod.stock}
+                        Còn {formatNumber(prod.stock)}
                       </span>
                     </div>
                   ))
@@ -503,7 +605,7 @@ export default function AdminDashboardClient({ stats, topSellers }: AdminDashboa
                   </div>
                   <div>
                     <span className="text-sm font-bold text-slate-800 group-hover:text-blue-600 transition">Quản lý Đơn hàng</span>
-                    <p className="text-xs text-slate-400 mt-0.5">{stats.pendingOrders} đơn hàng chờ</p>
+                    <p className="text-xs text-slate-400 mt-0.5">{formatNumber(safeStats.pendingOrders)} đơn hàng chờ</p>
                   </div>
                 </div>
                 <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-blue-500 transition" />
@@ -519,7 +621,7 @@ export default function AdminDashboardClient({ stats, topSellers }: AdminDashboa
                   </div>
                   <div>
                     <span className="text-sm font-bold text-slate-800 group-hover:text-blue-600 transition">Kho Sản phẩm</span>
-                    <p className="text-xs text-slate-400 mt-0.5">{stats.totalProducts} phân loại hàng</p>
+                    <p className="text-xs text-slate-400 mt-0.5">{formatNumber(safeStats.totalProducts)} phân loại hàng</p>
                   </div>
                 </div>
                 <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-blue-500 transition" />

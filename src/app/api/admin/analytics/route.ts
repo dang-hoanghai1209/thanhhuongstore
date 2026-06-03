@@ -52,6 +52,21 @@ function createRevenueSeries(start: Date | undefined, now: Date) {
   return series;
 }
 
+function createEmptyAnalyticsContract() {
+  return {
+    summary: {
+      totalRevenue: 0,
+      totalOrders: 0,
+      totalCustomers: 0,
+      totalProducts: 0,
+    },
+    ordersByStatus: [] as Array<{ status: string; count: number }>,
+    revenueByDay: [] as Array<{ date: string; revenue: number }>,
+    lowStockProducts: [] as Array<Record<string, never>>,
+    recentOrders: [] as Array<Record<string, never>>,
+  };
+}
+
 export async function GET(request: NextRequest) {
   try {
     const authResult = await requireAdmin(request);
@@ -220,45 +235,69 @@ export async function GET(request: NextRequest) {
         typeof group._count === 'object' ? group._count?._all ?? 0 : 0;
     }
 
+    const summary = {
+      totalRevenue: toNumber(revenueAggregate._sum.totalAmount),
+      totalOrders: toNumber(totalOrders),
+      totalCustomers: toNumber(totalCustomers),
+      totalProducts: toNumber(totalProducts),
+    };
+    const ordersByStatusList = Object.entries(orderStatusCounts).map(([status, count]) => ({
+      status,
+      count: toNumber(count),
+    }));
+    const revenueByDay = Array.from(revenueByDate, ([date, revenue]) => ({
+      date,
+      revenue: toNumber(revenue),
+    }));
+    const lowStockProducts = lowStockVariants.map((variant) => ({
+      variantId: variant.id,
+      productId: variant.product.id,
+      productName: variant.product.name,
+      productSlug: variant.product.slug,
+      imageUrl: variant.product.images[0]?.url ?? null,
+      sku: variant.sku,
+      size: variant.size,
+      color: variant.color,
+      stock: toNumber(variant.stock),
+      retailPrice: toNumber(variant.retailPrice),
+    }));
+    const normalizedRecentOrders = recentOrders.map((order) => ({
+      id: order.id,
+      orderNumber: order.orderNumber,
+      customerName: order.customerName,
+      phoneNumber: order.phoneNumber,
+      status: order.status,
+      paymentMethod: order.paymentMethod,
+      paymentStatus: order.paymentStatus,
+      totalAmount: toNumber(order.totalAmount),
+      createdAt: order.createdAt,
+      itemCount: toNumber(order._count.items),
+    }));
+
     return NextResponse.json({
       range,
       period: {
         from: rangeStart?.toISOString() ?? null,
         to: now.toISOString(),
       },
-      overview: {
-        totalRevenue: toNumber(revenueAggregate._sum.totalAmount),
-        totalOrders,
-        totalCustomers,
-        totalProducts,
-      },
-      ordersByStatus: orderStatusCounts,
-      revenueByDate: Array.from(revenueByDate, ([date, revenue]) => ({
-        date,
-        revenue,
-      })),
-      lowStockProducts: lowStockVariants.map((variant) => ({
-        variantId: variant.id,
-        productId: variant.product.id,
-        productName: variant.product.name,
-        productSlug: variant.product.slug,
-        imageUrl: variant.product.images[0]?.url ?? null,
-        sku: variant.sku,
-        size: variant.size,
-        color: variant.color,
-        stock: variant.stock,
-        retailPrice: toNumber(variant.retailPrice),
-      })),
-      recentOrders: recentOrders.map((order) => ({
-        ...order,
-        totalAmount: toNumber(order.totalAmount),
-        itemCount: order._count.items,
-        _count: undefined,
-      })),
+      summary,
+      ordersByStatus: ordersByStatusList,
+      revenueByDay,
+      lowStockProducts,
+      recentOrders: normalizedRecentOrders,
+      overview: summary,
+      orderStatusBreakdown: orderStatusCounts,
+      revenueByDate: revenueByDay,
     });
   } catch (error) {
     console.error('Failed to fetch admin analytics:', error);
 
-    return NextResponse.json({ error: 'Unable to fetch admin analytics.' }, { status: 500 });
+    return NextResponse.json(
+      {
+        ...createEmptyAnalyticsContract(),
+        error: 'Unable to fetch admin analytics.',
+      },
+      { status: 500 },
+    );
   }
 }

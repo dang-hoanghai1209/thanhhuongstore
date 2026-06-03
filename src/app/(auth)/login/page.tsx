@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { 
@@ -32,6 +32,23 @@ type LoginResponse = {
   error?: string;
 };
 
+function getOAuthErrorMessage(errorCode: string) {
+  switch (errorCode) {
+    case 'invalid_oauth_state':
+      return 'Phiên đăng nhập OAuth không hợp lệ. Vui lòng thử lại.';
+    case 'google_oauth_failed':
+      return 'Đăng nhập Google thất bại. Vui lòng thử lại.';
+    case 'facebook_oauth_failed':
+      return 'Đăng nhập Facebook thất bại. Vui lòng thử lại.';
+    case 'facebook_email_required':
+      return 'Facebook không trả về email. Vui lòng cấp quyền email hoặc dùng email/password.';
+    case 'access_denied':
+      return 'Bạn đã hủy đăng nhập OAuth.';
+    default:
+      return 'Đăng nhập OAuth thất bại. Vui lòng thử lại.';
+  }
+}
+
 export default function LoginPage() {
   const router = useRouter();
   const setAuth = useAuthStore((state) => state.setAuth);
@@ -41,6 +58,14 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const oauthError = new URLSearchParams(window.location.search).get('error');
+
+    if (oauthError) {
+      setError(getOAuthErrorMessage(oauthError));
+    }
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -226,11 +251,23 @@ export default function LoginPage() {
 
           {/* Social Buttons */}
           <div className="grid grid-cols-2 gap-4">
-            <button className="flex items-center justify-center gap-2 py-2.5 border border-gray-200 hover:border-gray-300 rounded-brand-md bg-white text-xs text-gray-700 font-bold transition shadow-xs">
+            <button
+              type="button"
+              onClick={() => {
+                window.location.href = '/api/auth/google';
+              }}
+              className="flex items-center justify-center gap-2 py-2.5 border border-gray-200 hover:border-gray-300 rounded-brand-md bg-white text-xs text-gray-700 font-bold transition shadow-xs"
+            >
               <Chrome className="w-4 h-4 text-red-500" />
               Google
             </button>
-            <button className="flex items-center justify-center gap-2 py-2.5 border border-gray-200 hover:border-gray-300 rounded-brand-md bg-white text-xs text-gray-700 font-bold transition shadow-xs">
+            <button
+              type="button"
+              onClick={() => {
+                window.location.href = '/api/auth/facebook';
+              }}
+              className="flex items-center justify-center gap-2 py-2.5 border border-gray-200 hover:border-gray-300 rounded-brand-md bg-white text-xs text-gray-700 font-bold transition shadow-xs"
+            >
               <Facebook className="w-4 h-4 text-blue-600" />
               Facebook
             </button>

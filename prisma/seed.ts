@@ -1,4 +1,5 @@
-import { PrismaClient, SizeType } from '@prisma/client';
+import bcrypt from 'bcrypt';
+import { PrismaClient, SizeType, UserRole } from '@prisma/client';
 
 const directDatabaseUrl = process.env.DIRECT_URL ?? process.env.DATABASE_URL;
 
@@ -353,6 +354,7 @@ async function clearDatabase() {
   await prisma.$transaction([
     prisma.passwordReset.deleteMany(),
     prisma.refreshToken.deleteMany(),
+    prisma.oAuthAccount.deleteMany(),
     prisma.wholesaleProfile.deleteMany(),
     prisma.wishlistItem.deleteMany(),
     prisma.wishlist.deleteMany(),
@@ -370,6 +372,43 @@ async function clearDatabase() {
     prisma.coupon.deleteMany(),
     prisma.user.deleteMany(),
   ]);
+}
+
+async function seedAdminUser() {
+  const email = process.env.SEED_ADMIN_EMAIL?.trim().toLowerCase();
+  const password = process.env.SEED_ADMIN_PASSWORD;
+
+  if (!email || !password) {
+    console.log('Skipping admin seed because SEED_ADMIN_EMAIL or SEED_ADMIN_PASSWORD is missing.');
+    return;
+  }
+
+  const firstName = process.env.SEED_ADMIN_FIRST_NAME?.trim() || 'Admin';
+  const lastName = process.env.SEED_ADMIN_LAST_NAME?.trim() || 'User';
+  const passwordHash = await bcrypt.hash(password, 12);
+
+  await prisma.user.upsert({
+    where: { email },
+    update: {
+      passwordHash,
+      firstName,
+      lastName,
+      name: `${firstName} ${lastName}`.trim(),
+      role: UserRole.ADMIN,
+      isActive: true,
+    },
+    create: {
+      email,
+      passwordHash,
+      firstName,
+      lastName,
+      name: `${firstName} ${lastName}`.trim(),
+      role: UserRole.ADMIN,
+      isActive: true,
+    },
+  });
+
+  console.log(`Admin seed completed for ${email}.`);
 }
 
 function createSku(slug: string, colorIndex: number, sizeIndex: number) {
@@ -390,6 +429,8 @@ function createRetailPrice(slug: string) {
 async function main() {
   console.log('Clearing existing data...');
   await clearDatabase();
+
+  await seedAdminUser();
 
   console.log('Creating categories...');
   const categories = await Promise.all([

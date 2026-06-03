@@ -98,6 +98,28 @@ loi cau hinh neu thieu.
 | `JWT_REFRESH_SECRET` | Co | Secret rieng ky refresh token. |
 | `NEXT_PUBLIC_APP_URL` | Co | URL public cua ung dung, vi du `http://localhost:3000`. |
 
+### OAuth Google/Facebook
+
+OAuth dang dung chung he JWT custom va HttpOnly cookies voi email/password login.
+Khong cau hinh NextAuth/Auth.js song song.
+
+| Bien | Bat buoc | Mo ta |
+| --- | --- | --- |
+| `GOOGLE_CLIENT_ID` | Khi bat Google login | Client ID tren Google Cloud Console. |
+| `GOOGLE_CLIENT_SECRET` | Khi bat Google login | Client Secret tren Google Cloud Console. |
+| `GOOGLE_REDIRECT_URI` | Khi bat Google login | Vi du `http://localhost:3000/api/auth/google/callback`. |
+| `FACEBOOK_CLIENT_ID` | Khi bat Facebook login | App ID tren Facebook Developers. |
+| `FACEBOOK_CLIENT_SECRET` | Khi bat Facebook login | App Secret tren Facebook Developers. |
+| `FACEBOOK_REDIRECT_URI` | Khi bat Facebook login | Vi du `http://localhost:3000/api/auth/facebook/callback`. |
+| `OAUTH_SUCCESS_REDIRECT_URL` | Khong | URL sau khi OAuth thanh cong, mac dinh `/account`. |
+| `OAUTH_FAILURE_REDIRECT_URL` | Khong | URL khi OAuth loi, mac dinh `/login?error=...`. |
+
+Callback URL can dang ky:
+
+- Google local: `http://localhost:3000/api/auth/google/callback`
+- Facebook local: `http://localhost:3000/api/auth/facebook/callback`
+- Production: thay `http://localhost:3000` bang domain HTTPS that.
+
 ### Redis
 
 | Bien | Bat buoc | Mo ta |
@@ -154,6 +176,23 @@ Seed hien tai xoa du lieu lien quan truoc khi tao lai du lieu mau. Chi chay seed
 tren database local, staging dung rieng hoac database da duoc phep reset. Khong
 chay seed tren database production dang co du lieu kinh doanh.
 
+### Seed Admin Local
+
+Neu can tai khoan admin de test `/admin` local, dien cac bien sau trong `.env`
+truoc khi chay seed:
+
+```env
+SEED_ADMIN_EMAIL=admin@example.com
+SEED_ADMIN_PASSWORD=change-me-local-only
+SEED_ADMIN_FIRST_NAME=Admin
+SEED_ADMIN_LAST_NAME=User
+```
+
+Seed se hash password bang bcrypt va upsert user theo email voi `role = ADMIN`,
+`isActive = true`. Neu thieu `SEED_ADMIN_EMAIL` hoac `SEED_ADMIN_PASSWORD`, seed
+se bo qua tao admin va log thong bao skip. Khong dat mat khau production that
+vao cac bien seed local.
+
 ## Chay Bang Docker
 
 1. Tao `.env` tu `.env.example` va dien password/secret.
@@ -207,6 +246,11 @@ Checklist truoc khi deploy:
 4. Gan persistent volume cho `public/uploads/products`.
 5. Kiem tra domain, HTTPS, Nginx va VNPay production callback.
 6. Khong seed database production.
+
+Luu y Prisma migration: neu database da tung duoc tao bang `npx prisma db push`
+truoc khi co thu muc `prisma/migrations`, khong chay reset. Can baseline migration
+an toan bang `prisma migrate resolve --applied <migration_name>` sau khi xac nhan
+schema hien tai trong database khop voi migration.
 
 ## Scripts
 
