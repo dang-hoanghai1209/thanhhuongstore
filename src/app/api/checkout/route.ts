@@ -44,10 +44,12 @@ function getBankTransferPayload({
 const checkoutSchema = z.object({
   customerName: z.string().trim().optional(),
   fullName: z.string().trim().optional(),
+  email: z.string().trim().email().optional(),
   phoneNumber: z.string().trim().optional(),
   phone: z.string().trim().optional(),
   address: z.string().trim().min(1, 'Địa chỉ không được để trống'),
   notes: z.string().trim().max(1000, 'Ghi chú không được vượt quá 1000 ký tự').optional(),
+  note: z.string().trim().max(1000).optional(),
   paymentMethod: z.enum(['COD', 'BANK_TRANSFER', 'VNPAY']).default('COD'),
   items: z
     .array(
@@ -82,7 +84,8 @@ export async function POST(request: NextRequest) {
 
     const customerName = payload.data.customerName ?? payload.data.fullName;
     const phoneNumber = payload.data.phoneNumber ?? payload.data.phone;
-    const { address, notes, paymentMethod, items } = payload.data;
+    const { address, paymentMethod, items } = payload.data;
+    const notes = payload.data.notes ?? payload.data.note;
 
     if (!customerName || !phoneNumber) {
       return NextResponse.json(
@@ -225,11 +228,25 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(
       {
+        success: true,
+        message: 'Order created successfully.',
+        order: {
+          id: order.id,
+          code: order.orderNumber,
+          orderNumber: order.orderNumber,
+          total: totalAmount,
+          totalAmount,
+          status: order.status,
+          paymentMethod,
+          paymentStatus: order.paymentStatus,
+        },
         orderId: order.id,
         orderNumber: order.orderNumber,
+        orderCode: order.orderNumber,
         status: order.status,
         paymentStatus: order.paymentStatus,
         paymentMethod,
+        total: totalAmount,
         totalAmount,
         ...(bankTransfer ? { bankTransfer } : {}),
       },

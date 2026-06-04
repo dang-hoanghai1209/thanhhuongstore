@@ -1,13 +1,13 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { 
-  Plus, 
-  Minus, 
-  ShoppingBag, 
-  ChevronRight, 
-  ShieldCheck, 
-  Truck, 
+import {
+  Plus,
+  Minus,
+  ShoppingBag,
+  ChevronRight,
+  ShieldCheck,
+  Truck,
   RotateCcw,
   Sparkles,
   HelpCircle,
@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { useCartStore } from '@/store/useCartStore';
+import Breadcrumb from '@/components/ui/Breadcrumb';
 
 interface Variant {
   id: string;
@@ -111,17 +112,17 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
     if (selectedVariant) {
       return `${selectedVariant.retailPrice.toLocaleString('vi-VN')} đ`;
     }
-    
+
     if (variants.length === 0) return 'Liên hệ';
-    
+
     const prices = variants.map(v => v.retailPrice);
     const minPrice = Math.min(...prices);
     const maxPrice = Math.max(...prices);
-    
+
     if (minPrice === maxPrice) {
       return `${minPrice.toLocaleString('vi-VN')} đ`;
     }
-    
+
     return `Từ ${minPrice.toLocaleString('vi-VN')} đ - ${maxPrice.toLocaleString('vi-VN')} đ`;
   }, [selectedVariant, variants]);
 
@@ -174,29 +175,29 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
   return (
     <main className="min-h-screen bg-[#FAF9F6] text-gray-900 pb-20 pt-6">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
+
         {/* Breadcrumbs Navigation */}
-        <nav className="flex items-center gap-1.5 text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-8">
-          <Link href="/" className="hover:text-brand-600 transition">Trang chủ</Link>
-          <ChevronRight className="w-3.5 h-3.5" />
-          <Link href="/products" className="hover:text-brand-600 transition">Sản phẩm</Link>
-          <ChevronRight className="w-3.5 h-3.5" />
-          <span className="text-gray-600 truncate max-w-[200px]">{name}</span>
-        </nav>
+        <Breadcrumb
+          items={[
+            { label: 'Sản phẩm', href: '/products' },
+            ...(category ? [{ label: category.name, href: `/categories/${category.slug}` }] : []),
+            { label: name }
+          ]}
+        />
 
         {/* 2-Column Responsive Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start bg-white p-6 sm:p-8 rounded-brand-lg border border-gray-100 shadow-xs">
-          
+
           {/* LEFT COLUMN: Gallery Panel (5 cols) */}
           <div className="lg:col-span-6 space-y-4">
             {/* Primary Large Image Container */}
             <div className="aspect-[4/5] bg-gray-50 border border-gray-100 rounded-brand-lg overflow-hidden relative shadow-2xs">
-              <img 
-                src={activeImage} 
-                alt={name} 
+              <img
+                src={activeImage}
+                alt={name}
                 className="w-full h-full object-cover object-center transition duration-500 hover:scale-102"
               />
-              
+
               {/* Featured Badge */}
               {variants.some(v => v.stock > 0) ? (
                 <span className="absolute top-4 left-4 bg-brand-600 text-white text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-brand-sm shadow-sm">
@@ -217,8 +218,8 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
                     key={img.id}
                     onClick={() => setActiveImage(img.url)}
                     className={`aspect-[4/5] bg-gray-50 rounded-brand-md overflow-hidden border transition-all ${
-                      activeImage === img.url 
-                        ? 'border-brand-600 ring-2 ring-brand-500/10' 
+                      activeImage === img.url
+                        ? 'border-brand-600 ring-2 ring-brand-500/10'
                         : 'border-gray-200 hover:border-gray-400'
                     }`}
                   >
@@ -231,7 +232,7 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
 
           {/* RIGHT COLUMN: Detail Options Panel (6 cols) */}
           <div className="lg:col-span-6 space-y-6">
-            
+
             {/* Category and Title */}
             <div className="space-y-2">
               <span className="inline-flex items-center gap-1 bg-brand-50 text-brand-600 text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded">
@@ -251,7 +252,7 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
                   {priceDisplay}
                 </span>
               </div>
-              
+
               {/* Optional stock message */}
               {selectedVariant && (
                 <div className="text-right">
@@ -282,15 +283,15 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
                         setSelectedSize(null);
                       }}
                       className={`relative flex items-center justify-center p-0.5 rounded-full border transition-all ${
-                        isSelected 
-                          ? 'border-brand-600 ring-2 ring-brand-500/20 scale-105' 
+                        isSelected
+                          ? 'border-brand-600 ring-2 ring-brand-500/20 scale-105'
                           : 'border-gray-200 hover:border-gray-400'
                       }`}
                       title={colorObj.name}
                     >
-                      <span 
-                        className="w-7 h-7 rounded-full border border-black/5" 
-                        style={{ backgroundColor: colorObj.hex }} 
+                      <span
+                        className="w-7 h-7 rounded-full border border-black/5"
+                        style={{ backgroundColor: colorObj.hex }}
                       />
                     </button>
                   );
@@ -315,7 +316,7 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
                       className={`min-w-10 h-10 px-3 border rounded-brand-sm text-xs font-bold transition flex items-center justify-center ${
                         isSelected
                           ? 'border-brand-600 bg-brand-50/50 text-brand-600 font-black ring-1 ring-brand-500/10'
-                          : isAvailable 
+                          : isAvailable
                             ? 'border-gray-200 text-gray-800 hover:border-gray-400 hover:bg-gray-50'
                             : 'border-gray-100 text-gray-300 cursor-not-allowed bg-gray-50 line-through'
                       }`}
@@ -330,10 +331,10 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
             {/* Quantity adjust & Add actions */}
             <div className="space-y-4 pt-4 border-t border-gray-100/60">
               <div className="flex items-center gap-4">
-                
+
                 {/* Quantity modifier */}
                 <div className="flex items-center border border-gray-200 rounded-brand-md bg-white p-1 shadow-2xs">
-                  <button 
+                  <button
                     onClick={() => handleQtyChange('dec')}
                     disabled={quantity <= 1 || !selectedVariant}
                     className="p-1.5 hover:bg-gray-50 text-gray-500 disabled:text-gray-300 disabled:bg-transparent rounded-brand-sm transition-colors"
@@ -343,7 +344,7 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
                   <span className="px-4 text-sm font-black text-gray-800 min-w-6 text-center">
                     {quantity}
                   </span>
-                  <button 
+                  <button
                     onClick={() => handleQtyChange('inc')}
                     disabled={!selectedVariant || quantity >= selectedVariant.stock}
                     className="p-1.5 hover:bg-gray-50 text-gray-500 disabled:text-gray-300 disabled:bg-transparent rounded-brand-sm transition-colors"
@@ -374,10 +375,10 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
                   ) : (
                     <>
                       <ShoppingBag className="w-4 h-4" />
-                      {!selectedVariant 
-                        ? 'Vui lòng chọn phân loại' 
-                        : selectedVariant.stock === 0 
-                          ? 'Hết hàng' 
+                      {!selectedVariant
+                        ? 'Vui lòng chọn phân loại'
+                        : selectedVariant.stock === 0
+                          ? 'Hết hàng'
                           : 'Thêm vào giỏ hàng'}
                     </>
                   )}
@@ -450,7 +451,7 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
                     </ul>
                   </div>
                 )}
-                
+
                 {activeTab === 'b2b' && (
                   <div className="space-y-2.5 p-3 bg-gray-50 rounded border border-gray-100">
                     <p className="font-bold text-gray-800">💼 Quyền lợi đại lý hợp tác sỉ với Thanh Hương Store:</p>

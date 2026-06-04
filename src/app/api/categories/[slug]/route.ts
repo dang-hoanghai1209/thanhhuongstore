@@ -6,8 +6,7 @@ import prisma from '@/lib/prisma';
 
 export const dynamic = 'force-dynamic';
 
-const searchSchema = z.object({
-  q: z.string().trim().min(1).max(100),
+const querySchema = z.object({
   page: z.coerce.number().int().positive().default(1),
   limit: z.coerce.number().int().positive().max(100).default(12),
 });
@@ -34,7 +33,7 @@ const productInclude = {
   },
 } satisfies Prisma.ProductInclude;
 
-type SearchProduct = Prisma.ProductGetPayload<{
+type CategoryProduct = Prisma.ProductGetPayload<{
   include: typeof productInclude;
 }>;
 
@@ -44,7 +43,7 @@ function toNumber(value: unknown) {
   return Number.isFinite(numberValue) ? numberValue : 0;
 }
 
-function formatProduct(product: SearchProduct) {
+function formatProduct(product: CategoryProduct) {
   const variants = product.variants.map((variant) => ({
     ...variant,
     retailPrice: toNumber(variant.retailPrice),
@@ -73,32 +72,54 @@ function formatProduct(product: SearchProduct) {
   };
 }
 
-export async function GET(request: NextRequest) {
+export async function GET(
+  request: NextRequest,
+  context: { params: { slug: string } },
+) {
   try {
-    const payload = searchSchema.safeParse({
-      q: request.nextUrl.searchParams.get('q'),
+    const payload = querySchema.safeParse({
       page: request.nextUrl.searchParams.get('page') ?? undefined,
       limit: request.nextUrl.searchParams.get('limit') ?? undefined,
     });
 
     if (!payload.success) {
-      return NextResponse.json({ error: 'Search query is required.' }, { status: 400 });
+      return NextResponse.json(
+        {
+          error: 'Invalid category query.',
+          details: payload.error.flatten().fieldErrors,
+        },
+        { status: 400 },
+      );
     }
 
-    const { q, page, limit } = payload.data;
+    const category = await prisma.category.findFirst({
+      where: {
+        slug: context.params.slug,
+        isActive: true,
+      },
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+        sizeType: true,
+        sortOrder: true,
+        parentId: true,
+        isActive: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+
+    if (!category) {
+      return NextResponse.json({ error: 'Category not found.' }, { status: 404 });
+    }
+
+    const { page, limit } = payload.data;
     const skip = (page - 1) * limit;
     const where: Prisma.ProductWhereInput = {
       isActive: true,
-      category: {
-        isActive: true,
-      },
-      OR: [
-        { name: { contains: q, mode: 'insensitive' } },
-        { slug: { contains: q, mode: 'insensitive' } },
-        { category: { name: { contains: q, mode: 'insensitive' } } },
-      ],
+      categoryId: category.id,
     };
-
     const [products, total] = await prisma.$transaction([
       prisma.product.findMany({
         where,
@@ -109,27 +130,22 @@ export async function GET(request: NextRequest) {
       }),
       prisma.product.count({ where }),
     ]);
-    const items = products.map(formatProduct);
+    const formattedProducts = products.map(formatProduct);
 
     return NextResponse.json({
-      items,
-      products: items,
+      ...category,
+      description: null,
+      products: formattedProducts,
+      items: formattedProducts,
       pagination: {
         page,
         limit,
         total,
         totalPages: Math.ceil(total / limit),
       },
-      filters: {
-        q,
-        category: '',
-        minPrice: null,
-        maxPrice: null,
-        sort: 'newest',
-      },
     });
   } catch (error) {
-    console.error('Failed to search products:', error);
-    return NextResponse.json({ error: 'Unable to search products.' }, { status: 500 });
+    console.error('Failed to fetch category details:', error);
+    return NextResponse.json({ error: 'Unable to fetch category details.' }, { status: 500 });
   }
 }

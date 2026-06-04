@@ -6,17 +6,32 @@ import prisma from '@/lib/prisma';
 
 export const dynamic = 'force-dynamic';
 
+const sortValues = [
+  'newest',
+  'oldest',
+  'price_asc',
+  'price_desc',
+  'name_asc',
+  'name_desc',
+  'popular',
+] as const;
+
 const querySchema = z
   .object({
     category: z.string().trim().min(1).max(100).optional(),
+    categorySlug: z.string().trim().min(1).max(100).optional(),
+    q: z.string().trim().min(1).max(100).optional(),
     search: z.string().trim().min(1).max(100).optional(),
     minPrice: z.coerce.number().finite().nonnegative().optional(),
     maxPrice: z.coerce.number().finite().nonnegative().optional(),
     sort: z
-      .enum(['newest', 'oldest', 'name-asc', 'name-desc', 'price-asc', 'price-desc'])
+      .preprocess(
+        (value) => String(value ?? 'newest').replaceAll('-', '_'),
+        z.enum(sortValues),
+      )
       .default('newest'),
     page: z.coerce.number().int().positive().default(1),
-    limit: z.coerce.number().int().positive().max(100).default(24),
+    limit: z.coerce.number().int().positive().max(100).default(12),
   })
   .superRefine((value, context) => {
     if (
@@ -41,13 +56,7 @@ const productInclude = {
     },
   },
   images: {
-    where: {
-      isPrimary: true,
-    },
-    orderBy: {
-      sortOrder: 'asc' as const,
-    },
-    take: 1,
+    orderBy: [{ isPrimary: 'desc' as const }, { sortOrder: 'asc' as const }],
   },
   variants: {
     select: {
@@ -60,39 +69,66 @@ const productInclude = {
       wholesalePrice: true,
       stock: true,
     },
-    orderBy: {
-      retailPrice: 'asc' as const,
-    },
-    take: 1,
+    orderBy: [{ retailPrice: 'asc' as const }, { size: 'asc' as const }, { color: 'asc' as const }],
   },
-} as const;
+} satisfies Prisma.ProductInclude;
 
 type ListedProduct = Prisma.ProductGetPayload<{
   include: typeof productInclude;
 }>;
 
+function toNumber(value: unknown) {
+  const numberValue = Number(value ?? 0);
+
+  return Number.isFinite(numberValue) ? numberValue : 0;
+}
+
 function formatProduct(product: ListedProduct) {
+  const variants = product.variants.map((variant) => ({
+    ...variant,
+    retailPrice: toNumber(variant.retailPrice),
+    wholesalePrice: toNumber(variant.wholesalePrice),
+  }));
+  const variantPrices = variants.map((variant) => variant.retailPrice).filter((price) => price > 0);
+  const price = variantPrices.length > 0 ? Math.min(...variantPrices) : 0;
+  const totalStock = variants.reduce((sum, variant) => sum + toNumber(variant.stock), 0);
+
   return {
-    ...product,
-    variants: product.variants.map((variant) => ({
-      ...variant,
-      retailPrice: Number(variant.retailPrice),
-      wholesalePrice: Number(variant.wholesalePrice),
-    })),
+    id: product.id,
+    name: product.name,
+    slug: product.slug,
+    description: null,
+    shortDescription: null,
+    price,
+    salePrice: null,
+    finalPrice: price,
+    images: product.images,
+    category: product.category,
+    variants,
+    stock: totalStock,
+    totalStock,
+    isActive: product.isActive,
+    isFeatured: product.isFeatured,
+    wholesaleTiers: product.wholesaleTiers,
+    createdAt: product.createdAt,
+    updatedAt: product.updatedAt,
   };
 }
 
 function getProductOrderBy(
-  sort: 'newest' | 'oldest' | 'name-asc' | 'name-desc',
+  sort: (typeof sortValues)[number],
 ): Prisma.ProductOrderByWithRelationInput[] {
   switch (sort) {
     case 'oldest':
       return [{ createdAt: 'asc' }, { id: 'asc' }];
-    case 'name-asc':
+    case 'name_asc':
       return [{ name: 'asc' }, { id: 'asc' }];
-    case 'name-desc':
+    case 'name_desc':
       return [{ name: 'desc' }, { id: 'asc' }];
+    case 'popular':
     case 'newest':
+    case 'price_asc':
+    case 'price_desc':
       return [{ createdAt: 'desc' }, { id: 'asc' }];
   }
 }
@@ -101,6 +137,8 @@ export async function GET(request: NextRequest) {
   try {
     const payload = querySchema.safeParse({
       category: request.nextUrl.searchParams.get('category') ?? undefined,
+      categorySlug: request.nextUrl.searchParams.get('categorySlug') ?? undefined,
+      q: request.nextUrl.searchParams.get('q') ?? undefined,
       search: request.nextUrl.searchParams.get('search') ?? undefined,
       minPrice: request.nextUrl.searchParams.get('minPrice') ?? undefined,
       maxPrice: request.nextUrl.searchParams.get('maxPrice') ?? undefined,
@@ -119,7 +157,9 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const { category, search, minPrice, maxPrice, sort, page, limit } = payload.data;
+    const { minPrice, maxPrice, sort, page, limit } = payload.data;
+    const category = payload.data.category ?? payload.data.categorySlug ?? '';
+    const q = payload.data.q ?? payload.data.search ?? '';
     const skip = (page - 1) * limit;
     const retailPriceFilter: Prisma.DecimalFilter | undefined =
       minPrice !== undefined || maxPrice !== undefined
@@ -134,21 +174,12 @@ export async function GET(request: NextRequest) {
         isActive: true,
         ...(category ? { slug: category } : {}),
       },
-      ...(search
+      ...(q
         ? {
             OR: [
-              {
-                name: {
-                  contains: search,
-                  mode: 'insensitive',
-                },
-              },
-              {
-                slug: {
-                  contains: search,
-                  mode: 'insensitive',
-                },
-              },
+              { name: { contains: q, mode: 'insensitive' } },
+              { slug: { contains: q, mode: 'insensitive' } },
+              { category: { name: { contains: q, mode: 'insensitive' } } },
             ],
           }
         : {}),
@@ -166,8 +197,8 @@ export async function GET(request: NextRequest) {
     let products: ListedProduct[];
     let total: number;
 
-    if (sort === 'price-asc' || sort === 'price-desc') {
-      const priceDirection = sort === 'price-asc' ? 'asc' : 'desc';
+    if (sort === 'price_asc' || sort === 'price_desc') {
+      const priceDirection = sort === 'price_asc' ? 'asc' : 'desc';
       const [groupedVariants, productCount] = await prisma.$transaction([
         prisma.productVariant.groupBy({
           by: ['productId'],
@@ -221,14 +252,26 @@ export async function GET(request: NextRequest) {
       ]);
     }
 
+    const formattedProducts = products.map(formatProduct);
+    const pagination = {
+      page,
+      limit,
+      total,
+      totalPages: Math.ceil(total / limit),
+    };
+    const filters = {
+      q,
+      category,
+      minPrice: minPrice ?? null,
+      maxPrice: maxPrice ?? null,
+      sort,
+    };
+
     return NextResponse.json({
-      products: products.map(formatProduct),
-      pagination: {
-        page,
-        limit,
-        total,
-        totalPages: Math.ceil(total / limit),
-      },
+      items: formattedProducts,
+      products: formattedProducts,
+      pagination,
+      filters,
     });
   } catch (error) {
     console.error('Failed to fetch product catalog:', error);

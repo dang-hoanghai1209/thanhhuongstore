@@ -2,6 +2,8 @@ import prisma from '@/lib/prisma';
 import Link from 'next/link';
 import { ShoppingBag, X, Sparkles, Search, ChevronLeft, ChevronRight } from 'lucide-react';
 import { EmptyState } from '@/components/ui/States';
+import ProductCard from '@/components/ui/ProductCard';
+import Breadcrumb from '@/components/ui/Breadcrumb';
 
 interface ProductsPageProps {
   searchParams: {
@@ -19,11 +21,21 @@ export const dynamic = 'force-dynamic';
 export default async function ProductsCatalogPage({ searchParams }: ProductsPageProps) {
   const categorySlug = searchParams.category;
   const searchQuery = searchParams.search;
-  const minPrice = searchParams.minPrice !== undefined && searchParams.minPrice !== '' ? Number(searchParams.minPrice) : undefined;
-  const maxPrice = searchParams.maxPrice !== undefined && searchParams.maxPrice !== '' ? Number(searchParams.maxPrice) : undefined;
+  const minPriceVal = searchParams.minPrice !== undefined && searchParams.minPrice !== '' ? Number(searchParams.minPrice) : undefined;
+  const maxPriceVal = searchParams.maxPrice !== undefined && searchParams.maxPrice !== '' ? Number(searchParams.maxPrice) : undefined;
   const sortBy = searchParams.sort || 'newest';
   const page = searchParams.page ? Math.max(1, Number(searchParams.page)) : 1;
   const pageSize = 9;
+
+  let validationError: string | null = null;
+  let minPrice = minPriceVal;
+  let maxPrice = maxPriceVal;
+
+  if (minPriceVal !== undefined && maxPriceVal !== undefined && minPriceVal > maxPriceVal) {
+    validationError = 'Giá tối thiểu không được lớn hơn giá tối đa.';
+    minPrice = maxPriceVal;
+    maxPrice = minPriceVal;
+  }
 
   // 1. Fetch active categories for the sidebar
   const categories = await prisma.category.findMany({
@@ -54,7 +66,7 @@ export default async function ProductsCatalogPage({ searchParams }: ProductsPage
   }
 
   // 3. Fetch products matching filters
-  const products = await prisma.product.findMany({
+  const rawProducts = await prisma.product.findMany({
     where,
     include: {
       category: { select: { name: true } },
@@ -62,6 +74,14 @@ export default async function ProductsCatalogPage({ searchParams }: ProductsPage
       variants: true,
     },
   });
+  const products = rawProducts.map((product) => ({
+    ...product,
+    variants: product.variants.map((variant) => ({
+      ...variant,
+      retailPrice: Number(variant.retailPrice),
+      wholesalePrice: Number(variant.wholesalePrice),
+    })),
+  }));
 
   // 4. Apply sorting logic at JavaScript level (Decimal parsing safety)
   products.sort((a, b) => {
@@ -83,16 +103,16 @@ export default async function ProductsCatalogPage({ searchParams }: ProductsPage
   const paginatedProducts = products.slice(startIndex, startIndex + pageSize);
 
   // 6. Helper function to generate modified filter URLs for Server-side routing
-  const getFilterUrl = (params: { 
-    category?: string | null; 
-    minPrice?: number | null; 
-    maxPrice?: number | null; 
+  const getFilterUrl = (params: {
+    category?: string | null;
+    minPrice?: number | null;
+    maxPrice?: number | null;
     sort?: string | null;
     page?: number | null;
     search?: string | null;
   }) => {
     const query = new URLSearchParams();
-    
+
     const catVal = params.category !== undefined ? params.category : categorySlug;
     if (catVal) query.set('category', catVal);
 
@@ -127,14 +147,14 @@ export default async function ProductsCatalogPage({ searchParams }: ProductsPage
             <Sparkles className="w-3.5 h-3.5" /> Danh mục sản phẩm
           </div>
           <h1 className="text-3xl font-extrabold tracking-tight">
-            {searchQuery 
-              ? `Tìm kiếm: "${searchQuery}"` 
-              : activeCategory 
-                ? activeCategory.name 
+            {searchQuery
+              ? `Tìm kiếm: "${searchQuery}"`
+              : activeCategory
+                ? activeCategory.name
                 : 'Tất Cả Sản Phẩm'}
           </h1>
           <p className="text-xs sm:text-sm text-brand-100 max-w-2xl leading-relaxed">
-            {activeCategory 
+            {activeCategory
               ? `Bộ sưu tập các mẫu mã mới nhất thuộc danh mục ${activeCategory.name} cao cấp.`
               : 'Trải nghiệm mua sắm đẳng cấp với các dòng tất vớ, bikini nữ và đồ lót nam dệt sợi tự nhiên, kháng khuẩn vượt trội.'
             }
@@ -144,14 +164,28 @@ export default async function ProductsCatalogPage({ searchParams }: ProductsPage
 
       {/* Grid Container */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        {/* Dynamic Breadcrumbs */}
+        {(() => {
+          const bItems: Array<{ label: string; href?: string }> = [{ label: 'Sản phẩm', href: '/products' }];
+          if (activeCategory) {
+            bItems.push({ label: activeCategory.name });
+          } else if (searchQuery) {
+            bItems.push({ label: `Tìm kiếm: "${searchQuery}"` });
+          } else {
+            bItems[0].href = undefined;
+          }
+          return <Breadcrumb items={bItems} />;
+        })()}
+
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-10 items-start">
-          
+
           {/* DESKTOP SIDEBAR FILTER (1/4 columns) */}
           <aside className="hidden lg:block space-y-8 bg-white p-6 rounded-brand-lg border border-gray-100/60 shadow-xs">
             <div className="flex items-center justify-between pb-4 border-b border-gray-100">
               <h3 className="text-sm font-bold text-gray-800 uppercase tracking-wider">Bộ lọc</h3>
               {(categorySlug || searchQuery || minPrice !== undefined || maxPrice !== undefined) && (
-                <Link 
+                <Link
                   href="/products"
                   className="text-xs font-bold text-brand-600 hover:text-brand-700 transition flex items-center gap-1"
                 >
@@ -212,41 +246,67 @@ export default async function ProductsCatalogPage({ searchParams }: ProductsPage
               </div>
             </div>
 
-            {/* Price Ranges Radio links */}
+            {/* Numeric Custom Price Filters */}
             <div className="space-y-3 pt-4 border-t border-gray-100">
-              <h4 className="text-xs font-bold text-gray-700 uppercase tracking-wide">Khoảng giá</h4>
-              <div className="space-y-2 flex flex-col">
-                {[
-                  { label: 'Tất cả giá', minPrice: null, maxPrice: null },
-                  { label: 'Dưới 100,000đ', minPrice: 0, maxPrice: 100000 },
-                  { label: '100,000đ - 300,000đ', minPrice: 100000, maxPrice: 300000 },
-                  { label: 'Trên 300,000đ', minPrice: 300000, maxPrice: null },
-                ].map((opt, idx) => {
-                  const isActive = 
-                    (opt.minPrice === null && opt.maxPrice === null && minPrice === undefined && maxPrice === undefined) ||
-                    (opt.minPrice !== null && minPrice === opt.minPrice && opt.maxPrice !== null && maxPrice === opt.maxPrice) ||
-                    (opt.minPrice !== null && minPrice === opt.minPrice && opt.maxPrice === null && maxPrice === undefined);
-                  return (
+              <h4 className="text-xs font-bold text-gray-700 uppercase tracking-wide">Khoảng giá (VNĐ)</h4>
+              {validationError && (
+                <p className="text-[10px] text-red-500 font-bold bg-red-50 p-2 rounded-brand-md border border-red-100/50">
+                  ⚠️ {validationError}
+                </p>
+              )}
+              <form action="/products" method="GET" className="space-y-3">
+                {categorySlug && <input type="hidden" name="category" value={categorySlug} />}
+                {searchQuery && <input type="hidden" name="search" value={searchQuery} />}
+                {sortBy && <input type="hidden" name="sort" value={sortBy} />}
+
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label className="text-[9px] text-gray-400 font-bold uppercase tracking-wider block mb-1">Từ</label>
+                    <input
+                      type="number"
+                      name="minPrice"
+                      placeholder="0"
+                      min="0"
+                      defaultValue={minPriceVal !== undefined ? minPriceVal : ''}
+                      className="w-full border border-gray-200 rounded-brand-md px-2.5 py-2 text-xs font-bold focus:outline-none focus:border-brand-500 transition"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-[9px] text-gray-400 font-bold uppercase tracking-wider block mb-1">Đến</label>
+                    <input
+                      type="number"
+                      name="maxPrice"
+                      placeholder="Giá tối đa"
+                      min="0"
+                      defaultValue={maxPriceVal !== undefined ? maxPriceVal : ''}
+                      className="w-full border border-gray-200 rounded-brand-md px-2.5 py-2 text-xs font-bold focus:outline-none focus:border-brand-500 transition"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex gap-2 pt-1">
+                  <button
+                    type="submit"
+                    className="flex-1 bg-brand-600 hover:bg-brand-700 text-white text-[11px] font-bold py-2 rounded-brand-md transition shadow-xs text-center"
+                  >
+                    Áp dụng
+                  </button>
+                  {(minPriceVal !== undefined || maxPriceVal !== undefined) && (
                     <Link
-                      key={idx}
-                      href={getFilterUrl({ minPrice: opt.minPrice, maxPrice: opt.maxPrice })}
-                      className={`text-xs font-bold transition-all py-1.5 px-2.5 rounded-brand-sm border ${
-                        isActive
-                          ? 'border-brand-600 bg-brand-50 text-brand-700 font-extrabold shadow-sm'
-                          : 'border-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-50'
-                      }`}
+                      href={getFilterUrl({ minPrice: null, maxPrice: null })}
+                      className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 text-[11px] font-bold py-2 rounded-brand-md transition text-center"
                     >
-                      {opt.label}
+                      Xóa lọc
                     </Link>
-                  );
-                })}
-              </div>
+                  )}
+                </div>
+              </form>
             </div>
           </aside>
 
           {/* MAIN CATALOG GRID (3/4 columns) */}
           <div className="lg:col-span-3 space-y-6">
-            
+
             {/* Sorting Header Bar (pure HTML links to avoid client component complexity) */}
             <div className="flex items-center justify-between bg-white p-4 rounded-brand-lg border border-gray-100/60 shadow-xs flex-wrap gap-4">
               <div className="text-xs text-gray-500 font-medium">
@@ -296,96 +356,9 @@ export default async function ProductsCatalogPage({ searchParams }: ProductsPage
             {/* PRODUCT GRID */}
             {paginatedProducts.length > 0 && (
               <div className="grid grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8">
-                {paginatedProducts.map((product) => {
-                  const firstVariant = product.variants[0];
-                  const price = firstVariant ? Number(firstVariant.retailPrice) : 0;
-                  
-                  // Extract unique colors to render swatches
-                  const uniqueColors: { color: string; colorHex: string }[] = [];
-                  product.variants.forEach(v => {
-                    if (!uniqueColors.some(uc => uc.color === v.color)) {
-                      uniqueColors.push({ color: v.color, colorHex: v.colorHex });
-                    }
-                  });
-
-                  // Primary image URL fallback
-                  const primaryImage = product.images.find(img => img.isPrimary) || product.images[0];
-                  const imageUrl = primaryImage ? primaryImage.url : 'https://images.unsplash.com/photo-1582966772680-860e372bb558?auto=format&fit=crop&w=400&q=80';
-
-                  return (
-                    <div 
-                      key={product.id}
-                      className="group bg-white rounded-brand-lg border border-gray-100/60 overflow-hidden shadow-xs hover:shadow-lg hover:-translate-y-1.5 transition-all duration-300 flex flex-col"
-                    >
-                      {/* Image container */}
-                      <div className="relative w-full aspect-square bg-gray-50 overflow-hidden border-b border-gray-100/60">
-                        <img 
-                          src={imageUrl} 
-                          alt={product.name}
-                          className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
-                        />
-                        
-                        {/* Featured Sticker */}
-                        {product.isFeatured && (
-                          <span className="absolute top-3 left-3 px-2 py-0.5 rounded bg-brand-600/90 text-white text-[9px] font-extrabold uppercase tracking-wide shadow-xs">
-                            Nổi bật
-                          </span>
-                        )}
-
-                        {/* Wholesale Tier Sticker */}
-                        {product.wholesaleTiers && (
-                          <span className="absolute top-3 right-3 px-2 py-0.5 rounded bg-accent-pink/90 text-white text-[9px] font-extrabold uppercase tracking-wide shadow-xs">
-                            Giá sỉ tốt
-                          </span>
-                        )}
-                      </div>
-
-                      {/* Info body */}
-                      <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between space-y-3">
-                        <div className="space-y-1.5">
-                          <span className="text-[10px] font-bold text-brand-600 uppercase tracking-wide block">
-                            {product.category?.name || 'Sản phẩm'}
-                          </span>
-                          <h3 className="text-xs sm:text-sm font-bold text-gray-900 group-hover:text-brand-600 transition-colors line-clamp-2">
-                            {product.name}
-                          </h3>
-
-                          {/* Color Swatches */}
-                          {uniqueColors.length > 0 && (
-                            <div className="flex gap-1.5 pt-1.5">
-                              {uniqueColors.map((colorObj, cIdx) => (
-                                <span
-                                  key={cIdx}
-                                  className="w-3.5 h-3.5 rounded-full border border-gray-200 shadow-xs block"
-                                  style={{ backgroundColor: colorObj.colorHex }}
-                                  title={colorObj.color}
-                                />
-                              ))}
-                            </div>
-                          )}
-                        </div>
-
-                        {/* Pricing details */}
-                        <div className="flex items-end justify-between pt-2">
-                          <div className="space-y-0.5">
-                            <span className="text-[10px] text-gray-400 font-medium block">Giá bán lẻ:</span>
-                            <p className="text-xs sm:text-sm font-black text-brand-600">
-                              {price > 0 ? `${price.toLocaleString('vi-VN')} đ` : 'Liên hệ'}
-                            </p>
-                          </div>
-                          
-                          <Link 
-                            href={`/products/${product.slug}`}
-                            className="p-2 rounded-brand-md bg-brand-50 group-hover:bg-brand-500 text-brand-600 group-hover:text-white transition-all duration-300 shrink-0 shadow-xs"
-                            title="Xem chi tiết"
-                          >
-                            <ShoppingBag className="w-3.5 h-3.5" />
-                          </Link>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
+                {paginatedProducts.map((product) => (
+                  <ProductCard key={product.id} product={product} />
+                ))}
               </div>
             )}
 

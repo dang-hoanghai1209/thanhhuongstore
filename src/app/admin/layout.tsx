@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import Breadcrumb from '@/components/ui/Breadcrumb';
 import {
   ClipboardList,
   ShoppingBag,
@@ -121,7 +122,26 @@ export default function AdminLayout({
 
         {/* Page children container */}
         <main className="flex-grow p-4 md:p-8 max-w-7xl w-full mx-auto">
-          <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-4 md:p-8 min-h-[calc(100vh-140px)]">
+          {(() => {
+            const items: { label: string; href?: string }[] = [{ label: 'Quản trị', href: pathname === '/admin' ? undefined : '/admin' }];
+            if (pathname.startsWith('/admin/orders')) {
+              items.push({ label: 'Đơn hàng' });
+            } else if (pathname.startsWith('/admin/products')) {
+              items.push({ label: 'Sản phẩm' });
+            } else if (pathname.startsWith('/admin/customers')) {
+              items.push({ label: 'Khách hàng' });
+            } else if (pathname.startsWith('/admin/banners')) {
+              items.push({ label: 'Banners' });
+            } else if (pathname.startsWith('/admin/coupons')) {
+              items.push({ label: 'Mã giảm giá & Cấu hình' });
+            } else if (pathname.startsWith('/admin/categories')) {
+              items.push({ label: 'Danh mục' });
+            } else if (pathname.startsWith('/admin/analytics')) {
+              items.push({ label: 'Báo cáo thống kê' });
+            }
+            return <Breadcrumb items={items} />;
+          })()}
+          <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-4 md:p-8 min-h-[calc(100vh-140px)] mt-4">
             {children}
           </div>
         </main>

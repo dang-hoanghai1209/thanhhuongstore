@@ -37,7 +37,7 @@ export const revalidate = 60; // Revalidate the page cache every 60 seconds
 export default async function HomePage() {
   let products: DBProduct[] = [];
   let categories: { name: string; slug: string; id: string; sizeType: string }[] = [];
-  
+
   try {
     // 1. Fetch 8 active products from PostgreSQL directly
     products = await prisma.product.findMany({
@@ -69,25 +69,25 @@ export default async function HomePage() {
   const fallbackCategories = [
     {
       name: "Đồ Lót Cao Cấp",
-      slug: "do-lot",
+      slug: "do-boi",
       imageUrl: "https://images.unsplash.com/photo-1594913785162-e6785b423cb1?auto=format&fit=crop&w=400&q=80",
       description: "Thoáng khí, mềm mại"
     },
     {
       name: "Tất Vớ Thời Trang",
-      slug: "socks",
+      slug: "vo-thoi-trang",
       imageUrl: "https://images.unsplash.com/photo-1582966772680-860e372bb558?auto=format&fit=crop&w=400&q=80",
       description: "Cotton kháng khuẩn"
     },
     {
       name: "Bikini & Đồ Bơi",
-      slug: "swimwear",
+      slug: "do-boi",
       imageUrl: "https://images.unsplash.com/photo-1608231387042-66d1773070a5?auto=format&fit=crop&w=400&q=80",
       description: "Tôn dáng quyến rũ"
     },
     {
       name: "Đồ Ngủ & Đồ Mặc Nhà",
-      slug: "homewear",
+      slug: "do-boi",
       imageUrl: "https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=400&q=80",
       description: "Lụa mềm cao cấp"
     }
@@ -112,7 +112,7 @@ export default async function HomePage() {
 
   return (
     <main className="min-h-screen bg-[#FAF9F6] text-gray-900 pb-20">
-      
+
       {/* 1. HERO BANNER SECTION */}
       <section className="relative overflow-hidden bg-gradient-to-r from-brand-950 via-brand-900 to-brand-850 text-white py-24 sm:py-32 px-6 sm:px-12 md:px-20 border-b border-white/5">
         {/* Glowing Ambient Backdrops */}
@@ -126,28 +126,28 @@ export default async function HomePage() {
               <Flame className="w-3.5 h-3.5 text-accent-pink animate-pulse" />
               Đại Tiệc Mùa Hè
             </div>
-            
+
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight leading-none text-white uppercase">
               Ưu Đãi Trải Nghiệm <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent-gold via-accent-pink to-brand-300">
                 Lên Đến 50%
               </span>
             </h1>
-            
+
             <p className="text-sm sm:text-base text-brand-100 max-w-xl font-medium leading-relaxed mx-auto lg:mx-0">
               Thổi bay cái nóng mùa hè bằng bộ sưu tập nội y dệt sợi tre và bikini thun Ý cao cấp của Thanh Hương Store. Mềm mại, thoáng mát và tôn dáng tự nhiên.
             </p>
-            
+
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-2">
-              <Link 
-                href="/products" 
+              <Link
+                href="/products"
                 className="px-8 py-4 rounded-brand-md bg-white text-gray-950 hover:bg-gray-100 font-extrabold text-xs uppercase tracking-wider transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 flex items-center justify-center gap-2"
               >
                 Săn sale ngay
                 <ArrowRight className="w-4 h-4 text-brand-600" />
               </Link>
-              <Link 
-                href="/wholesale" 
+              <Link
+                href="/wholesale"
                 className="px-8 py-4 rounded-brand-md bg-white/10 hover:bg-white/15 text-white font-extrabold text-xs uppercase tracking-wider transition-all border border-white/20 backdrop-blur-xs flex items-center justify-center"
               >
                 Xem chính sách sỉ B2B
@@ -217,20 +217,20 @@ export default async function HomePage() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {mappedCategories.map((cat, idx) => (
-            <Link 
+            <Link
               key={idx}
-              href={`/products?category=${cat.slug}`}
+              href={`/categories/${cat.slug}`}
               className="group relative h-72 rounded-brand-lg overflow-hidden border border-gray-100 shadow-2xs hover:shadow-lg transition-all duration-300"
             >
               {/* Background Image */}
-              <img 
-                src={cat.imageUrl} 
+              <img
+                src={cat.imageUrl}
                 alt={cat.name}
                 className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
               />
               {/* Dark overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-gray-950/80 via-gray-950/20 to-transparent group-hover:opacity-90 transition-opacity" />
-              
+
               {/* Text info bottom */}
               <div className="absolute bottom-6 left-6 text-white space-y-1 z-10">
                 <span className="text-[9px] text-accent-gold font-extrabold uppercase tracking-widest block">
@@ -247,7 +247,7 @@ export default async function HomePage() {
 
       {/* 4. FEATURED PRODUCTS (8 ITEMS FROM DATABASE) */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        
+
         <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-10 pb-4 border-b border-gray-200 gap-4">
           <div className="space-y-1">
             <h2 className="text-xl sm:text-2xl font-black text-gray-900 uppercase tracking-tight flex items-center gap-2">
@@ -256,7 +256,7 @@ export default async function HomePage() {
             </h2>
             <p className="text-xs text-gray-400 font-bold">Cập nhật xu hướng thời trang mặc nhà mới nhất.</p>
           </div>
-          <Link 
+          <Link
             href="/products"
             className="text-xs font-bold text-brand-600 hover:text-brand-700 flex items-center gap-1.5 group shrink-0"
           >
@@ -279,7 +279,7 @@ export default async function HomePage() {
               // Safe decimal arithmetic
               const firstVariant = product.variants && product.variants[0];
               const price = firstVariant ? Number(firstVariant.retailPrice) : 0;
-              const hasWholesaleTiers = product.wholesaleTiers && 
+              const hasWholesaleTiers = product.wholesaleTiers &&
                 (Array.isArray(product.wholesaleTiers) ? product.wholesaleTiers.length > 0 : true);
 
               // Images fallback
@@ -287,14 +287,14 @@ export default async function HomePage() {
               const imageUrl = primaryImage ? primaryImage.url : 'https://images.unsplash.com/photo-1594913785162-e6785b423cb1?auto=format&fit=crop&w=400&q=80';
 
               return (
-                <div 
+                <div
                   key={product.id}
                   className="group bg-white rounded-brand-lg border border-gray-100 overflow-hidden shadow-xs hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col relative"
                 >
                   {/* Photo thumbnail container */}
                   <div className="relative w-full aspect-[4/5] bg-gray-50 overflow-hidden border-b border-gray-100">
-                    <img 
-                      src={imageUrl} 
+                    <img
+                      src={imageUrl}
                       alt={product.name}
                       className="w-full h-full object-cover object-center group-hover:scale-103 transition-transform duration-500"
                     />
@@ -332,9 +332,9 @@ export default async function HomePage() {
                           {price > 0 ? `${price.toLocaleString('vi-VN')} đ` : 'Liên hệ'}
                         </p>
                       </div>
-                      
+
                       {/* View details button link */}
-                      <Link 
+                      <Link
                         href={`/products/${product.slug}`}
                         className="p-2 rounded-brand-md bg-gray-50 hover:bg-brand-600 text-gray-600 hover:text-white transition-all shadow-3xs"
                         title="Xem chi tiết"
@@ -353,16 +353,16 @@ export default async function HomePage() {
       {/* 5. SECONDARY PROMO BANNERS */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          
+
           {/* Banner 1 */}
           <div className="relative rounded-brand-lg overflow-hidden bg-brand-950 p-8 sm:p-12 flex flex-col justify-between min-h-60 text-white shadow-2xs group border border-white/5">
-            <img 
-              src="https://images.unsplash.com/photo-1582966772680-860e372bb558?auto=format&fit=crop&w=600&q=80" 
+            <img
+              src="https://images.unsplash.com/photo-1582966772680-860e372bb558?auto=format&fit=crop&w=600&q=80"
               alt="Promo 1"
               className="absolute inset-0 w-full h-full object-cover opacity-25 group-hover:scale-102 transition duration-500"
             />
             <div className="absolute inset-0 bg-gradient-to-r from-brand-950 via-brand-900/30 to-transparent" />
-            
+
             <div className="relative z-10 space-y-2">
               <span className="text-[9px] text-accent-gold font-extrabold uppercase tracking-widest block">Ưu Đãi Trọn Bộ</span>
               <h3 className="text-xl sm:text-2xl font-black uppercase tracking-tight">Mua 3 Tặng 1</h3>
@@ -370,9 +370,9 @@ export default async function HomePage() {
                 Áp dụng cho dòng sản phẩm tất vớ Cotton chải kỹ kháng khuẩn. Mua càng nhiều ưu đãi sỉ càng tốt.
               </p>
             </div>
-            
+
             <div className="relative z-10 pt-6">
-              <Link 
+              <Link
                 href="/products"
                 className="inline-flex items-center gap-1.5 text-xs font-bold text-accent-gold hover:text-white transition"
               >
@@ -384,13 +384,13 @@ export default async function HomePage() {
 
           {/* Banner 2 */}
           <div className="relative rounded-brand-lg overflow-hidden bg-accent-pink/95 p-8 sm:p-12 flex flex-col justify-between min-h-60 text-white shadow-2xs group">
-            <img 
-              src="https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=600&q=80" 
+            <img
+              src="https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=600&q=80"
               alt="Promo 2"
               className="absolute inset-0 w-full h-full object-cover opacity-20 group-hover:scale-102 transition duration-500"
             />
             <div className="absolute inset-0 bg-gradient-to-r from-accent-pink via-accent-pink/50 to-transparent" />
-            
+
             <div className="relative z-10 space-y-2">
               <span className="text-[9px] text-white font-extrabold uppercase tracking-widest block">Xu Hướng Mới</span>
               <h3 className="text-xl sm:text-2xl font-black uppercase tracking-tight">BST Lụa Băng Mát Lạnh</h3>
@@ -398,9 +398,9 @@ export default async function HomePage() {
                 Dòng sản phẩm đồ lót nam và váy ngủ cao cấp dệt sợi mát lạnh. Giảm nhiệt ngày nóng bức tức thì.
               </p>
             </div>
-            
+
             <div className="relative z-10 pt-6">
-              <Link 
+              <Link
                 href="/products"
                 className="inline-flex items-center gap-1.5 text-xs font-bold text-white hover:text-gray-900 hover:bg-white px-4 py-2 rounded-brand-sm bg-white/10 border border-white/20 transition-all"
               >

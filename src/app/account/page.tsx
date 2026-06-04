@@ -3,10 +3,12 @@
 import React from 'react';
 import { User, ClipboardList, MapPin, Heart } from 'lucide-react';
 import Link from 'next/link';
+import Breadcrumb from '@/components/ui/Breadcrumb';
 
 export default function AccountPage() {
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-8 animate-fadeIn">
+      <Breadcrumb items={[{ label: 'Tài khoản' }]} />
       <div>
         <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight">Hồ Sơ Của Bạn</h1>
         <p className="text-xs text-gray-500 mt-1">Quản lý thông tin tài khoản cá nhân, địa chỉ và lịch sử giao dịch.</p>
@@ -25,8 +27,8 @@ export default function AccountPage() {
 
       {/* Navigation Sub-sections */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Link 
-          href="/account/orders" 
+        <Link
+          href="/account/orders"
           className="bg-white p-5 rounded-brand-lg border border-gray-100 hover:border-brand-100 hover:bg-brand-50/10 transition shadow-2xs group space-y-3"
         >
           <div className="w-10 h-10 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
@@ -38,8 +40,8 @@ export default function AccountPage() {
           </div>
         </Link>
 
-        <Link 
-          href="/account/addresses" 
+        <Link
+          href="/account/addresses"
           className="bg-white p-5 rounded-brand-lg border border-gray-100 hover:border-brand-100 hover:bg-brand-50/10 transition shadow-2xs group space-y-3"
         >
           <div className="w-10 h-10 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
@@ -51,8 +53,8 @@ export default function AccountPage() {
           </div>
         </Link>
 
-        <Link 
-          href="/account/wishlist" 
+        <Link
+          href="/account/wishlist"
           className="bg-white p-5 rounded-brand-lg border border-gray-100 hover:border-brand-100 hover:bg-brand-50/10 transition shadow-2xs group space-y-3"
         >
           <div className="w-10 h-10 rounded-lg bg-red-50 text-red-600 flex items-center justify-center shrink-0">

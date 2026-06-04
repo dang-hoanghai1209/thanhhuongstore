@@ -2,13 +2,13 @@
 
 import { useEffect, useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
-import { 
-  ShoppingBag, 
-  ChevronRight, 
-  MapPin, 
-  Phone, 
-  User, 
-  FileText, 
+import {
+  ShoppingBag,
+  ChevronRight,
+  MapPin,
+  Phone,
+  User,
+  FileText,
   CreditCard,
   Truck,
   ArrowLeft,
@@ -18,6 +18,7 @@ import {
 import Link from 'next/link';
 import { useCartStore } from '@/store/useCartStore';
 import { EmptyState, LoadingSpinner } from '@/components/ui/States';
+import Breadcrumb from '@/components/ui/Breadcrumb';
 
 type PaymentMethod = 'COD' | 'BANK_TRANSFER' | 'VNPAY';
 
@@ -54,7 +55,7 @@ export default function CheckoutPage() {
   const [address, setAddress] = useState('');
   const [notes, setNotes] = useState('');
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('COD');
-  
+
   // Submit & Error Handling States
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -205,19 +206,18 @@ export default function CheckoutPage() {
   return (
     <main className="min-h-screen bg-[#FAF9F6] text-gray-900 pb-24 pt-6">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
+
         {/* Breadcrumb Navigation */}
-        <nav className="flex items-center gap-1.5 text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-8">
-          <Link href="/" className="hover:text-brand-600 transition">Trang chủ</Link>
-          <ChevronRight className="w-3 h-3" />
-          <Link href="/cart" className="hover:text-brand-600 transition">Giỏ hàng</Link>
-          <ChevronRight className="w-3 h-3" />
-          <span className="text-gray-600">Thanh toán</span>
-        </nav>
+        <Breadcrumb
+          items={[
+            { label: 'Giỏ hàng', href: '/cart' },
+            { label: 'Thanh toán' }
+          ]}
+        />
 
         {/* Back Link */}
         <div className="mb-6">
-          <Link 
+          <Link
             href="/cart"
             className="inline-flex items-center gap-1.5 text-xs font-bold text-gray-500 hover:text-gray-900 transition"
           >
@@ -228,10 +228,10 @@ export default function CheckoutPage() {
 
         {/* Form Container Grid (12 Columns) */}
         <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
-          
+
           {/* LEFT COLUMN: Shipping info & delivery options (7 Cols) */}
           <div className="lg:col-span-7 space-y-6">
-            
+
             {/* Delivery address box */}
             <div className="bg-white p-6 sm:p-8 rounded-brand-lg border border-gray-100 shadow-2xs space-y-6">
               <h2 className="text-sm font-black text-gray-900 uppercase tracking-wider flex items-center gap-2 pb-3 border-b border-gray-100">
@@ -319,11 +319,11 @@ export default function CheckoutPage() {
 
               <div className="space-y-3">
                 {/* COD Radio */}
-                <div 
+                <div
                   onClick={() => setPaymentMethod('COD')}
                   className={`p-4 border rounded-brand-md flex items-center gap-4 relative cursor-pointer transition ${
-                    paymentMethod === 'COD' 
-                      ? 'bg-brand-50/50 border-brand-500' 
+                    paymentMethod === 'COD'
+                      ? 'bg-brand-50/50 border-brand-500'
                       : 'border-gray-200 hover:border-gray-300'
                   }`}
                 >
@@ -340,11 +340,11 @@ export default function CheckoutPage() {
                 </div>
 
                 {/* BANK TRANSFER Radio */}
-                <div 
+                <div
                   onClick={() => setPaymentMethod('BANK_TRANSFER')}
                   className={`p-4 border rounded-brand-md flex items-center gap-4 relative cursor-pointer transition ${
-                    paymentMethod === 'BANK_TRANSFER' 
-                      ? 'bg-brand-50/50 border-brand-500' 
+                    paymentMethod === 'BANK_TRANSFER'
+                      ? 'bg-brand-50/50 border-brand-500'
                       : 'border-gray-200 hover:border-gray-300'
                   }`}
                 >
@@ -361,11 +361,11 @@ export default function CheckoutPage() {
                 </div>
 
                 {/* VNPAY Radio */}
-                <div 
+                <div
                   onClick={() => setPaymentMethod('VNPAY')}
                   className={`p-4 border rounded-brand-md flex items-center gap-4 relative cursor-pointer transition ${
-                    paymentMethod === 'VNPAY' 
-                      ? 'bg-brand-50/50 border-brand-500' 
+                    paymentMethod === 'VNPAY'
+                      ? 'bg-brand-50/50 border-brand-500'
                       : 'border-gray-200 hover:border-gray-300'
                   }`}
                 >
@@ -387,7 +387,7 @@ export default function CheckoutPage() {
 
           {/* RIGHT COLUMN: Order Summary sidebar (5 Cols) */}
           <div className="lg:col-span-5 space-y-6 lg:sticky lg:top-24">
-            
+
             <div className="bg-white p-6 rounded-brand-lg border border-gray-100 shadow-2xs space-y-6">
               <h2 className="text-sm font-black text-gray-900 uppercase tracking-wider pb-3 border-b border-gray-100 flex items-center justify-between">
                 <span>Tóm tắt đơn hàng</span>
@@ -423,7 +423,7 @@ export default function CheckoutPage() {
                   <span>Tạm tính</span>
                   <span className="font-extrabold text-gray-900">{subtotal.toLocaleString('vi-VN')} đ</span>
                 </div>
-                
+
                 <div className="flex justify-between text-xs text-gray-500 font-medium">
                   <span className="flex items-center gap-1">
                     Phí vận chuyển

@@ -3,10 +3,12 @@
 import React from 'react';
 import { EmptyState } from '@/components/ui/States';
 import { Heart } from 'lucide-react';
+import Breadcrumb from '@/components/ui/Breadcrumb';
 
 export default function AccountWishlistPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <Breadcrumb items={[{ label: 'Tài khoản', href: '/account' }, { label: 'Yêu thích' }]} />
       <h1 className="text-xl sm:text-2xl font-extrabold text-gray-900 mb-6">Danh Sách Yêu Thích</h1>
       <EmptyState
         title="Danh sách yêu thích trống"

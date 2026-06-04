@@ -45,19 +45,36 @@ const cartInclude = {
   },
 } as const;
 
-function formatCart<T extends { items: Array<{ variant: { retailPrice: unknown; wholesalePrice: unknown } }> }>(
+function formatCart<
+  T extends {
+    items: Array<{
+      quantity: unknown;
+      variant: { retailPrice: unknown; wholesalePrice: unknown };
+    }>;
+  },
+>(
   cart: T,
 ) {
+  const items = cart.items.map((item) => ({
+    ...item,
+    variant: {
+      ...item.variant,
+      retailPrice: Number(item.variant.retailPrice),
+      wholesalePrice: Number(item.variant.wholesalePrice),
+    },
+  }));
+  const subtotal = items.reduce(
+    (sum, item) => sum + Number(item.variant.retailPrice) * Number(item.quantity ?? 0),
+    0,
+  );
+  const itemCount = items.reduce((sum, item) => sum + Number(item.quantity ?? 0), 0);
+
   return {
     ...cart,
-    items: cart.items.map((item) => ({
-      ...item,
-      variant: {
-        ...item.variant,
-        retailPrice: Number(item.variant.retailPrice),
-        wholesalePrice: Number(item.variant.wholesalePrice),
-      },
-    })),
+    items,
+    subtotal,
+    total: subtotal,
+    itemCount,
   };
 }
 
@@ -78,7 +95,7 @@ export async function GET(request: NextRequest) {
 
     const cart = await getCart(authResult.userId);
 
-    return NextResponse.json(cart ? formatCart(cart) : { items: [] });
+    return NextResponse.json(cart ? formatCart(cart) : { items: [], subtotal: 0, total: 0, itemCount: 0 });
   } catch (error) {
     console.error('Failed to fetch cart:', error);
     return NextResponse.json({ error: 'Unable to fetch cart.' }, { status: 500 });
@@ -151,7 +168,10 @@ export async function POST(request: NextRequest) {
     });
 
     const cart = await getCart(authResult.userId);
-    return NextResponse.json(cart ? formatCart(cart) : { items: [] }, { status: 201 });
+    return NextResponse.json(
+      cart ? formatCart(cart) : { items: [], subtotal: 0, total: 0, itemCount: 0 },
+      { status: 201 },
+    );
   } catch (error) {
     console.error('Failed to add cart item:', error);
 
@@ -238,7 +258,7 @@ export async function PATCH(request: NextRequest) {
     }
 
     const cart = await getCart(authResult.userId);
-    return NextResponse.json(cart ? formatCart(cart) : { items: [] });
+    return NextResponse.json(cart ? formatCart(cart) : { items: [], subtotal: 0, total: 0, itemCount: 0 });
   } catch (error) {
     console.error('Failed to update cart item:', error);
     return NextResponse.json(
@@ -289,7 +309,7 @@ export async function DELETE(request: NextRequest) {
     }
 
     const cart = await getCart(authResult.userId);
-    return NextResponse.json(cart ? formatCart(cart) : { items: [] });
+    return NextResponse.json(cart ? formatCart(cart) : { items: [], subtotal: 0, total: 0, itemCount: 0 });
   } catch (error) {
     console.error('Failed to delete cart item:', error);
     return NextResponse.json({ error: 'Unable to delete cart item.' }, { status: 500 });

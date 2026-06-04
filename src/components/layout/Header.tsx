@@ -2,13 +2,13 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { 
-  Menu, 
-  X, 
-  Search, 
-  ShoppingBag, 
-  User, 
-  ChevronDown, 
+import {
+  Menu,
+  X,
+  Search,
+  ShoppingBag,
+  User,
+  ChevronDown,
   ArrowRight,
   Sparkles,
   Phone,
@@ -28,33 +28,33 @@ const navItems = [
     featured: "Tất kháng khuẩn, khử mùi vượt trội dệt sợi cotton cao cấp.",
     subcategories: [
       { name: "Tất Cổ Ngắn Cushioning", href: "/products/vo-co-ngan-cotton-premium" },
-      { name: "Tất Dệt Lông Cừu Merino", href: "/categories/socks" },
-      { name: "Vớ Lười Silicon Chống Tuột", href: "/categories/socks" },
-      { name: "Tất Dài Thể Thao", href: "/categories/socks" }
+      { name: "Tất Dệt Lông Cừu Merino", href: "/categories/vo-thoi-trang" },
+      { name: "Vớ Lười Silicon Chống Tuột", href: "/categories/vo-thoi-trang" },
+      { name: "Tất Dài Thể Thao", href: "/categories/vo-thoi-trang" }
     ]
   },
   {
     name: "Bikini & Đồ Bơi Nữ",
-    slug: "bikini-thun-y-hai-manh-tropical",
+    slug: "ao-boi-nu-ocean",
     type: "SWIMWEAR",
-    featured: "BST Bikini thun Ý 2 mảnh co giãn tuyệt vời tôn dáng thon thả.",
+    featured: "BST Áo bơi nữ Ocean thun Ý co giãn tuyệt vời tôn dáng thon thả.",
     subcategories: [
-      { name: "Bikini Hai Mảnh Sexy", href: "/categories/swimwear" },
-      { name: "Bikini Một Mảnh Cut-out", href: "/categories/swimwear" },
-      { name: "Đồ Bơi Dài Tay Chống Nắng", href: "/categories/swimwear" },
-      { name: "Váy Đi Biển Nữ Tính", href: "/categories/swimwear" }
+      { name: "Bikini Hai Mảnh Sexy", href: "/categories/do-boi" },
+      { name: "Bikini Một Mảnh Cut-out", href: "/categories/do-boi" },
+      { name: "Đồ Bơi Dài Tay Chống Nắng", href: "/categories/do-boi" },
+      { name: "Váy Đi Biển Nữ Tính", href: "/categories/do-boi" }
     ]
   },
   {
     name: "Đồ Lót Nam Premium",
-    slug: "quan-lot-nam-trunk-modal-tre",
+    slug: "quan-boi-nam-active",
     type: "UNDERWEAR",
-    featured: "Dòng sịp nam Trunk và Boxer dệt sợi Modal tre siêu thoáng khí.",
+    featured: "Dòng sịp nam trunk và quần bơi mát mẻ co giãn vượt trội.",
     subcategories: [
-      { name: "Quần Lót Boxer Co Giãn", href: "/categories/underwear" },
-      { name: "Quần Lót Brief Gọn Gàng", href: "/categories/underwear" },
-      { name: "Quần Lót Trunk Mát Mẻ", href: "/categories/underwear" },
-      { name: "Áo Ba Lỗ Ôm Sát Nam", href: "/categories/underwear" }
+      { name: "Quần Lót Boxer Co Giãn", href: "/categories/do-boi" },
+      { name: "Quần Lót Brief Gọn Gàng", href: "/categories/do-boi" },
+      { name: "Quần Lót Trunk Mát Mẻ", href: "/categories/do-boi" },
+      { name: "Áo Ba Lỗ Ôm Sát Nam", href: "/categories/do-boi" }
     ]
   }
 ];
@@ -143,7 +143,7 @@ export default function Header() {
       <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-gray-100 shadow-xs">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20 gap-4">
-            
+
             {/* 1. Mobile Menu Toggle Icon */}
             <button
               onClick={() => setMobileMenuOpen(true)}
@@ -209,8 +209,8 @@ export default function Header() {
                               {item.featured}
                             </p>
                           </div>
-                          
-                          <Link 
+
+                          <Link
                             href={`/products/${item.slug}`}
                             className="text-xs font-bold text-brand-600 hover:text-brand-700 mt-4 flex items-center gap-1.5 group"
                           >
@@ -221,8 +221,8 @@ export default function Header() {
 
                         {/* Marketing Promo Card Banner */}
                         <div className="relative rounded-brand-md overflow-hidden bg-brand-950 flex flex-col justify-end p-5 text-white">
-                          <img 
-                            src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&w=400&q=80" 
+                          <img
+                            src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&w=400&q=80"
                             alt="Collection Promo"
                             className="absolute inset-0 w-full h-full object-cover opacity-35"
                           />
@@ -254,7 +254,7 @@ export default function Header() {
 
             {/* 5. RIGHT ICONS (User & Cart) */}
             <div className="flex items-center gap-4 shrink-0">
-              
+
               {/* Account icon */}
               {mounted && user ? (
                 <div className="relative group">
@@ -318,7 +318,7 @@ export default function Header() {
                 title="Giỏ hàng"
               >
                 <ShoppingBag className="w-5 h-5" />
-                
+
                 {/* Dynamic count badge indicating item exists */}
                 {mounted && totalItemsCount > 0 && (
                   <span className="absolute top-1.5 right-1.5 w-3.5 h-3.5 bg-brand-600 rounded-full border-2 border-white flex items-center justify-center text-[8px] font-black text-white">
@@ -344,7 +344,7 @@ export default function Header() {
 
           {/* Drawer panel */}
           <div className="relative w-80 max-w-full bg-white h-full shadow-2xl flex flex-col p-6 space-y-6 overflow-y-auto animate-slideRight">
-            
+
             {/* Header: Logo and Close */}
             <div className="flex items-center justify-between pb-4 border-b border-gray-100">
               <div className="flex items-center gap-2 text-brand-600">

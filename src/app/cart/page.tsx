@@ -1,25 +1,26 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
-import { 
-  Trash2, 
-  Plus, 
-  Minus, 
-  ShoppingBag, 
-  ArrowRight, 
-  Ticket, 
-  ShieldCheck, 
-  Truck 
+import {
+  Trash2,
+  Plus,
+  Minus,
+  ShoppingBag,
+  ArrowRight,
+  Ticket,
+  ShieldCheck,
+  Truck
 } from 'lucide-react';
 import { useCartStore } from '@/store/useCartStore';
 import { EmptyState, LoadingSpinner } from '@/components/ui/States';
+import Breadcrumb from '@/components/ui/Breadcrumb';
 
 export default function CartPage() {
   const [mounted, setMounted] = useState(false);
   const cartItems = useCartStore((state) => state.items);
   const removeItem = useCartStore((state) => state.removeItem);
   const updateQuantity = useCartStore((state) => state.updateQuantity);
-  
+
   const [couponCode, setCouponCode] = useState('');
   const [appliedCoupon, setAppliedCoupon] = useState<{ code: string; discount: number } | null>(null);
   const [couponError, setCouponError] = useState<string | null>(null);
@@ -111,7 +112,9 @@ export default function CartPage() {
   return (
     <main className="min-h-screen bg-[#FAF9F6] text-gray-900 pb-24 pt-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
+
+        <Breadcrumb items={[{ label: 'Giỏ hàng' }]} />
+
         {/* Page Title */}
         <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight mb-8">
           Giỏ Hàng Của Bạn <span className="text-gray-400 text-lg font-normal">({cartItems.length} sản phẩm)</span>
@@ -119,16 +122,16 @@ export default function CartPage() {
 
         {/* 2-Column Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 items-start">
-          
+
           {/* LEFT COLUMN: LIST OF PRODUCTS (70% on large screens) */}
           <div className="lg:col-span-2 space-y-4">
             {cartItems.map((item) => (
-              <div 
+              <div
                 key={item.id}
                 className="bg-white p-4 sm:p-5 rounded-brand-lg border border-gray-100 shadow-xs flex gap-4 items-center relative group"
               >
                 {/* Delete button (trash icon) */}
-                <button 
+                <button
                   onClick={() => deleteItem(item.id)}
                   className="absolute top-4 right-4 p-1.5 rounded-full hover:bg-red-50 text-gray-400 hover:text-red-500 transition duration-200"
                   title="Xóa sản phẩm"
@@ -159,7 +162,7 @@ export default function CartPage() {
                   <div className="flex flex-wrap items-center justify-between gap-4">
                     {/* Plus/Minus Quantity selector */}
                     <div className="flex items-center border border-gray-200 rounded-brand-md bg-white p-0.5">
-                      <button 
+                      <button
                         onClick={() => updateQty(item.id, 'dec')}
                         disabled={item.quantity <= 1}
                         className="p-1 hover:bg-gray-50 rounded disabled:opacity-20 transition"
@@ -169,7 +172,7 @@ export default function CartPage() {
                       <span className="px-3 text-xs font-bold text-gray-800 w-8 text-center">
                         {item.quantity}
                       </span>
-                      <button 
+                      <button
                         onClick={() => updateQty(item.id, 'inc')}
                         disabled={item.quantity >= item.stock}
                         className="p-1 hover:bg-gray-50 rounded disabled:opacity-20 transition"
@@ -194,7 +197,7 @@ export default function CartPage() {
 
           {/* RIGHT COLUMN: ORDER SUMMARY & CHECKOUT BUTTON (30%) */}
           <div className="space-y-6 lg:sticky lg:top-8">
-            
+
             {/* Sticky summary box */}
             <div className="bg-white p-6 rounded-brand-lg border border-gray-100 shadow-xs space-y-6">
               <h3 className="text-sm font-bold text-gray-800 uppercase tracking-wider pb-3 border-b border-gray-100">
@@ -207,7 +210,7 @@ export default function CartPage() {
                   <span>Tạm tính</span>
                   <span className="font-bold text-gray-800">{subtotal.toLocaleString('vi-VN')} đ</span>
                 </div>
-                
+
                 <div className="flex justify-between text-xs text-gray-500">
                   <span className="flex items-center gap-1">
                     Phí vận chuyển
@@ -222,7 +225,7 @@ export default function CartPage() {
                     <span className="font-extrabold">-{discountAmount.toLocaleString('vi-VN')} đ</span>
                   </div>
                 )}
-                
+
                 <div className="border-t border-gray-100 pt-4 flex justify-between items-end">
                   <span className="text-xs font-bold text-gray-800">Tổng cộng</span>
                   <span className="text-2xl font-black text-brand-600">
@@ -238,16 +241,16 @@ export default function CartPage() {
                 </label>
                 <div className="flex gap-2">
                   <div className="relative flex-1">
-                    <input 
-                      type="text" 
-                      placeholder="Mã giảm giá..." 
+                    <input
+                      type="text"
+                      placeholder="Mã giảm giá..."
                       value={couponCode}
                       onChange={(e) => setCouponCode(e.target.value)}
                       className="w-full pl-8 pr-3 py-2 border border-gray-200 rounded-brand-md text-xs font-bold focus:outline-none focus:ring-1 focus:ring-brand-500 uppercase placeholder:normal-case"
                     />
                     <Ticket className="w-4 h-4 text-gray-400 absolute left-2.5 top-1/2 -translate-y-1/2" />
                   </div>
-                  <button 
+                  <button
                     type="submit"
                     className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-brand-md text-xs font-bold transition shrink-0"
                   >
@@ -255,7 +258,7 @@ export default function CartPage() {
                   </button>
                 </div>
                 {couponError && <p className="text-[10px] text-red-500 font-bold mt-1">{couponError}</p>}
-                
+
                 {/* Hints for testing */}
                 <div className="text-[9px] text-gray-400 space-y-0.5 leading-relaxed pt-1">
                   <p>💡 Mã thử nghiệm:</p>
@@ -271,7 +274,7 @@ export default function CartPage() {
               </div>
 
               {/* Checkout Button */}
-              <a 
+              <a
                 href="/checkout"
                 className="w-full py-4 bg-brand-600 hover:bg-brand-700 text-white rounded-brand-md text-xs font-bold transition shadow-md hover:shadow-lg flex items-center justify-center gap-2"
               >
