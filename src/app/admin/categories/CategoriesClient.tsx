@@ -204,7 +204,7 @@ export default function CategoriesClient({ initialCategories }: CategoriesClient
         {/* Left Col - Add quick category form */}
         <div className="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm space-y-4 lg:sticky lg:top-6">
           <h3 className="text-base font-bold text-slate-800 flex items-center gap-2">
-            <FolderOpen className="w-5 h-5 text-blue-500" />
+            <FolderOpen className="w-5 h-5 text-primary" />
             Thêm Danh Mục Mới
           </h3>
           <p className="text-xs text-slate-400">Tạo nhanh danh mục để gán kích thước quy chuẩn cho sản phẩm.</p>
@@ -272,7 +272,7 @@ export default function CategoriesClient({ initialCategories }: CategoriesClient
                   className="text-slate-600 focus:outline-none transition shrink-0"
                 >
                   {formIsActive ? (
-                    <ToggleRight className="w-9 h-9 text-blue-600" />
+                    <ToggleRight className="w-9 h-9 text-primary" />
                   ) : (
                     <ToggleLeft className="w-9 h-9 text-slate-300" />
                   )}
@@ -284,7 +284,7 @@ export default function CategoriesClient({ initialCategories }: CategoriesClient
             <button
               type="submit"
               disabled={saving}
-              className="w-full mt-2 inline-flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-semibold shadow-sm transition disabled:opacity-50"
+              className="w-full mt-2 inline-flex items-center justify-center gap-2 px-4 py-3 bg-primary hover:bg-primary-container text-white rounded-xl text-sm font-semibold shadow-sm transition disabled:opacity-50"
             >
               <Plus className="w-4 h-4" />
               {saving ? 'Đang tạo...' : 'Tạo danh mục mới'}

@@ -182,7 +182,7 @@ export default function AdminDashboardClient({ stats, topSellers }: AdminDashboa
 
     switch (normalizedStatus) {
       case 'PENDING': return 'bg-amber-50 text-amber-700 border-amber-200';
-      case 'CONFIRMED': return 'bg-blue-50 text-blue-700 border-blue-200';
+      case 'CONFIRMED': return 'bg-primary/5 text-primary border-primary/20';
       case 'SHIPPING': return 'bg-purple-50 text-purple-700 border-purple-200';
       case 'DELIVERED':
       case 'COMPLETED': return 'bg-green-50 text-green-700 border-green-200';
@@ -269,7 +269,7 @@ export default function AdminDashboardClient({ stats, topSellers }: AdminDashboa
   return (
     <div className="space-y-8 animate-fadeIn">
       {/* Welcome Hero Banner */}
-      <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-3xl p-6 md:p-8 text-white shadow-md relative overflow-hidden">
+      <div className="bg-gradient-to-r from-primary to-primary-container rounded-3xl p-6 md:p-8 text-white shadow-md relative overflow-hidden">
         <div className="absolute right-0 top-0 translate-x-12 -translate-y-12 w-64 h-64 bg-white/5 rounded-full blur-2xl pointer-events-none" />
         <div className="absolute left-1/3 bottom-0 translate-y-12 w-48 h-48 bg-white/5 rounded-full blur-xl pointer-events-none" />
         
@@ -315,7 +315,7 @@ export default function AdminDashboardClient({ stats, topSellers }: AdminDashboa
 
         {/* Total Orders */}
         <div className="bg-white border border-slate-200/80 p-6 rounded-2xl shadow-sm flex items-center gap-5 hover:shadow-md transition-shadow">
-          <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-600 shrink-0">
+          <div className="w-12 h-12 rounded-2xl bg-primary/5 flex items-center justify-center text-primary shrink-0">
             <ShoppingBag className="w-6 h-6" />
           </div>
           <div>
@@ -360,7 +360,7 @@ export default function AdminDashboardClient({ stats, topSellers }: AdminDashboa
             <div className="bg-white border border-slate-200/80 p-6 rounded-2xl shadow-sm space-y-6">
               <div>
                 <h3 className="text-base font-bold text-slate-800 flex items-center gap-2">
-                  <BarChart2 className="w-5 h-5 text-blue-500" />
+                  <BarChart2 className="w-5 h-5 text-primary" />
                   Doanh Thu Gần Đây
                 </h3>
                 <p className="text-xs text-slate-400 mt-0.5">Biểu đồ tổng hợp doanh thu theo ngày gần nhất.</p>
@@ -381,7 +381,7 @@ export default function AdminDashboardClient({ stats, topSellers }: AdminDashboa
                           </div>
                           {/* Chart Bar */}
                           <div 
-                            className="w-full sm:w-2/3 bg-gradient-to-t from-blue-500 to-indigo-500 rounded-t-md hover:from-blue-600 hover:to-indigo-600 transition-all duration-300"
+                            className="w-full sm:w-2/3 bg-gradient-to-t from-primary to-primary-container rounded-t-md hover:from-blue-600 hover:to-indigo-600 transition-all duration-300"
                             style={{ height: `${Math.max(pct, 4)}%` }}
                           />
                         </div>
@@ -401,7 +401,7 @@ export default function AdminDashboardClient({ stats, topSellers }: AdminDashboa
             <div className="bg-white border border-slate-200/80 p-6 rounded-2xl shadow-sm space-y-6">
               <div>
                 <h3 className="text-base font-bold text-slate-800 flex items-center gap-2">
-                  <TrendingUp className="w-5 h-5 text-blue-500" />
+                  <TrendingUp className="w-5 h-5 text-primary" />
                   Phân Bổ Trạng Thái Đơn Hàng
                 </h3>
                 <p className="text-xs text-slate-400 mt-0.5">Thống kê tỷ lệ phân bổ các đơn hàng trong hệ thống.</p>
@@ -448,14 +448,14 @@ export default function AdminDashboardClient({ stats, topSellers }: AdminDashboa
               <div className="flex justify-between items-center">
                 <div>
                   <h3 className="text-base font-bold text-slate-800 flex items-center gap-2">
-                    <TrendingUp className="w-5 h-5 text-blue-500" />
+                    <TrendingUp className="w-5 h-5 text-primary" />
                     Xu Hướng & Top 5 Bán Chạy (Số liệu Cơ bản)
                   </h3>
                   <p className="text-xs text-slate-400 mt-0.5">Xếp hạng theo số lượng bán ra tổng hợp từ database.</p>
                 </div>
                 <Link 
                   href="/admin/products" 
-                  className="text-xs text-blue-600 font-semibold hover:underline inline-flex items-center gap-1 transition"
+                  className="text-xs text-primary font-semibold hover:underline inline-flex items-center gap-1 transition"
                 >
                   Quản lý kho <ArrowRight className="w-3 h-3" />
                 </Link>
@@ -471,7 +471,7 @@ export default function AdminDashboardClient({ stats, topSellers }: AdminDashboa
                     return (
                       <div key={item.productId} className="flex items-center gap-4">
                         <span className={`w-6 text-center font-bold text-sm shrink-0 ${
-                          index === 0 ? 'text-blue-600 text-base' : 'text-slate-400'
+                          index === 0 ? 'text-primary text-base' : 'text-slate-400'
                         }`}>
                           #{index + 1}
                         </span>
@@ -496,7 +496,7 @@ export default function AdminDashboardClient({ stats, topSellers }: AdminDashboa
                           
                           <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
                             <div 
-                              className="h-full bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full transition-all duration-500" 
+                              className="h-full bg-gradient-to-r from-primary to-primary-container rounded-full transition-all duration-500" 
                               style={{ width: `${percentage}%` }}
                             />
                           </div>
@@ -519,7 +519,7 @@ export default function AdminDashboardClient({ stats, topSellers }: AdminDashboa
             <div className="bg-white border border-slate-200/80 p-6 rounded-2xl shadow-sm space-y-6 animate-fadeIn">
               <div>
                 <h3 className="text-base font-bold text-slate-800 flex items-center gap-2">
-                  <Clock className="w-5 h-5 text-blue-500" />
+                  <Clock className="w-5 h-5 text-primary" />
                   Đơn Hàng Mới
                 </h3>
                 <p className="text-xs text-slate-400 mt-0.5">Danh sách các đơn hàng vừa tạo trong hệ thống.</p>
@@ -588,7 +588,7 @@ export default function AdminDashboardClient({ stats, topSellers }: AdminDashboa
           <div className="bg-white border border-slate-200/80 p-6 rounded-2xl shadow-sm space-y-6">
             <div>
               <h3 className="text-base font-bold text-slate-800 flex items-center gap-2">
-                <ClipboardList className="w-5 h-5 text-blue-500" />
+                <ClipboardList className="w-5 h-5 text-primary" />
                 Lối Tắt Vận Hành
               </h3>
               <p className="text-xs text-slate-400 mt-0.5">Truy cập nhanh các phân hệ admin quan trọng.</p>
@@ -597,50 +597,50 @@ export default function AdminDashboardClient({ stats, topSellers }: AdminDashboa
             <div className="space-y-3">
               <Link 
                 href="/admin/orders" 
-                className="flex items-center justify-between p-4 rounded-xl border border-slate-100 hover:border-blue-100 hover:bg-blue-50/50 transition group"
+                className="flex items-center justify-between p-4 rounded-xl border border-slate-100 hover:border-blue-100 hover:bg-primary/5/50 transition group"
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                  <div className="w-9 h-9 rounded-lg bg-primary/5 text-primary flex items-center justify-center shrink-0">
                     <ClipboardList className="w-5 h-5" />
                   </div>
                   <div>
-                    <span className="text-sm font-bold text-slate-800 group-hover:text-blue-600 transition">Quản lý Đơn hàng</span>
+                    <span className="text-sm font-bold text-slate-800 group-hover:text-primary transition">Quản lý Đơn hàng</span>
                     <p className="text-xs text-slate-400 mt-0.5">{formatNumber(safeStats.pendingOrders)} đơn hàng chờ</p>
                   </div>
                 </div>
-                <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-blue-500 transition" />
+                <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-primary transition" />
               </Link>
 
               <Link 
                 href="/admin/products" 
-                className="flex items-center justify-between p-4 rounded-xl border border-slate-100 hover:border-blue-100 hover:bg-blue-50/50 transition group"
+                className="flex items-center justify-between p-4 rounded-xl border border-slate-100 hover:border-blue-100 hover:bg-primary/5/50 transition group"
               >
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center shrink-0">
                     <ShoppingBag className="w-5 h-5" />
                   </div>
                   <div>
-                    <span className="text-sm font-bold text-slate-800 group-hover:text-blue-600 transition">Kho Sản phẩm</span>
+                    <span className="text-sm font-bold text-slate-800 group-hover:text-primary transition">Kho Sản phẩm</span>
                     <p className="text-xs text-slate-400 mt-0.5">{formatNumber(safeStats.totalProducts)} phân loại hàng</p>
                   </div>
                 </div>
-                <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-blue-500 transition" />
+                <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-primary transition" />
               </Link>
 
               <Link 
                 href="/admin/customers" 
-                className="flex items-center justify-between p-4 rounded-xl border border-slate-100 hover:border-blue-100 hover:bg-blue-50/50 transition group"
+                className="flex items-center justify-between p-4 rounded-xl border border-slate-100 hover:border-blue-100 hover:bg-primary/5/50 transition group"
               >
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
                     <UserCheck className="w-5 h-5" />
                   </div>
                   <div>
-                    <span className="text-sm font-bold text-slate-800 group-hover:text-blue-600 transition">Khách hàng</span>
+                    <span className="text-sm font-bold text-slate-800 group-hover:text-primary transition">Khách hàng</span>
                     <p className="text-xs text-slate-400 mt-0.5">Hồ sơ sỉ & lẻ đại lý</p>
                   </div>
                 </div>
-                <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-blue-500 transition" />
+                <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-primary transition" />
               </Link>
             </div>
           </div>

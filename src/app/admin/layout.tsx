@@ -66,7 +66,7 @@ export default function AdminLayout({
         {/* Sidebar Header */}
         <div className="h-16 flex items-center px-6 border-b border-slate-100">
           <div className="flex items-center gap-2">
-            <span className="text-xl font-bold tracking-tight bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+            <span className="text-xl font-black tracking-tight text-primary">
               Thanh Hương Admin
             </span>
           </div>
@@ -83,11 +83,11 @@ export default function AdminLayout({
                 href={item.href}
                 className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-semibold transition ${
                   isActive
-                    ? 'bg-blue-50 text-blue-600'
+                    ? 'bg-primary/10 text-primary'
                     : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
                 }`}
               >
-                <Icon className={`w-5 h-5 ${isActive ? 'text-blue-600' : 'text-slate-400 group-hover:text-slate-500'}`} />
+                <Icon className={`w-5 h-5 ${isActive ? 'text-primary' : 'text-slate-400 group-hover:text-slate-500'}`} />
                 {item.name}
               </Link>
             );
@@ -111,7 +111,7 @@ export default function AdminLayout({
         <header className="h-14 bg-white border-b border-slate-200 flex items-center justify-between px-6 md:hidden">
           <span className="text-sm font-bold text-slate-800">Thanh Hương Admin</span>
           <div className="flex gap-2">
-            <Link href="/admin/orders" className="text-xs text-blue-600 font-semibold px-2 py-1 bg-blue-50 rounded">
+            <Link href="/admin/orders" className="text-xs text-primary font-semibold px-2 py-1 bg-primary/10 rounded">
               Đơn hàng
             </Link>
             <Link href="/admin/products" className="text-xs text-slate-600 px-2 py-1 rounded">

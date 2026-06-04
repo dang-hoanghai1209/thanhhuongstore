@@ -353,7 +353,7 @@ export default function ProductsClient({ initialProducts, categories }: Products
         </div>
         <button
           onClick={handleOpenAddModal}
-          className="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-semibold shadow-sm transition shrink-0"
+          className="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-primary hover:bg-primary-container text-white rounded-xl text-sm font-semibold shadow-sm transition shrink-0"
         >
           <Plus className="w-4.5 h-4.5" />
           Thêm sản phẩm mới
@@ -369,7 +369,7 @@ export default function ProductsClient({ initialProducts, categories }: Products
             placeholder="Tìm theo tên sản phẩm hoặc danh mục..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full bg-white border border-slate-200 pl-11 pr-4 py-2.5 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-shadow placeholder:text-slate-400"
+            className="w-full bg-white border border-slate-200 pl-11 pr-4 py-2.5 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/10/20 focus:border-primary transition-shadow placeholder:text-slate-400"
           />
         </div>
       </div>
@@ -420,7 +420,7 @@ export default function ProductsClient({ initialProducts, categories }: Products
                           href={`/products/${p.slug}`} 
                           target="_blank" 
                           rel="noreferrer" 
-                          className="text-xs text-blue-500 font-semibold hover:underline inline-flex items-center gap-1 mt-1 font-normal"
+                          className="text-xs text-primary font-semibold hover:underline inline-flex items-center gap-1 mt-1 font-normal"
                         >
                           <Eye className="w-3.5 h-3.5" /> Xem ngoài Shop
                         </a>
@@ -461,7 +461,7 @@ export default function ProductsClient({ initialProducts, categories }: Products
                       <td className="py-4 px-6 text-center">
                         <button
                           onClick={() => handleOpenEditModal(p)}
-                          className="p-2 border border-slate-200 hover:border-blue-200 hover:bg-blue-50 text-slate-500 hover:text-blue-600 rounded-xl transition shadow-sm"
+                          className="p-2 border border-slate-200 hover:border-primary/20 hover:bg-blue-50 text-slate-500 hover:text-primary rounded-xl transition shadow-sm"
                           title="Chỉnh sửa sản phẩm"
                         >
                           <Edit2 className="w-4 h-4" />
@@ -510,7 +510,7 @@ export default function ProductsClient({ initialProducts, categories }: Products
                       placeholder="Ví dụ: Áo Ngực Bralette Cotton Mộc"
                       value={formName}
                       onChange={(e) => setFormName(e.target.value)}
-                      className="w-full bg-white border border-slate-200 px-4 py-2.5 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-shadow"
+                      className="w-full bg-white border border-slate-200 px-4 py-2.5 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/10/20 focus:border-primary transition-shadow"
                     />
                   </div>
 
@@ -519,7 +519,7 @@ export default function ProductsClient({ initialProducts, categories }: Products
                     <select
                       value={formCategory}
                       onChange={(e) => setFormCategory(e.target.value)}
-                      className="w-full bg-white border border-slate-200 px-4 py-2.5 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-shadow cursor-pointer"
+                      className="w-full bg-white border border-slate-200 px-4 py-2.5 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/10/20 focus:border-primary transition-shadow cursor-pointer"
                     >
                       {categories.map((cat) => (
                         <option key={cat.id} value={cat.id}>
@@ -536,7 +536,7 @@ export default function ProductsClient({ initialProducts, categories }: Products
                       className="text-slate-600 hover:text-slate-900 focus:outline-none transition shrink-0"
                     >
                       {formIsActive ? (
-                        <ToggleRight className="w-10 h-10 text-blue-600" />
+                        <ToggleRight className="w-10 h-10 text-primary" />
                       ) : (
                         <ToggleLeft className="w-10 h-10 text-slate-300" />
                       )}
@@ -557,7 +557,7 @@ export default function ProductsClient({ initialProducts, categories }: Products
                     <div className="border border-dashed border-slate-300 rounded-2xl p-4 bg-slate-50 hover:bg-slate-50/80 transition-colors flex flex-col items-center justify-center min-h-[140px] relative mb-3">
                       {isUploading ? (
                         <div className="flex flex-col items-center justify-center space-y-2">
-                          <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
+                          <Loader2 className="w-8 h-8 text-primary animate-spin" />
                           <span className="text-xs font-medium text-slate-500">Đang tải ảnh lên...</span>
                         </div>
                       ) : formImageUrl ? (
@@ -625,7 +625,7 @@ export default function ProductsClient({ initialProducts, categories }: Products
                         setFormImageUrl(e.target.value);
                         if (uploadError) setUploadError(null);
                       }}
-                      className="w-full bg-white border border-slate-200 px-4 py-2.5 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-shadow"
+                      className="w-full bg-white border border-slate-200 px-4 py-2.5 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/10/20 focus:border-primary transition-shadow"
                     />
                     <p className="text-[10px] text-slate-400 mt-1">
                       Giữ nguyên flow nhập link ảnh tự thiết kế hoặc link CDN bên ngoài.
@@ -639,7 +639,7 @@ export default function ProductsClient({ initialProducts, categories }: Products
                       rows={3}
                       value={formDescription}
                       onChange={(e) => setFormDescription(e.target.value)}
-                      className="w-full bg-white border border-slate-200 px-4 py-2.5 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-shadow resize-none"
+                      className="w-full bg-white border border-slate-200 px-4 py-2.5 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/10/20 focus:border-primary transition-shadow resize-none"
                     />
                   </div>
                 </div>
@@ -655,7 +655,7 @@ export default function ProductsClient({ initialProducts, categories }: Products
                   <button
                     type="button"
                     onClick={handleAddVariantRow}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 border border-blue-200 hover:bg-blue-50 text-blue-600 rounded-lg text-xs font-semibold shadow-xs transition"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 border border-primary/20 hover:bg-blue-50 text-primary rounded-lg text-xs font-semibold shadow-xs transition"
                   >
                     <Plus className="w-3.5 h-3.5" />
                     Thêm biến thể
@@ -792,7 +792,7 @@ export default function ProductsClient({ initialProducts, categories }: Products
                 <button
                   type="submit"
                   disabled={saving}
-                  className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-semibold shadow-sm transition disabled:opacity-50 inline-flex items-center gap-2"
+                  className="px-5 py-2.5 bg-primary hover:bg-primary-container text-white rounded-xl text-sm font-semibold shadow-sm transition disabled:opacity-50 inline-flex items-center gap-2"
                 >
                   {saving ? 'Đang lưu...' : 'Lưu sản phẩm'}
                 </button>

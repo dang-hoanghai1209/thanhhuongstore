@@ -194,7 +194,7 @@ export default function AdminOrdersPage() {
         return 'bg-amber-50 text-amber-700 border-amber-200';
       case 'CONFIRMED':
       case 'PROCESSING':
-        return 'bg-blue-50 text-blue-700 border-blue-200';
+        return 'bg-primary/5 text-blue-700 border-primary/20';
       case 'SHIPPING':
         return 'bg-purple-50 text-purple-700 border-purple-200';
       case 'DELIVERED':
@@ -311,7 +311,7 @@ export default function AdminOrdersPage() {
 
         {/* Total Orders */}
         <div className="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm flex items-center gap-5">
-          <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 shrink-0">
+          <div className="w-12 h-12 rounded-xl bg-primary/5 flex items-center justify-center text-primary shrink-0">
             <ShoppingBag className="w-6 h-6" />
           </div>
           <div>
@@ -353,7 +353,7 @@ export default function AdminOrdersPage() {
             placeholder="Tìm theo Mã đơn, tên KH, SĐT hoặc địa chỉ..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full bg-white border border-slate-200 pl-11 pr-4 py-2.5 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-shadow placeholder:text-slate-400"
+            className="w-full bg-white border border-slate-200 pl-11 pr-4 py-2.5 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/10/20 focus:border-primary transition-shadow placeholder:text-slate-400"
           />
         </div>
 
@@ -422,7 +422,7 @@ export default function AdminOrdersPage() {
                   return (
                     <tr key={order.id} className="hover:bg-slate-50/50 transition-colors">
                       {/* Order number */}
-                      <td className="py-4 px-6 font-bold text-blue-600 shrink-0">
+                      <td className="py-4 px-6 font-bold text-primary shrink-0">
                         {order.orderNumber}
                       </td>
                       
@@ -472,7 +472,7 @@ export default function AdminOrdersPage() {
                             value={displayStatus}
                             onChange={(e) => handleStatusChange(order.id, e.target.value)}
                             disabled={updatingId === order.id}
-                            className={`text-xs font-bold rounded-full px-3 py-1.5 border focus:outline-none focus:ring-2 focus:ring-blue-500/20 cursor-pointer transition-colors disabled:opacity-50 appearance-none pr-8 ${getStatusStyles(dbStatus)}`}
+                            className={`text-xs font-bold rounded-full px-3 py-1.5 border focus:outline-none focus:ring-2 focus:ring-primary/10/20 cursor-pointer transition-colors disabled:opacity-50 appearance-none pr-8 ${getStatusStyles(dbStatus)}`}
                           >
                             <option value="PENDING">Chờ xử lý</option>
                             <option value="CONFIRMED">Đã xác nhận</option>
@@ -488,7 +488,7 @@ export default function AdminOrdersPage() {
                       <td className="py-4 px-6 text-center">
                         <button
                           onClick={() => setSelectedOrder(order)}
-                          className="p-2 border border-slate-200 hover:border-blue-200 hover:bg-blue-50 text-slate-500 hover:text-blue-600 rounded-xl transition shadow-sm"
+                          className="p-2 border border-slate-200 hover:border-primary/20 hover:bg-primary/5 text-slate-500 hover:text-primary rounded-xl transition shadow-sm"
                           title="Xem chi tiết"
                         >
                           <Eye className="w-4 h-4" />
@@ -512,7 +512,7 @@ export default function AdminOrdersPage() {
               <div>
                 <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
                   <span>Chi Tiết Đơn Hàng:</span>
-                  <span className="text-blue-600">{selectedOrder.orderNumber}</span>
+                  <span className="text-primary">{selectedOrder.orderNumber}</span>
                 </h3>
                 <p className="text-xs text-slate-500 mt-1">Ngày đặt: {formatDate(selectedOrder.createdAt)}</p>
               </div>
@@ -618,7 +618,7 @@ export default function AdminOrdersPage() {
                   )}
                   <div className="flex justify-between text-base font-bold text-slate-900 pt-2 border-t border-slate-200">
                     <span>Tổng cộng:</span>
-                    <span className="text-blue-600">{formatVND(Number(selectedOrder.totalAmount))}</span>
+                    <span className="text-primary">{formatVND(Number(selectedOrder.totalAmount))}</span>
                   </div>
                 </div>
               </div>
@@ -633,7 +633,7 @@ export default function AdminOrdersPage() {
                     value={selectedOrder.status === 'DELIVERED' ? 'COMPLETED' : selectedOrder.status}
                     onChange={(e) => handleStatusChange(selectedOrder.id, e.target.value)}
                     disabled={updatingId === selectedOrder.id}
-                    className={`text-xs font-bold rounded-full px-3 py-1.5 border focus:outline-none focus:ring-2 focus:ring-blue-500/20 cursor-pointer disabled:opacity-50 appearance-none pr-8 ${getStatusStyles(selectedOrder.status)}`}
+                    className={`text-xs font-bold rounded-full px-3 py-1.5 border focus:outline-none focus:ring-2 focus:ring-primary/10/20 cursor-pointer disabled:opacity-50 appearance-none pr-8 ${getStatusStyles(selectedOrder.status)}`}
                   >
                     <option value="PENDING">Chờ xử lý</option>
                     <option value="CONFIRMED">Đã xác nhận</option>

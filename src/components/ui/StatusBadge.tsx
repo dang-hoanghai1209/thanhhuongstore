@@ -16,7 +16,9 @@ export default function StatusBadge({ status }: StatusBadgeProps) {
     cancelled: { bg: 'bg-red-50 border-red-200 text-red-800', label: 'Đã hủy' },
     refunded: { bg: 'bg-gray-50 border-gray-200 text-gray-800', label: 'Đã hoàn tiền' },
     paid: { bg: 'bg-emerald-50 border-emerald-200 text-emerald-800', label: 'Đã thanh toán' },
-    failed: { bg: 'bg-red-50 border-red-200 text-red-800', label: 'Thất bại' }
+    failed: { bg: 'bg-red-50 border-red-200 text-red-800', label: 'Thất bại' },
+    active: { bg: 'bg-emerald-50 border-emerald-200 text-emerald-800', label: 'Hoạt động' },
+    inactive: { bg: 'bg-red-50 border-red-200 text-red-800', label: 'Tạm khóa' }
   };
 
   const current = config[statusLower] || { bg: 'bg-gray-50 border-gray-200 text-gray-800', label: status };

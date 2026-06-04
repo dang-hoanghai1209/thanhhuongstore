@@ -2,18 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import {
-  Menu,
-  X,
-  Search,
-  ShoppingBag,
-  User,
-  ChevronDown,
-  ArrowRight,
-  Sparkles,
-  Phone,
-  HelpCircle
-} from 'lucide-react';
 import MiniCart from '@/components/cart/MiniCart';
 import { useCartStore } from '@/store/useCartStore';
 import { useAuthStore } from '@/store';
@@ -124,17 +112,17 @@ export default function Header() {
   return (
     <>
       {/* Top Banner Message */}
-      <div className="bg-brand-950 text-white py-2 px-4 text-center text-[10px] font-extrabold uppercase tracking-widest border-b border-white/5 flex justify-between items-center max-w-7xl mx-auto sm:px-8 lg:px-12">
+      <div className="bg-primary-container text-white py-2 px-4 text-center text-[10px] font-extrabold uppercase tracking-widest border-b border-white/5 flex justify-between items-center max-w-7xl mx-auto sm:px-8 lg:px-12 rounded-t-lg">
         <div className="hidden sm:flex items-center gap-1">
-          <Phone className="w-3.5 h-3.5 text-accent-gold" />
-          Hotline: 0912.345.678
+          <span className="material-symbols-outlined text-accent-gold text-[14px]">phone</span>
+          Hotline: 0987.654.321
         </div>
         <div className="mx-auto sm:mx-0 flex items-center gap-1.5 justify-center">
-          <Sparkles className="w-3.5 h-3.5 text-accent-pink animate-pulse" />
+          <span className="material-symbols-outlined text-accent-pink text-[14px] animate-pulse">auto_awesome</span>
           <span>Freeship cho mọi đơn lẻ bán lẻ từ 500,000đ</span>
         </div>
         <div className="hidden md:flex items-center gap-1">
-          <HelpCircle className="w-3.5 h-3.5 text-brand-300" />
+          <span className="material-symbols-outlined text-white/70 text-[14px]">help</span>
           Hỗ trợ đại lý B2B sỉ
         </div>
       </div>
@@ -147,18 +135,18 @@ export default function Header() {
             {/* 1. Mobile Menu Toggle Icon */}
             <button
               onClick={() => setMobileMenuOpen(true)}
-              className="lg:hidden p-2 rounded-brand-md text-gray-500 hover:bg-gray-50 hover:text-gray-900 transition"
+              className="lg:hidden p-2 rounded-brand-md text-gray-500 hover:bg-gray-50 hover:text-gray-900 transition flex items-center justify-center"
               aria-label="Open menu"
             >
-              <Menu className="w-6 h-6" />
+              <span className="material-symbols-outlined text-[24px]">menu</span>
             </button>
 
             {/* 2. Brand Logo */}
-            <Link href="/" className="flex items-center gap-2 text-brand-600 shrink-0">
-              <div className="w-9 h-9 rounded-brand-md bg-brand-600 flex items-center justify-center text-white font-black text-base shadow-sm">
+            <Link href="/" className="flex items-center gap-2 text-primary shrink-0">
+              <div className="w-9 h-9 rounded-brand-md bg-primary flex items-center justify-center text-white font-black text-base shadow-sm">
                 TH
               </div>
-              <span className="text-base sm:text-lg font-black uppercase tracking-widest">Thanh Hương Store</span>
+              <span className="text-base sm:text-lg font-black uppercase tracking-widest text-on-surface">Thanh Hương Store</span>
             </Link>
 
             {/* 3. DESKTOP NAVIGATION MEGA MENU */}
@@ -170,11 +158,11 @@ export default function Header() {
                   onMouseEnter={() => setHoveredMenu(idx)}
                   onMouseLeave={() => setHoveredMenu(null)}
                 >
-                  <button className="flex items-center gap-1.5 text-xs font-bold text-gray-700 hover:text-brand-600 uppercase tracking-wider transition py-8">
+                  <button className="flex items-center gap-1 text-xs font-bold text-gray-700 hover:text-primary uppercase tracking-wider transition py-8">
                     {item.name}
-                    <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${
-                      hoveredMenu === idx ? 'rotate-180 text-brand-600' : 'text-gray-400'
-                    }`} />
+                    <span className="material-symbols-outlined text-gray-400 text-[18px] transition-transform duration-200" style={{ transform: hoveredMenu === idx ? 'rotate(180deg)' : 'rotate(0deg)' }}>
+                      keyboard_arrow_down
+                    </span>
                   </button>
 
                   {/* Mega Menu Dropdown Box */}
@@ -190,9 +178,11 @@ export default function Header() {
                             <Link
                               key={sIdx}
                               href={sub.href}
-                              className="text-xs font-bold text-gray-700 hover:text-brand-600 transition flex items-center gap-1.5 group"
+                              className="text-xs font-bold text-gray-700 hover:text-primary transition flex items-center gap-1 group"
                             >
-                              <ArrowRight className="w-3 h-3 text-gray-300 group-hover:text-brand-500 transition-transform group-hover:translate-x-0.5" />
+                              <span className="material-symbols-outlined text-gray-300 group-hover:text-primary text-[16px] transition-transform group-hover:translate-x-0.5">
+                                arrow_right_alt
+                              </span>
                               {sub.name}
                             </Link>
                           ))}
@@ -201,36 +191,36 @@ export default function Header() {
                         {/* Middle Category Intro Column */}
                         <div className="p-5 bg-gray-50 border border-gray-100 rounded-brand-md flex flex-col justify-between">
                           <div className="space-y-2">
-                            <span className="text-[9px] font-extrabold text-accent-pink uppercase tracking-widest bg-accent-pink/10 px-2 py-0.5 rounded">
+                            <span className="text-[9px] font-extrabold text-white bg-primary px-2 py-0.5 rounded uppercase tracking-wider">
                               Nổi bật
                             </span>
                             <h4 className="text-xs font-extrabold text-gray-900 mt-1">{item.name}</h4>
-                            <p className="text-[11px] text-gray-500 leading-relaxed mt-2">
+                            <p className="text-[11px] text-gray-500 leading-relaxed mt-2 font-medium">
                               {item.featured}
                             </p>
                           </div>
 
                           <Link
                             href={`/products/${item.slug}`}
-                            className="text-xs font-bold text-brand-600 hover:text-brand-700 mt-4 flex items-center gap-1.5 group"
+                            className="text-xs font-bold text-primary hover:text-primary-container mt-4 flex items-center gap-1 group"
                           >
                             Xem sản phẩm bán chạy nhất
-                            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                            <span className="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">arrow_right_alt</span>
                           </Link>
                         </div>
 
                         {/* Marketing Promo Card Banner */}
-                        <div className="relative rounded-brand-md overflow-hidden bg-brand-950 flex flex-col justify-end p-5 text-white">
+                        <div className="relative rounded-brand-md overflow-hidden bg-primary-container flex flex-col justify-end p-5 text-white">
                           <img
                             src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&w=400&q=80"
                             alt="Collection Promo"
                             className="absolute inset-0 w-full h-full object-cover opacity-35"
                           />
-                          <div className="absolute inset-0 bg-gradient-to-t from-brand-950 via-brand-950/20 to-transparent" />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                           <div className="relative z-10 space-y-1">
                             <p className="text-[9px] text-accent-gold font-extrabold uppercase tracking-widest">Đặc quyền B2B</p>
                             <p className="text-xs font-extrabold">Chiết khấu sỉ tự động</p>
-                            <p className="text-[10px] text-brand-200">Mua nhiều giảm lớn tại giỏ hàng</p>
+                            <p className="text-[10px] text-white/70 font-medium">Mua nhiều giảm lớn tại giỏ hàng</p>
                           </div>
                         </div>
                       </div>
@@ -247,9 +237,9 @@ export default function Header() {
                 placeholder="Tìm sản phẩm, danh mục..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-brand-md text-xs font-bold focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/10 transition"
+                className="pl-10 input-standard"
               />
-              <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+              <span className="material-symbols-outlined text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 text-[18px]">search</span>
             </form>
 
             {/* 5. RIGHT ICONS (User & Cart) */}
@@ -259,7 +249,7 @@ export default function Header() {
               {mounted && user ? (
                 <div className="relative group">
                   <button className="flex items-center gap-1.5 p-2 rounded-brand-md text-gray-500 hover:bg-gray-50 hover:text-gray-900 transition">
-                    <User className="w-5 h-5" />
+                    <span className="material-symbols-outlined text-[20px]">person</span>
                     <span className="hidden md:inline text-xs font-bold text-gray-700">
                       {user.firstName}
                     </span>
@@ -270,7 +260,7 @@ export default function Header() {
                       <p className="text-[10px] text-gray-400 truncate">{user.email}</p>
                     </div>
                     {user.role === 'ADMIN' && (
-                      <Link href="/admin" className="block px-4 py-2 text-xs font-bold text-blue-600 hover:bg-slate-50 transition">
+                      <Link href="/admin" className="block px-4 py-2 text-xs font-bold text-primary hover:bg-slate-50 transition">
                         Quản trị
                       </Link>
                     )}
@@ -290,11 +280,11 @@ export default function Header() {
                 </div>
               ) : (
                 <div className="hidden sm:flex items-center gap-1.5 text-xs font-bold text-gray-700">
-                  <Link href="/login" className="hover:text-brand-600 transition">
+                  <Link href="/login" className="hover:text-primary transition">
                     Đăng nhập
                   </Link>
                   <span className="text-gray-300">/</span>
-                  <Link href="/register" className="hover:text-brand-600 transition">
+                  <Link href="/register" className="hover:text-primary transition">
                     Đăng ký
                   </Link>
                 </div>
@@ -304,24 +294,24 @@ export default function Header() {
               {(!mounted || !user) && (
                 <Link
                   href="/login"
-                  className="sm:hidden p-2.5 rounded-brand-md text-gray-500 hover:bg-gray-50 hover:text-gray-900 transition"
+                  className="sm:hidden p-2.5 rounded-brand-md text-gray-500 hover:bg-gray-50 hover:text-gray-900 transition flex items-center justify-center"
                   title="Tài khoản"
                 >
-                  <User className="w-5 h-5" />
+                  <span className="material-symbols-outlined text-[20px]">person</span>
                 </Link>
               )}
 
               {/* Cart Icon */}
               <button
                 onClick={openCart}
-                className="p-2.5 rounded-brand-md text-gray-500 hover:bg-gray-50 hover:text-gray-900 transition relative animate-pulseSubtle"
+                className="p-2.5 rounded-brand-md text-gray-500 hover:bg-gray-50 hover:text-gray-900 transition relative animate-pulseSubtle flex items-center justify-center"
                 title="Giỏ hàng"
               >
-                <ShoppingBag className="w-5 h-5" />
+                <span className="material-symbols-outlined text-[20px]">shopping_bag</span>
 
                 {/* Dynamic count badge indicating item exists */}
                 {mounted && totalItemsCount > 0 && (
-                  <span className="absolute top-1.5 right-1.5 w-3.5 h-3.5 bg-brand-600 rounded-full border-2 border-white flex items-center justify-center text-[8px] font-black text-white">
+                  <span className="absolute top-1.5 right-1.5 w-3.5 h-3.5 bg-primary rounded-full border-2 border-white flex items-center justify-center text-[8px] font-black text-white">
                     {totalItemsCount}
                   </span>
                 )}
@@ -335,7 +325,7 @@ export default function Header() {
 
       {/* MOBILE HAMBURGER MENU (Slide-in Drawer) */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-50 lg:hidden flex">
+        <div className="fixed inset-0 z-50 lg:hidden flex animate-fadeIn">
           {/* Backdrop overlay */}
           <div
             onClick={() => setMobileMenuOpen(false)}
@@ -347,17 +337,17 @@ export default function Header() {
 
             {/* Header: Logo and Close */}
             <div className="flex items-center justify-between pb-4 border-b border-gray-100">
-              <div className="flex items-center gap-2 text-brand-600">
-                <div className="w-8 h-8 rounded-brand-sm bg-brand-600 flex items-center justify-center text-white font-black text-sm shadow-xs">
+              <div className="flex items-center gap-2 text-primary">
+                <div className="w-8 h-8 rounded-brand-sm bg-primary flex items-center justify-center text-white font-black text-sm shadow-xs">
                   TH
                 </div>
-                <span className="text-sm font-black uppercase tracking-widest">Thanh Hương Store</span>
+                <span className="text-sm font-black uppercase tracking-widest text-on-surface">Thanh Hương Store</span>
               </div>
               <button
                 onClick={() => setMobileMenuOpen(false)}
-                className="p-1 rounded-full hover:bg-gray-100 transition"
+                className="p-1 rounded-full hover:bg-gray-100 transition flex items-center justify-center"
               >
-                <X className="w-5 h-5 text-gray-500" />
+                <span className="material-symbols-outlined text-gray-500 text-[20px]">close</span>
               </button>
             </div>
 
@@ -368,9 +358,9 @@ export default function Header() {
                 placeholder="Tìm sản phẩm..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-brand-md text-xs font-bold focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/10 transition"
+                className="pl-10 input-standard"
               />
-              <Search className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+              <span className="material-symbols-outlined text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 text-[18px]">search</span>
             </form>
 
             {/* Mobile User Section */}
@@ -378,8 +368,8 @@ export default function Header() {
               {mounted && user ? (
                 <div className="space-y-3">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-brand-50 flex items-center justify-center text-brand-600">
-                      <User className="w-5 h-5" />
+                    <div className="w-10 h-10 rounded-full bg-primary/5 flex items-center justify-center text-primary border border-primary/10">
+                      <span className="material-symbols-outlined text-[18px]">person</span>
                     </div>
                     <div>
                       <p className="text-xs font-extrabold text-gray-800">{user.lastName} {user.firstName}</p>
@@ -391,33 +381,37 @@ export default function Header() {
                       <Link
                         href="/admin"
                         onClick={() => setMobileMenuOpen(false)}
-                        className="text-xs font-bold text-blue-600 hover:text-blue-700 py-1"
+                        className="text-xs font-bold text-primary hover:text-primary-container py-1 flex items-center gap-1"
                       >
-                        🛡️ Trang quản trị
+                        <span className="material-symbols-outlined text-[16px]">security</span>
+                        Trang quản trị
                       </Link>
                     )}
                     <Link
                       href="/account"
                       onClick={() => setMobileMenuOpen(false)}
-                      className="text-xs font-bold text-gray-700 hover:text-brand-600 py-1"
+                      className="text-xs font-bold text-gray-700 hover:text-primary py-1 flex items-center gap-1"
                     >
-                      👤 Tài khoản
+                      <span className="material-symbols-outlined text-[16px]">person</span>
+                      Tài khoản
                     </Link>
                     <Link
                       href="/account/orders"
                       onClick={() => setMobileMenuOpen(false)}
-                      className="text-xs font-bold text-gray-700 hover:text-brand-600 py-1"
+                      className="text-xs font-bold text-gray-700 hover:text-primary py-1 flex items-center gap-1"
                     >
-                      📦 Đơn hàng
+                      <span className="material-symbols-outlined text-[16px]">local_shipping</span>
+                      Đơn hàng
                     </Link>
                     <button
                       onClick={() => {
                         setMobileMenuOpen(false);
                         handleLogout();
                       }}
-                      className="text-xs font-bold text-red-600 hover:text-red-700 text-left py-1"
+                      className="text-xs font-bold text-red-600 hover:text-red-700 text-left py-1 flex items-center gap-1"
                     >
-                      🚪 Đăng xuất
+                      <span className="material-symbols-outlined text-[16px]">logout</span>
+                      Đăng xuất
                     </button>
                   </div>
                 </div>
@@ -433,7 +427,7 @@ export default function Header() {
                   <Link
                     href="/register"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="flex-1 py-2.5 text-center text-xs font-bold text-white bg-brand-600 rounded-brand-md hover:bg-brand-700 transition"
+                    className="flex-1 py-2.5 text-center text-xs font-bold text-white bg-primary rounded-brand-md hover:bg-primary-container transition"
                   >
                     Đăng ký
                   </Link>
@@ -454,9 +448,9 @@ export default function Header() {
                         key={sIdx}
                         href={sub.href}
                         onClick={() => setMobileMenuOpen(false)}
-                        className="text-xs font-bold text-gray-700 hover:text-brand-600 transition flex items-center gap-1.5"
+                        className="text-xs font-bold text-gray-700 hover:text-primary transition flex items-center gap-1"
                       >
-                        <ArrowRight className="w-3.5 h-3.5 text-gray-300" />
+                        <span className="material-symbols-outlined text-gray-300 text-[16px]">keyboard_arrow_right</span>
                         {sub.name}
                       </Link>
                     ))}
@@ -466,10 +460,16 @@ export default function Header() {
             </div>
 
             {/* Mobile Footer Area */}
-            <div className="pt-6 border-t border-gray-100 text-xs text-gray-400 space-y-2">
-              <p>📍 Hotline: 0912.345.678</p>
-              <p>✉️ Email: support@thanhhuongstore.vn</p>
-              <p className="text-[10px] text-gray-300 pt-2">© 2026 Thanh Hương Store. All rights reserved.</p>
+            <div className="pt-6 border-t border-gray-100 text-xs text-gray-400 space-y-2 font-medium">
+              <p className="flex items-center gap-1">
+                <span className="material-symbols-outlined text-primary text-[16px]">phone</span>
+                Hotline: 0987.654.321
+              </p>
+              <p className="flex items-center gap-1">
+                <span className="material-symbols-outlined text-primary text-[16px]">mail</span>
+                hotro@thanhhuongstore.vn
+              </p>
+              <p className="text-[10px] text-gray-300 pt-2 font-normal">© 2026 Thanh Hương Store. All rights reserved.</p>
             </div>
 
           </div>

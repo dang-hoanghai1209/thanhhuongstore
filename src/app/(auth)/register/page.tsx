@@ -1,20 +1,8 @@
 'use client';
 
 import { useState, useMemo } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { 
-  Mail, 
-  Lock, 
-  User, 
-  Phone, 
-  Eye, 
-  EyeOff, 
-  Loader2, 
-  CheckCircle2, 
-  AlertTriangle, 
-  Sparkles, 
-  Shield 
-} from 'lucide-react';
 import { useAuthStore } from '@/store';
 
 export default function RegisterPage() {
@@ -51,11 +39,11 @@ export default function RegisterPage() {
     if (password.length >= 8) score += 1;
     if (/[A-Z]/.test(password)) score += 1;
     if (/[0-9]/.test(password)) score += 1;
-    if (/[^A-Za-z0-9]/.test(password)) score += 1; // Special char for extra score
+    if (/[^A-Za-z0-9]/.test(password)) score += 1;
 
     if (score <= 1) return { label: 'Yếu', score: 25, color: 'bg-red-500' };
     if (score === 2) return { label: 'Trung bình', score: 50, color: 'bg-yellow-500' };
-    if (score === 3) return { label: 'Mạnh', score: 75, color: 'bg-indigo-500' };
+    if (score === 3) return { label: 'Mạnh', score: 75, color: 'bg-primary' };
     return { label: 'Rất mạnh', score: 100, color: 'bg-emerald-500' };
   }, [password]);
 
@@ -126,18 +114,18 @@ export default function RegisterPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#FAF9F6] flex">
+    <main className="min-h-screen bg-[#FAF9F6] flex animate-fadeIn">
       
-      {/* LEFT HALF: REGISTER FORM LAYOUT (Centered and padded) */}
+      {/* LEFT HALF: REGISTER FORM LAYOUT */}
       <div className="flex-1 flex flex-col justify-center py-12 px-6 sm:px-12 lg:px-20 max-w-2xl mx-auto w-full z-10">
         
         {/* Success registration banner */}
         {success && (
           <div className="mb-6 p-4 bg-emerald-50 border border-emerald-100 rounded-brand-md text-emerald-800 text-xs font-semibold flex items-center gap-3 shadow-sm animate-fadeIn">
-            <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
+            <span className="material-symbols-outlined text-emerald-600 text-[20px] shrink-0">check_circle</span>
             <div className="space-y-0.5">
-              <p className="font-bold">Đăng ký tài khoản thành công!</p>
-              <p className="text-[10px] text-emerald-600 font-normal">Hệ thống đang chuẩn bị chuyển hướng bạn...</p>
+              <p className="font-bold text-[13px]">Đăng ký tài khoản thành công!</p>
+              <p className="text-[11px] text-emerald-600 font-normal">Hệ thống đang chuẩn bị chuyển hướng bạn...</p>
             </div>
           </div>
         )}
@@ -145,8 +133,8 @@ export default function RegisterPage() {
         {/* Error registration banner */}
         {error && (
           <div className="mb-6 p-4 bg-red-50 border border-red-100 rounded-brand-md text-red-700 text-xs font-semibold flex items-center gap-3 shadow-sm animate-fadeIn">
-            <AlertTriangle className="w-5 h-5 text-red-500 shrink-0" />
-            <span>{error}</span>
+            <span className="material-symbols-outlined text-red-500 text-[20px] shrink-0">warning</span>
+            <span className="text-[12px]">{error}</span>
           </div>
         )}
 
@@ -154,12 +142,12 @@ export default function RegisterPage() {
           
           {/* Logo & Headings */}
           <div className="space-y-2 text-center sm:text-left">
-            <div className="inline-flex items-center gap-2 text-brand-600">
-              <div className="w-8 h-8 rounded-brand-sm bg-brand-600 flex items-center justify-center text-white font-black text-sm shadow">
-                V
+            <Link href="/" className="inline-flex items-center gap-2 text-primary hover:opacity-90 transition-opacity">
+              <div className="w-8 h-8 rounded-brand-sm bg-primary flex items-center justify-center text-white font-black text-sm shadow">
+                TH
               </div>
-              <span className="text-sm font-black uppercase tracking-widest">Thanh Hương Store</span>
-            </div>
+              <span className="text-sm font-black uppercase tracking-widest text-on-surface">Thanh Hương Store</span>
+            </Link>
             
             <h2 className="text-xl sm:text-2xl font-black text-gray-900 tracking-tight">
               Tạo tài khoản mới
@@ -185,9 +173,9 @@ export default function RegisterPage() {
                     placeholder="Nguyễn Văn" 
                     value={lastName}
                     onChange={(e) => setLastName(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-brand-md text-xs font-bold focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/10 transition"
+                    className="pl-10 input-standard"
                   />
-                  <User className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                  <span className="material-symbols-outlined text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 text-[18px]">person</span>
                 </div>
               </div>
 
@@ -202,9 +190,9 @@ export default function RegisterPage() {
                     placeholder="An" 
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-brand-md text-xs font-bold focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/10 transition"
+                    className="pl-10 input-standard"
                   />
-                  <User className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                  <span className="material-symbols-outlined text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 text-[18px]">person</span>
                 </div>
               </div>
             </div>
@@ -222,9 +210,9 @@ export default function RegisterPage() {
                     placeholder="an@example.com" 
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-brand-md text-xs font-bold focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/10 transition"
+                    className="pl-10 input-standard"
                   />
-                  <Mail className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                  <span className="material-symbols-outlined text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 text-[18px]">mail</span>
                 </div>
               </div>
 
@@ -238,9 +226,9 @@ export default function RegisterPage() {
                     placeholder="0912345678" 
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-brand-md text-xs font-bold focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/10 transition"
+                    className="pl-10 input-standard"
                   />
-                  <Phone className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                  <span className="material-symbols-outlined text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 text-[18px]">phone_iphone</span>
                 </div>
               </div>
             </div>
@@ -258,15 +246,17 @@ export default function RegisterPage() {
                     placeholder="Tối thiểu 8 ký tự" 
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full pl-10 pr-10 py-2.5 border border-gray-200 rounded-brand-md text-xs font-bold focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/10 transition"
+                    className="pl-10 pr-10 input-standard"
                   />
-                  <Lock className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                  <span className="material-symbols-outlined text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 text-[18px]">lock</span>
                   <button
                     type="button"
                     onClick={() => setShowPassword(prev => !prev)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 flex items-center justify-center"
                   >
-                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    <span className="material-symbols-outlined text-[18px]">
+                      {showPassword ? 'visibility_off' : 'visibility'}
+                    </span>
                   </button>
                 </div>
               </div>
@@ -282,23 +272,25 @@ export default function RegisterPage() {
                     placeholder="Nhập lại mật khẩu" 
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    className={`w-full pl-10 pr-10 py-2.5 border rounded-brand-md text-xs font-bold focus:outline-none focus:ring-2 focus:ring-brand-500/10 transition ${
-                      passwordsMatch ? 'border-gray-200 focus:border-brand-500' : 'border-red-400 focus:border-red-500'
+                    className={`pl-10 pr-10 input-standard ${
+                      passwordsMatch ? '' : 'border-red-400 focus:border-red-500 focus:ring-red-500/10'
                     }`}
                   />
-                  <Lock className="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                  <span className="material-symbols-outlined text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 text-[18px]">lock</span>
                   <button
                     type="button"
                     onClick={() => setShowConfirmPassword(prev => !prev)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 flex items-center justify-center"
                   >
-                    {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    <span className="material-symbols-outlined text-[18px]">
+                      {showConfirmPassword ? 'visibility_off' : 'visibility'}
+                    </span>
                   </button>
                 </div>
               </div>
             </div>
 
-            {/* Password strength indicator (Visual layout) */}
+            {/* Password strength indicator */}
             {password && (
               <div className="space-y-1.5 animate-fadeIn">
                 <div className="flex justify-between items-center text-[10px] font-bold">
@@ -317,7 +309,7 @@ export default function RegisterPage() {
             {/* Error mismatched password banner */}
             {!passwordsMatch && (
               <p className="text-[10px] text-red-500 font-bold flex items-center gap-1.5 animate-fadeIn">
-                <AlertTriangle className="w-3.5 h-3.5" />
+                <span className="material-symbols-outlined text-[14px]">warning</span>
                 Mật khẩu xác nhận không khớp. Vui lòng nhập lại.
               </p>
             )}
@@ -329,11 +321,11 @@ export default function RegisterPage() {
                   type="checkbox" 
                   checked={acceptTerms}
                   onChange={(e) => setAcceptTerms(e.target.checked)}
-                  className="w-4 h-4 mt-0.5 text-brand-600 focus:ring-brand-500 border-gray-300 rounded"
+                  className="w-4 h-4 mt-0.5 text-primary focus:ring-primary border-gray-300 rounded"
                 />
                 <span className="leading-tight select-none">
-                  Tôi đồng ý với <a href="/terms" className="font-bold text-brand-600 hover:underline">Điều khoản dịch vụ</a> và <a href="/privacy" className="font-bold text-brand-600 hover:underline">Chính sách bảo mật</a> của  Store.
-                </span>Thanh Hương Store
+                  Tôi đồng ý với <Link href="/terms" className="font-bold text-primary hover:underline">Điều khoản dịch vụ</Link> và <Link href="/privacy-policy" className="font-bold text-primary hover:underline">Chính sách bảo mật</Link> của Thanh Hương Store.
+                </span>
               </label>
             </div>
 
@@ -341,11 +333,11 @@ export default function RegisterPage() {
             <button
               type="submit" 
               disabled={loading || !acceptTerms || !passwordsMatch || !lastName || !firstName || !email || !password}
-              className="w-full py-3.5 bg-brand-600 hover:bg-brand-700 text-white rounded-brand-md text-xs font-bold transition shadow-md hover:shadow-lg disabled:opacity-50 disabled:hover:bg-brand-600 flex items-center justify-center gap-2 mt-4"
+              className="w-full py-3 bg-primary hover:bg-primary-container text-white rounded-xl text-xs font-bold transition shadow-md disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-4 active:scale-95"
             >
               {loading ? (
                 <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <span className="material-symbols-outlined animate-spin text-[16px]">sync</span>
                   Đang khởi tạo tài khoản...
                 </>
               ) : (
@@ -357,34 +349,34 @@ export default function RegisterPage() {
           {/* Login redirection */}
           <p className="text-center text-xs text-gray-500 font-medium pt-2">
             Đã có tài khoản?{' '}
-            <a href="/login" className="font-bold text-brand-600 hover:text-brand-700 transition">
+            <Link href="/login" className="font-bold text-primary hover:text-primary-container transition">
               Đăng nhập ngay
-            </a>
+            </Link>
           </p>
 
         </div>
 
       </div>
 
-      {/* RIGHT HALF: COHERENT BANNER SPLIT (With different Unsplash image) */}
-      <div className="hidden lg:block lg:flex-1 relative bg-brand-950">
+      {/* RIGHT HALF: PREMIUM BRAND BANNER */}
+      <div className="hidden lg:block lg:flex-1 relative bg-primary-container">
         <img 
           src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&w=1000&q=80" 
           alt="Luxury Swimwear & Socks Showcase"
-          className="absolute inset-0 w-full h-full object-cover opacity-85 animate-float" 
+          className="absolute inset-0 w-full h-full object-cover opacity-80" 
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-brand-950/80 via-brand-950/20 to-brand-950/40" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-black/30" />
         
         {/* Floating brand slogan */}
         <div className="absolute bottom-16 left-16 right-16 space-y-4 text-white z-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-white/10 backdrop-blur-md text-brand-200 text-[10px] font-extrabold uppercase tracking-widest">
-            <Shield className="w-3.5 h-3.5 text-accent-teal" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-white/10 backdrop-blur-md text-white text-[10px] font-extrabold uppercase tracking-widest">
+            <span className="material-symbols-outlined text-accent-teal text-[14px]">shield</span>
             ĐỒNG HÀNH BỀN VỮNG
           </div>
           <h3 className="text-3xl font-black tracking-tight leading-tight">
             Khơi nguồn tự tin, dẫn lối phong cách.
           </h3>
-          <p className="text-sm text-brand-100 max-w-md font-normal leading-relaxed">
+          <p className="text-sm text-white/80 max-w-md font-normal leading-relaxed">
             Hưởng các đặc quyền chiết khấu tự động sỉ B2B, quản lý đơn hàng thông minh và hỗ trợ trực tuyến 24/7 từ Thanh Hương Store.
           </p>
         </div>
