@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import { ChevronRight, Home } from 'lucide-react';
 
 interface BreadcrumbItem {
   label: string;
@@ -14,14 +13,14 @@ export default function Breadcrumb({ items }: BreadcrumbProps) {
   return (
     <nav 
       aria-label="Breadcrumb"
-      className="flex items-center flex-wrap gap-1.5 text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-6 bg-white py-3 px-4 rounded-brand-md border border-gray-100/60 shadow-xs max-w-max"
+      className="flex items-center flex-wrap gap-xs text-label-md text-on-surface-variant mb-md"
     >
-      {/* Home link always visible at the start */}
+      {/* Home Link */}
       <Link 
         href="/" 
-        className="flex items-center gap-1 hover:text-brand-600 transition duration-200"
+        className="hover:text-primary transition-colors flex items-center gap-1"
       >
-        <Home className="w-3.5 h-3.5" />
+        <span className="material-symbols-outlined text-[18px]">home</span>
         <span>Trang chủ</span>
       </Link>
 
@@ -29,17 +28,19 @@ export default function Breadcrumb({ items }: BreadcrumbProps) {
         const isLast = idx === items.length - 1;
 
         return (
-          <div key={idx} className="flex items-center gap-1.5">
-            <ChevronRight className="w-3.5 h-3.5 text-gray-300" />
+          <div key={idx} className="flex items-center gap-xs">
+            <span className="material-symbols-outlined text-[16px] text-on-surface-variant/60 select-none">
+              chevron_right
+            </span>
             
             {isLast || !item.href ? (
-              <span className="text-gray-800 font-extrabold truncate max-w-[160px] sm:max-w-xs">
+              <span className="text-on-surface font-semibold truncate max-w-[160px] sm:max-w-xs">
                 {item.label}
               </span>
             ) : (
               <Link 
                 href={item.href}
-                className="hover:text-brand-600 transition duration-200"
+                className="hover:text-primary transition-colors"
               >
                 {item.label}
               </Link>

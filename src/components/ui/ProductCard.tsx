@@ -2,7 +2,6 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { ShoppingBag } from 'lucide-react';
 import { useCart } from '@/hooks';
 
 export interface ProductCardProps {
@@ -57,52 +56,55 @@ export default function ProductCard({ product }: ProductCardProps) {
   };
 
   return (
-    <div className="group bg-white rounded-brand-lg border border-gray-100/60 overflow-hidden shadow-xs hover:shadow-lg hover:-translate-y-1.5 transition-all duration-300 flex flex-col h-full">
-      <div className="relative w-full aspect-square bg-gray-50 overflow-hidden border-b border-gray-100/60">
+    <div className="group bg-surface-container-lowest rounded-2xl overflow-hidden product-card-shadow transition-all duration-300 hover:-translate-y-1 flex flex-col h-full">
+      {/* Product Image & Badges */}
+      <div className="relative aspect-square w-full bg-surface-container overflow-hidden">
         <Link href={`/products/${product.slug}`} className="block w-full h-full">
           <img
             src={imageUrl}
             alt={product.name}
-            className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
         </Link>
 
         {product.isFeatured && (
-          <span className="absolute top-3 left-3 px-2 py-0.5 rounded bg-brand-600/90 text-white text-[9px] font-extrabold uppercase tracking-wide shadow-xs">
-            Nổi bật
+          <span className="absolute top-2 left-2 bg-primary text-on-primary px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider">
+            NỔI BẬT
           </span>
         )}
 
         {product.wholesaleTiers && (
-          <span className="absolute top-3 right-3 px-2 py-0.5 rounded bg-accent-pink/90 text-white text-[9px] font-extrabold uppercase tracking-wide shadow-xs">
-            Giá sỉ tốt
+          <span className="absolute top-2 right-2 bg-secondary-container text-on-secondary-container px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider">
+            GIÁ SỈ
           </span>
         )}
 
         {isOutOfStock && (
           <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-            <span className="px-3 py-1.5 rounded bg-red-600 text-white text-xs font-black uppercase tracking-wider shadow">
+            <span className="px-3 py-1.5 rounded-lg bg-error text-on-error text-xs font-bold uppercase tracking-wider">
               Hết hàng
             </span>
           </div>
         )}
       </div>
 
-      <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between space-y-3">
-        <div className="space-y-1.5">
-          <span className="text-[10px] font-bold text-brand-600 uppercase tracking-wide block font-mono">
+      {/* Product Info */}
+      <div className="p-4 flex-grow flex flex-col justify-between gap-3">
+        <div>
+          <p className="text-on-surface-variant text-[11px] font-semibold mb-1 uppercase tracking-wide">
             {product.category?.name || 'Sản phẩm'}
-          </span>
-          <h3 className="text-xs sm:text-sm font-bold text-gray-900 group-hover:text-brand-600 transition-colors line-clamp-2 leading-tight">
+          </p>
+          <h4 className="font-headline-sm text-headline-sm mb-2 group-hover:text-primary transition-colors line-clamp-2 leading-snug">
             <Link href={`/products/${product.slug}`}>{product.name}</Link>
-          </h3>
+          </h4>
 
+          {/* Color Dots */}
           {uniqueColors.length > 0 && (
-            <div className="flex gap-1.5 pt-1.5">
+            <div className="flex gap-1.5 pt-1">
               {uniqueColors.map((colorObj, cIdx) => (
                 <span
                   key={cIdx}
-                  className="w-3.5 h-3.5 rounded-full border border-gray-200 shadow-xs block"
+                  className="w-3.5 h-3.5 rounded-full border border-outline-variant block shadow-xs"
                   style={{ backgroundColor: colorObj.colorHex }}
                   title={colorObj.color}
                 />
@@ -111,25 +113,22 @@ export default function ProductCard({ product }: ProductCardProps) {
           )}
         </div>
 
-        <div className="flex items-end justify-between pt-2">
-          <div className="space-y-0.5">
-            <span className="text-[10px] text-gray-400 font-medium block">Giá bán lẻ:</span>
-            <p className="text-xs sm:text-sm font-black text-brand-600">
-              {price > 0 ? `${price.toLocaleString('vi-VN')} đ` : 'Liên hệ'}
-            </p>
-          </div>
-
+        {/* Pricing & Add to Cart */}
+        <div className="flex items-center justify-between mt-2 pt-2 border-t border-surface-variant/30">
+          <span className="font-bold text-primary text-body-lg">
+            {price > 0 ? `${price.toLocaleString('vi-VN')}đ` : 'Liên hệ'}
+          </span>
           <button
             onClick={handleQuickAdd}
             disabled={isOutOfStock || !firstVariant}
-            className={`p-2 rounded-brand-md transition-all duration-300 shrink-0 shadow-xs ${
+            className={`p-2 rounded-full transition-colors flex items-center justify-center ${
               isOutOfStock
-                ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                : 'bg-brand-50 hover:bg-brand-600 text-brand-600 hover:text-white'
+                ? 'bg-surface-variant text-on-surface-variant/40 cursor-not-allowed'
+                : 'bg-surface-container hover:bg-secondary-container hover:text-on-secondary-container text-primary'
             }`}
             title={isOutOfStock ? 'Hết hàng' : 'Thêm nhanh vào giỏ'}
           >
-            <ShoppingBag className="w-3.5 h-3.5" />
+            <span className="material-symbols-outlined text-[20px]">add_shopping_cart</span>
           </button>
         </div>
       </div>

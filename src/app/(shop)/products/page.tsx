@@ -4,6 +4,7 @@ import { ShoppingBag, X, Sparkles, Search, ChevronLeft, ChevronRight } from 'luc
 import { EmptyState } from '@/components/ui/States';
 import ProductCard from '@/components/ui/ProductCard';
 import Breadcrumb from '@/components/ui/Breadcrumb';
+import PageHeader from '@/components/ui/PageHeader';
 
 interface ProductsPageProps {
   searchParams: {
@@ -139,28 +140,11 @@ export default async function ProductsCatalogPage({ searchParams }: ProductsPage
 
   return (
     <main className="min-h-screen bg-[#FAF9F6] text-gray-900 pb-24">
-      {/* Category Hero Header Banner */}
-      <section className="bg-gradient-to-r from-brand-950 to-brand-900 text-white py-14 px-6 sm:px-12 md:px-20 mb-8 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-80 h-80 bg-brand-500 rounded-full filter blur-3xl opacity-15 -mr-16 -mt-16 animate-float" />
-        <div className="relative max-w-7xl mx-auto space-y-3">
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-white/10 text-brand-200 text-[10px] font-extrabold uppercase tracking-widest">
-            <Sparkles className="w-3.5 h-3.5" /> Danh mục sản phẩm
-          </div>
-          <h1 className="text-3xl font-extrabold tracking-tight">
-            {searchQuery
-              ? `Tìm kiếm: "${searchQuery}"`
-              : activeCategory
-                ? activeCategory.name
-                : 'Tất Cả Sản Phẩm'}
-          </h1>
-          <p className="text-xs sm:text-sm text-brand-100 max-w-2xl leading-relaxed">
-            {activeCategory
-              ? `Bộ sưu tập các mẫu mã mới nhất thuộc danh mục ${activeCategory.name} cao cấp.`
-              : 'Trải nghiệm mua sắm đẳng cấp với các dòng tất vớ, bikini nữ và đồ lót nam dệt sợi tự nhiên, kháng khuẩn vượt trội.'
-            }
-          </p>
-        </div>
-      </section>
+      <PageHeader 
+        title={searchQuery ? `Tìm kiếm: "${searchQuery}"` : activeCategory ? activeCategory.name : 'Tất Cả Sản Phẩm'}
+        description={activeCategory ? `Bộ sưu tập các mẫu mã mới nhất thuộc danh mục ${activeCategory.name} cao cấp.` : 'Trải nghiệm mua sắm đẳng cấp với các dòng tất vớ, bikini nữ và đồ lót nam dệt sợi tự nhiên, kháng khuẩn vượt trội.'}
+        badge="Danh mục sản phẩm"
+      />
 
       {/* Grid Container */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

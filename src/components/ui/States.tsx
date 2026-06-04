@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import { Loader2, Inbox, AlertTriangle, RefreshCw } from 'lucide-react';
 import Link from 'next/link';
 
 interface LoadingSpinnerProps {
@@ -12,8 +11,8 @@ interface LoadingSpinnerProps {
 export function LoadingSpinner({ message = 'Đang tải dữ liệu...', className = 'py-20' }: LoadingSpinnerProps) {
   return (
     <div className={`flex flex-col items-center justify-center text-center space-y-3 animate-fadeIn ${className}`}>
-      <Loader2 className="w-10 h-10 text-brand-600 animate-spin" />
-      <span className="text-sm font-semibold text-gray-500">{message}</span>
+      <span className="material-symbols-outlined text-[40px] text-primary animate-spin">sync</span>
+      <span className="text-sm font-semibold text-on-surface-variant">{message}</span>
     </div>
   );
 }
@@ -21,7 +20,7 @@ export function LoadingSpinner({ message = 'Đang tải dữ liệu...', classNa
 interface EmptyStateProps {
   title?: string;
   description?: string;
-  icon?: React.ReactNode;
+  icon?: React.ReactNode; // Can be a string name of Material Symbol, or standard React node
   actionLabel?: string;
   actionHref?: string;
   onAction?: () => void;
@@ -38,26 +37,30 @@ export function EmptyState({
   className = 'py-20 max-w-md mx-auto'
 }: EmptyStateProps) {
   return (
-    <div className={`flex flex-col items-center justify-center text-center p-8 bg-white rounded-brand-lg border border-gray-100/60 shadow-xs animate-fadeIn ${className}`}>
-      <div className="w-16 h-16 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 mb-5">
-        {icon || <Inbox className="w-8 h-8" />}
+    <div className={`flex flex-col items-center justify-center text-center p-8 bg-surface-container-lowest rounded-2xl border border-surface-variant shadow-sm animate-fadeIn ${className}`}>
+      <div className="w-16 h-16 rounded-full bg-surface-container-low flex items-center justify-center text-primary mb-5">
+        {typeof icon === 'string' ? (
+          <span className="material-symbols-outlined text-[32px]">{icon}</span>
+        ) : (
+          icon || <span className="material-symbols-outlined text-[32px]">inbox</span>
+        )}
       </div>
-      <h3 className="text-base font-bold text-gray-800">{title}</h3>
-      <p className="text-xs text-gray-500 mt-2 leading-relaxed max-w-sm">{description}</p>
+      <h3 className="text-base font-bold text-on-surface">{title}</h3>
+      <p className="text-xs text-on-surface-variant mt-2 leading-relaxed max-w-sm">{description}</p>
       
       {actionLabel && (
         <div className="mt-6">
           {actionHref ? (
             <Link
               href={actionHref}
-              className="inline-flex items-center justify-center px-6 py-2.5 bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold rounded-brand-md transition shadow-xs select-none"
+              className="inline-flex items-center justify-center px-6 py-2.5 bg-primary hover:bg-primary-container text-on-primary text-xs font-bold rounded-xl transition shadow-lg shadow-primary/10 select-none active:scale-95 transition-transform"
             >
               {actionLabel}
             </Link>
           ) : (
             <button
               onClick={onAction}
-              className="inline-flex items-center justify-center px-6 py-2.5 bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold rounded-brand-md transition shadow-xs select-none"
+              className="inline-flex items-center justify-center px-6 py-2.5 bg-primary hover:bg-primary-container text-on-primary text-xs font-bold rounded-xl transition shadow-lg shadow-primary/10 select-none active:scale-95 transition-transform"
             >
               {actionLabel}
             </button>
@@ -88,15 +91,15 @@ export function ErrorState({
   className = 'py-20 max-w-md mx-auto'
 }: ErrorStateProps) {
   return (
-    <div className={`flex flex-col items-center justify-center text-center p-8 bg-red-50/50 rounded-brand-lg border border-red-100/80 shadow-xs animate-fadeIn ${className}`}>
-      <div className="w-16 h-16 rounded-full bg-red-50 flex items-center justify-center text-red-500 mb-5 animate-pulseSubtle">
-        <AlertTriangle className="w-8 h-8" />
+    <div className={`flex flex-col items-center justify-center text-center p-8 bg-error-container/20 rounded-2xl border border-error-container/80 shadow-sm animate-fadeIn ${className}`}>
+      <div className="w-16 h-16 rounded-full bg-error-container/40 flex items-center justify-center text-error mb-5">
+        <span className="material-symbols-outlined text-[32px]">warning</span>
       </div>
-      <h3 className="text-base font-bold text-gray-800">{title}</h3>
-      <p className="text-xs text-gray-500 mt-2 leading-relaxed max-w-sm">{description}</p>
+      <h3 className="text-base font-bold text-on-surface">{title}</h3>
+      <p className="text-xs text-on-surface-variant mt-2 leading-relaxed max-w-sm">{description}</p>
       
       {errorDetail && (
-        <div className="mt-3 text-[10px] font-mono text-red-600 bg-red-50 border border-red-100/50 rounded-lg p-2 max-w-xs break-all select-all">
+        <div className="mt-3 text-[10px] font-mono text-error bg-error-container/40 border border-error-container rounded-lg p-2 max-w-xs break-all select-all">
           Lỗi: {errorDetail}
         </div>
       )}
@@ -105,15 +108,15 @@ export function ErrorState({
         {onRetry && (
           <button
             onClick={onRetry}
-            className="inline-flex items-center justify-center gap-1.5 px-5 py-2.5 bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold rounded-brand-md transition shadow-xs select-none"
+            className="inline-flex items-center justify-center gap-1.5 px-5 py-2.5 bg-primary hover:bg-primary-container text-on-primary text-xs font-bold rounded-xl transition shadow-lg shadow-primary/10 select-none active:scale-95 transition-transform"
           >
-            <RefreshCw className="w-3.5 h-3.5" />
+            <span className="material-symbols-outlined text-[16px] animate-spin">sync</span>
             {retryLabel}
           </button>
         )}
         <Link
           href="/"
-          className="inline-flex items-center justify-center px-5 py-2.5 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 text-xs font-bold rounded-brand-md transition select-none"
+          className="inline-flex items-center justify-center px-5 py-2.5 bg-surface-container-lowest border border-outline-variant hover:bg-surface-container text-on-surface font-semibold text-xs rounded-xl transition select-none active:scale-95 transition-transform"
         >
           {homeLabel}
         </Link>
