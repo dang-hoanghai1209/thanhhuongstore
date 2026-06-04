@@ -59,7 +59,8 @@ if (process.env.START_EMAIL_WORKER === 'true') {
 
       case 'password-reset':
         subject = '[Thanh Hương Store] Yêu cầu đặt lại mật khẩu';
-        const resetLink = `${process.env.NEXT_PUBLIC_APP_URL}/auth/reset-password?token=${data.resetToken}`;
+        const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+        const resetLink = `${appUrl}/reset-password?token=${data.resetToken}`;
         htmlContent = `
           <p>Xin chào ${data.firstName},</p>
           <p>Bạn nhận được email này vì đã yêu cầu đặt lại mật khẩu cho tài khoản Thanh Hương Store.</p>
