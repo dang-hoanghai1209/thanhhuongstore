@@ -350,7 +350,7 @@ export default function RegisterPage() {
           <p className="text-center text-xs text-gray-500 font-medium pt-2">
             Đã có tài khoản?{' '}
             <Link href="/login" className="font-bold text-primary hover:text-primary-container transition">
-              Đăng nhập ngay
+              Đăng nhập
             </Link>
           </p>
 

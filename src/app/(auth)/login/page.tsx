@@ -271,7 +271,7 @@ export default function LoginPage() {
 
           {/* Register Link footer */}
           <p className="text-center text-xs text-gray-500 font-medium">
-            Bạn chưa có tài khoản? Hãy{' '}
+            Chưa có tài khoản?{' '}
             <Link href="/register" className="font-bold text-primary hover:text-primary-container transition">
               Đăng ký
             </Link>
