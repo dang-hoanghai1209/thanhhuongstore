@@ -58,3 +58,25 @@ export async function POST(request: NextRequest) {
     );
   }
 }
+
+export async function GET(request: NextRequest) {
+  try {
+    const authResult = await requireAuth(request);
+
+    if (authResult instanceof NextResponse) {
+      return authResult;
+    }
+
+    const profile = await prisma.wholesaleProfile.findUnique({
+      where: { userId: authResult.userId },
+    });
+
+    return NextResponse.json({ profile });
+  } catch (error) {
+    console.error('Failed to fetch wholesale profile:', error);
+    return NextResponse.json(
+      { error: 'Unable to fetch wholesale profile.' },
+      { status: 500 },
+    );
+  }
+}

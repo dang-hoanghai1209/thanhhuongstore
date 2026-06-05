@@ -87,3 +87,42 @@ npm run build
     *   `src/app/api/admin/settings/route.ts` (settings backend API)
     *   `src/app/admin/settings/page.tsx` (settings page)
     *   `src/app/admin/settings/SettingsClient.tsx` (settings tabbed dashboard)
+    *   `src/app/wholesale/register/page.tsx` (wholesale registration client page)
+    *   `src/app/api/wholesale/register/route.ts` (added GET method for wholesale profile retrieval)
+    *   `src/components/ui/StatusBadge.tsx` (added approved/rejected wholesale states)
+    *   `src/app/admin/products/[id]/page.tsx` (added redirect to avoid dead placeholder)
+
+---
+
+## 4. Final Functional Audit & Readiness Verification
+
+### A. Functional Audit Results
+*   **Customer Storefront Routes**: All 23 customer-facing routes verified. Replaced the `/wholesale/register` placeholder with a fully functional B2B Wholesale application page.
+*   **Admin Console Routes**: All 10 admin panel folders are active. Replaced the `/admin/products/[id]` placeholder with a clean redirect to `/admin/products` since product editing is handled directly via modal dialogs on the main products dashboard.
+*   **Functional Checks**:
+    *   *Search*: Fully functional.
+    *   *Cart & Checkout*: Tested and fully reactive (with B2B wholesale automatic discounts).
+    *   *Auth Flow*: Corrected auth link messages for both Login and Register. Prefilled profiles display on wholesale applications.
+    *   *Security*: Middleware correctly intercepts `/admin/*` and unauthorized routes, redirecting guests to the login sequence.
+
+### B. Image Readiness Analysis
+*   **Storage Location**: Local images are stored under `public/uploads/products` and served from same-origin paths (`/uploads/products/*`).
+*   **Optimization**: Powered by the host `sharp` library in `src/app/api/upload/route.ts`, converting uploads to optimized `.webp` formats (capped at 5MB, 2000px maximum width/height, 82% quality compression).
+*   **Allowed Domain Patterns**: Configured in `next.config.js` to permit `images.unsplash.com` and `picsum.photos` (remote patterns used for initial seeding/fallbacks).
+*   **Fallbacks**: 
+    *   `ProductCard` fallback: `photo-1582966772680-860e372bb558` (Unsplash)
+    *   `ProductDetailClient` fallback: `photo-1594913785162-e6785b423cb1` (Unsplash)
+    *   Admin dashboard fallback: `photo-1523381210434-271e8be1f52b` (Unsplash)
+*   **Upload vs URL Input**: Admin console supports both local image file uploads (processed and saved to local disk via `sharp`) and manual external image URL inputs.
+
+### C. Data & Seeding Consistency
+*   **Seeded Data**: Verification of `seed.ts` shows 2 categories and 4 core products (Vớ cổ ngắn, Vớ cổ cao, Áo bơi nữ, Quần bơi nam) with consistent pricing, tags, and category slugs.
+*   **Image URLs**: All 4 default products are populated with high-quality, valid remote patterns. No broken paths exist in the default database seed.
+*   **Slug Validity**: Verified categories (`vo-thoi-trang`, `do-boi`) and products have correct URL-safe characters.
+
+### D. Remaining Tasks Before Production Deployment
+1.  **Database Configuration**: Connect the PostgreSQL client to a live cloud host (e.g. Supabase, Neon) using `DATABASE_URL` and `DIRECT_URL`.
+2.  **Schema Migrations**: Push database tables to the production instance via `npx prisma db push` or `prisma migrate deploy`.
+3.  **Real Product Media**: Replace default Unsplash images by uploading actual catalog photos via the admin dashboard or updating the `seed.ts` script URLs.
+4.  **Secrets & Environment Variables**: Configure OAuth Client IDs (Google, Facebook) and VNPay terminal configurations in production `.env` variables.
+

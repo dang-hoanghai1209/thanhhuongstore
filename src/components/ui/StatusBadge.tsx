@@ -18,7 +18,9 @@ export default function StatusBadge({ status }: StatusBadgeProps) {
     paid: { bg: 'bg-emerald-50 border-emerald-200 text-emerald-800', label: 'Đã thanh toán' },
     failed: { bg: 'bg-red-50 border-red-200 text-red-800', label: 'Thất bại' },
     active: { bg: 'bg-emerald-50 border-emerald-200 text-emerald-800', label: 'Hoạt động' },
-    inactive: { bg: 'bg-red-50 border-red-200 text-red-800', label: 'Tạm khóa' }
+    inactive: { bg: 'bg-red-50 border-red-200 text-red-800', label: 'Tạm khóa' },
+    approved: { bg: 'bg-emerald-50 border-emerald-200 text-emerald-800', label: 'Đã phê duyệt' },
+    rejected: { bg: 'bg-red-50 border-red-200 text-red-800', label: 'Từ chối' }
   };
 
   const current = config[statusLower] || { bg: 'bg-gray-50 border-gray-200 text-gray-800', label: status };

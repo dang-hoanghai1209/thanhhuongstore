@@ -1,1 +1,5 @@
-export default function Placeholder() { return <div>Giao dien dang cap nhat</div>; }
+import { redirect } from 'next/navigation';
+
+export default function EditProductRedirect() {
+  redirect('/admin/products');
+}
