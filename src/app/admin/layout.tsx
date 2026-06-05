@@ -10,7 +10,11 @@ import {
   Settings,
   Users,
   TrendingUp,
-  LayoutDashboard
+  LayoutDashboard,
+  Tag,
+  Percent,
+  UserCheck,
+  BarChart2
 } from 'lucide-react';
 
 interface SidebarItem {
@@ -36,9 +40,24 @@ const sidebarItems: SidebarItem[] = [
     icon: ShoppingBag,
   },
   {
+    name: 'Danh mục',
+    href: '/admin/categories',
+    icon: Tag,
+  },
+  {
     name: 'Khách hàng',
     href: '/admin/customers',
     icon: Users,
+  },
+  {
+    name: 'Tài khoản sỉ',
+    href: '/admin/wholesale',
+    icon: UserCheck,
+  },
+  {
+    name: 'Mã giảm giá',
+    href: '/admin/coupons',
+    icon: Percent,
   },
   {
     name: 'Banners & Marketing',
@@ -46,8 +65,13 @@ const sidebarItems: SidebarItem[] = [
     icon: TrendingUp,
   },
   {
-    name: 'Cấu hình',
-    href: '/admin/coupons',
+    name: 'Báo cáo',
+    href: '/admin/analytics',
+    icon: BarChart2,
+  },
+  {
+    name: 'Cấu hình hệ thống',
+    href: '/admin/settings',
     icon: Settings,
   },
 ];
@@ -133,11 +157,15 @@ export default function AdminLayout({
             } else if (pathname.startsWith('/admin/banners')) {
               items.push({ label: 'Banners' });
             } else if (pathname.startsWith('/admin/coupons')) {
-              items.push({ label: 'Mã giảm giá & Cấu hình' });
+              items.push({ label: 'Mã giảm giá' });
             } else if (pathname.startsWith('/admin/categories')) {
               items.push({ label: 'Danh mục' });
             } else if (pathname.startsWith('/admin/analytics')) {
               items.push({ label: 'Báo cáo thống kê' });
+            } else if (pathname.startsWith('/admin/wholesale')) {
+              items.push({ label: 'Tài khoản sỉ/B2B' });
+            } else if (pathname.startsWith('/admin/settings')) {
+              items.push({ label: 'Cấu hình hệ thống' });
             }
             return <Breadcrumb items={items} />;
           })()}

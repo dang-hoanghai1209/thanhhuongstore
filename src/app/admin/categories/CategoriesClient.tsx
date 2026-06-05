@@ -10,9 +10,15 @@ import {
   AlertTriangle,
   FolderOpen,
   ToggleLeft,
-  ToggleRight
+  ToggleRight,
+  Edit2
 } from 'lucide-react';
-import { createCategoryAction, toggleCategoryActiveAction, deleteCategoryAction } from './actions';
+import { 
+  createCategoryAction, 
+  toggleCategoryActiveAction, 
+  deleteCategoryAction,
+  updateCategoryAction 
+} from './actions';
 import { SizeType } from '@prisma/client';
 
 interface Category {
@@ -42,6 +48,9 @@ export default function CategoriesClient({ initialCategories }: CategoriesClient
   const [categories, setCategories] = useState<Category[]>(initialCategories);
   const [searchTerm, setSearchTerm] = useState('');
   
+  // Editing State
+  const [editingCategory, setEditingCategory] = useState<Category | null>(null);
+
   // Quick Form State
   const [formName, setFormName] = useState('');
   const [formSizeType, setFormSizeType] = useState<SizeType>(SizeType.SOCK);
@@ -85,12 +94,33 @@ export default function CategoriesClient({ initialCategories }: CategoriesClient
       if (response.success) {
         setCategories((prev) => prev.filter((c) => c.id !== categoryId));
         showToast('Xóa Danh mục thành công', 'success');
+        if (editingCategory?.id === categoryId) {
+          handleResetForm();
+        }
       } else {
         showToast(response.message || 'Không thể xóa Danh mục', 'error');
       }
     } catch (error) {
       showToast('Lỗi mạng khi xóa Danh mục', 'error');
     }
+  };
+
+  const handleOpenEdit = (c: Category) => {
+    setEditingCategory(c);
+    setFormName(c.name);
+    setFormSizeType(c.sizeType as SizeType);
+    setFormParentId(c.parentId || '');
+    setFormSortOrder(c.sortOrder);
+    setFormIsActive(c.isActive);
+  };
+
+  const handleResetForm = () => {
+    setEditingCategory(null);
+    setFormName('');
+    setFormSizeType(SizeType.SOCK);
+    setFormParentId('');
+    setFormSortOrder(0);
+    setFormIsActive(true);
   };
 
   const handleSaveCategory = async (e: React.FormEvent) => {
@@ -102,36 +132,65 @@ export default function CategoriesClient({ initialCategories }: CategoriesClient
 
     setSaving(true);
     try {
-      const res = await createCategoryAction({
-        name: formName,
-        sizeType: formSizeType,
-        parentId: formParentId,
-        sortOrder: Number(formSortOrder),
-        isActive: formIsActive
-      });
+      if (editingCategory) {
+        // Edit Mode
+        const res = await updateCategoryAction(editingCategory.id, {
+          name: formName,
+          sizeType: formSizeType,
+          parentId: formParentId || null,
+          sortOrder: Number(formSortOrder),
+          isActive: formIsActive
+        });
 
-      if (res.success && res.category) {
-        showToast('Tạo danh mục mới thành công', 'success');
-        // Cast returned category row
-        const newCatFull: Category = {
-          id: res.category.id,
-          name: res.category.name,
-          slug: res.category.slug,
-          sizeType: res.category.sizeType,
-          parentId: res.category.parentId,
-          sortOrder: res.category.sortOrder,
-          isActive: res.category.isActive,
-          parent: res.category.parent ? { name: res.category.parent.name } : null
-        };
-        setCategories((prev) => [newCatFull, ...prev]);
-        
-        // Reset Form
-        setFormName('');
-        setFormParentId('');
-        setFormSortOrder(0);
-        setFormIsActive(true);
+        if (res.success && res.category) {
+          showToast('Cập nhật danh mục thành công', 'success');
+          // Cast returned category row
+          const updatedCatFull: Category = {
+            id: res.category.id,
+            name: res.category.name,
+            slug: res.category.slug,
+            sizeType: res.category.sizeType,
+            parentId: res.category.parentId,
+            sortOrder: res.category.sortOrder,
+            isActive: res.category.isActive,
+            parent: res.category.parent ? { name: res.category.parent.name } : null
+          };
+
+          setCategories((prev) =>
+            prev.map((c) => (c.id === editingCategory.id ? updatedCatFull : c))
+          );
+          handleResetForm();
+        } else {
+          showToast(res.message || 'Lỗi hệ thống khi cập nhật Danh mục', 'error');
+        }
       } else {
-        showToast(res.message || 'Lỗi hệ thống khi tạo Danh mục', 'error');
+        // Add Mode
+        const res = await createCategoryAction({
+          name: formName,
+          sizeType: formSizeType,
+          parentId: formParentId,
+          sortOrder: Number(formSortOrder),
+          isActive: formIsActive
+        });
+
+        if (res.success && res.category) {
+          showToast('Tạo danh mục mới thành công', 'success');
+          // Cast returned category row
+          const newCatFull: Category = {
+            id: res.category.id,
+            name: res.category.name,
+            slug: res.category.slug,
+            sizeType: res.category.sizeType,
+            parentId: res.category.parentId,
+            sortOrder: res.category.sortOrder,
+            isActive: res.category.isActive,
+            parent: res.category.parent ? { name: res.category.parent.name } : null
+          };
+          setCategories((prev) => [newCatFull, ...prev]);
+          handleResetForm();
+        } else {
+          showToast(res.message || 'Lỗi hệ thống khi tạo Danh mục', 'error');
+        }
       }
     } catch (error) {
       console.error('Error saving category:', error);
@@ -164,8 +223,8 @@ export default function CategoriesClient({ initialCategories }: CategoriesClient
     (c.parent && c.parent.name.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
-  // Eligible parent categories (exclude category self links or children if nested, but listing all for simplicity)
-  const parentCategoryOptions = categories.filter(c => !c.parentId);
+  // Eligible parent categories (exclude category self links to prevent hierarchy loop)
+  const parentCategoryOptions = categories.filter(c => !c.parentId && c.id !== editingCategory?.id);
 
   return (
     <div className="space-y-6">
@@ -201,13 +260,17 @@ export default function CategoriesClient({ initialCategories }: CategoriesClient
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-        {/* Left Col - Add quick category form */}
+        {/* Left Col - Add/Edit category form */}
         <div className="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm space-y-4 lg:sticky lg:top-6">
           <h3 className="text-base font-bold text-slate-800 flex items-center gap-2">
             <FolderOpen className="w-5 h-5 text-primary" />
-            Thêm Danh Mục Mới
+            {editingCategory ? 'Chỉnh Sửa Danh Mục' : 'Thêm Danh Mục Mới'}
           </h3>
-          <p className="text-xs text-slate-400">Tạo nhanh danh mục để gán kích thước quy chuẩn cho sản phẩm.</p>
+          <p className="text-xs text-slate-400">
+            {editingCategory 
+              ? 'Cập nhật lại thông tin và quy chuẩn kích thước danh mục.' 
+              : 'Tạo nhanh danh mục để gán kích thước quy chuẩn cho sản phẩm.'}
+          </p>
 
           <form onSubmit={handleSaveCategory} className="space-y-4 pt-2">
             <div>
@@ -218,7 +281,7 @@ export default function CategoriesClient({ initialCategories }: CategoriesClient
                 placeholder="Ví dụ: Đồ lót nam"
                 value={formName}
                 onChange={(e) => setFormName(e.target.value)}
-                className="w-full bg-white border border-slate-200 px-4 py-2.5 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-shadow"
+                className="w-full bg-white border border-slate-200 px-4 py-2.5 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/10 focus:border-primary transition-shadow"
               />
             </div>
 
@@ -227,7 +290,7 @@ export default function CategoriesClient({ initialCategories }: CategoriesClient
               <select
                 value={formSizeType}
                 onChange={(e) => setFormSizeType(e.target.value as SizeType)}
-                className="w-full bg-white border border-slate-200 px-4 py-2.5 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-shadow cursor-pointer"
+                className="w-full bg-white border border-slate-200 px-4 py-2.5 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/10 focus:border-primary transition-shadow cursor-pointer font-semibold"
               >
                 <option value="UNDERWEAR">Đồ lót (UNDERWEAR)</option>
                 <option value="SOCK">Tất vớ (SOCK)</option>
@@ -242,7 +305,7 @@ export default function CategoriesClient({ initialCategories }: CategoriesClient
               <select
                 value={formParentId}
                 onChange={(e) => setFormParentId(e.target.value)}
-                className="w-full bg-white border border-slate-200 px-4 py-2.5 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-shadow cursor-pointer text-slate-600"
+                className="w-full bg-white border border-slate-200 px-4 py-2.5 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/10 focus:border-primary transition-shadow cursor-pointer text-slate-600 font-semibold"
               >
                 <option value="">Không có (Danh mục gốc)</option>
                 {parentCategoryOptions.map((opt) => (
@@ -261,7 +324,7 @@ export default function CategoriesClient({ initialCategories }: CategoriesClient
                   min="0"
                   value={formSortOrder}
                   onChange={(e) => setFormSortOrder(Number(e.target.value))}
-                  className="w-full bg-white border border-slate-200 px-4 py-2.5 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-shadow"
+                  className="w-full bg-white border border-slate-200 px-4 py-2.5 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/10 focus:border-primary transition-shadow"
                 />
               </div>
 
@@ -281,21 +344,32 @@ export default function CategoriesClient({ initialCategories }: CategoriesClient
               </div>
             </div>
 
-            <button
-              type="submit"
-              disabled={saving}
-              className="w-full mt-2 inline-flex items-center justify-center gap-2 px-4 py-3 bg-primary hover:bg-primary-container text-white rounded-xl text-sm font-semibold shadow-sm transition disabled:opacity-50"
-            >
-              <Plus className="w-4 h-4" />
-              {saving ? 'Đang tạo...' : 'Tạo danh mục mới'}
-            </button>
+            <div className="flex items-center gap-3 pt-2">
+              {editingCategory && (
+                <button
+                  type="button"
+                  onClick={handleResetForm}
+                  className="flex-1 inline-flex items-center justify-center px-4 py-3 border border-slate-200 hover:bg-slate-50 text-slate-700 rounded-xl text-sm font-semibold transition"
+                >
+                  Hủy sửa
+                </button>
+              )}
+              <button
+                type="submit"
+                disabled={saving}
+                className="flex-grow inline-flex items-center justify-center gap-2 px-4 py-3 bg-primary hover:bg-primary-container text-white rounded-xl text-sm font-semibold shadow-sm transition disabled:opacity-50"
+              >
+                {!editingCategory && <Plus className="w-4 h-4" />}
+                {saving ? 'Đang lưu...' : editingCategory ? 'Lưu cập nhật' : 'Tạo danh mục mới'}
+              </button>
+            </div>
           </form>
         </div>
 
         {/* Right Col - Categories table */}
         <div className="lg:col-span-2 space-y-4">
           {/* Search Table filter */}
-          <div className="bg-slate-50 border border-slate-200/80 p-3.5 rounded-2xl">
+          <div className="bg-slate-50 border border-slate-200 p-3.5 rounded-2xl">
             <div className="relative">
               <Search className="w-5 h-5 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" />
               <input
@@ -303,7 +377,7 @@ export default function CategoriesClient({ initialCategories }: CategoriesClient
                 placeholder="Tìm danh mục theo tên, quy chuẩn, danh mục cha..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full bg-white border border-slate-200 pl-11 pr-4 py-2.5 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-shadow placeholder:text-slate-400"
+                className="w-full bg-white border border-slate-200 pl-11 pr-4 py-2.5 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/10 focus:border-primary transition-shadow placeholder:text-slate-400"
               />
             </div>
           </div>
@@ -319,7 +393,7 @@ export default function CategoriesClient({ initialCategories }: CategoriesClient
                     <th className="py-4 px-6">Phân cấp cha</th>
                     <th className="py-4 px-6 text-center w-24">Thứ tự</th>
                     <th className="py-4 px-6 text-center">Trạng thái</th>
-                    <th className="py-4 px-6 text-center w-24">Xóa</th>
+                    <th className="py-4 px-6 text-center w-32">Hành động</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100 text-sm text-slate-700">
@@ -331,9 +405,15 @@ export default function CategoriesClient({ initialCategories }: CategoriesClient
                     </tr>
                   ) : (
                     filteredCategories.map((c) => (
-                      <tr key={c.id} className="hover:bg-slate-50/50 transition-colors">
+                      <tr 
+                        key={c.id} 
+                        className={`hover:bg-slate-50/50 transition-colors ${
+                          editingCategory?.id === c.id ? 'bg-primary/5 hover:bg-primary/10' : ''
+                        }`}
+                      >
                         {/* Name */}
                         <td className="py-4 px-6 font-bold text-slate-800">
+                          {c.parentId && <span className="text-slate-400 font-normal mr-1.5">└─</span>}
                           {c.name}
                         </td>
 
@@ -378,15 +458,24 @@ export default function CategoriesClient({ initialCategories }: CategoriesClient
                           </button>
                         </td>
 
-                        {/* Actions (Delete) */}
+                        {/* Actions (Edit / Delete) */}
                         <td className="py-4 px-6 text-center">
-                          <button
-                            onClick={() => handleDeleteCategory(c.id)}
-                            className="p-2 border border-slate-200 hover:border-red-200 hover:bg-red-50 text-slate-500 hover:text-red-600 rounded-xl transition shadow-sm"
-                            title="Xóa danh mục"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
+                          <div className="flex items-center justify-center gap-2">
+                            <button
+                              onClick={() => handleOpenEdit(c)}
+                              className="p-2 border border-slate-200 hover:border-primary/20 hover:bg-primary/5 text-slate-500 hover:text-primary rounded-xl transition shadow-sm"
+                              title="Chỉnh sửa danh mục"
+                            >
+                              <Edit2 className="w-4 h-4" />
+                            </button>
+                            <button
+                              onClick={() => handleDeleteCategory(c.id)}
+                              className="p-2 border border-slate-200 hover:border-red-200 hover:bg-red-50 text-slate-500 hover:text-red-600 rounded-xl transition shadow-sm"
+                              title="Xóa danh mục"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     ))

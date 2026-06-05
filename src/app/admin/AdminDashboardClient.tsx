@@ -597,7 +597,7 @@ export default function AdminDashboardClient({ stats, topSellers }: AdminDashboa
             <div className="space-y-3">
               <Link 
                 href="/admin/orders" 
-                className="flex items-center justify-between p-4 rounded-xl border border-slate-100 hover:border-blue-100 hover:bg-primary/5/50 transition group"
+                className="flex items-center justify-between p-4 rounded-xl border border-slate-100 hover:border-primary/20 hover:bg-primary/5 transition group"
               >
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 rounded-lg bg-primary/5 text-primary flex items-center justify-center shrink-0">
@@ -613,7 +613,7 @@ export default function AdminDashboardClient({ stats, topSellers }: AdminDashboa
 
               <Link 
                 href="/admin/products" 
-                className="flex items-center justify-between p-4 rounded-xl border border-slate-100 hover:border-blue-100 hover:bg-primary/5/50 transition group"
+                className="flex items-center justify-between p-4 rounded-xl border border-slate-100 hover:border-primary/20 hover:bg-primary/5 transition group"
               >
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center shrink-0">
@@ -629,7 +629,7 @@ export default function AdminDashboardClient({ stats, topSellers }: AdminDashboa
 
               <Link 
                 href="/admin/customers" 
-                className="flex items-center justify-between p-4 rounded-xl border border-slate-100 hover:border-blue-100 hover:bg-primary/5/50 transition group"
+                className="flex items-center justify-between p-4 rounded-xl border border-slate-100 hover:border-primary/20 hover:bg-primary/5 transition group"
               >
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">

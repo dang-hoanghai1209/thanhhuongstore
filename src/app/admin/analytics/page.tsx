@@ -1,1 +1,7 @@
-export default function Placeholder() { return <div>Giao dien dang cap nhat</div>; }
+import AnalyticsClient from './AnalyticsClient';
+
+export const dynamic = 'force-dynamic';
+
+export default function AdminAnalyticsPage() {
+  return <AnalyticsClient />;
+}

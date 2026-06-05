@@ -92,3 +92,51 @@ export async function deleteCategoryAction(categoryId: string) {
     return { success: false, message: error.message || 'Lỗi hệ thống khi xóa Danh mục' };
   }
 }
+
+export async function updateCategoryAction(
+  categoryId: string,
+  data: {
+    name: string;
+    sizeType: SizeType;
+    parentId?: string | null;
+    sortOrder?: number;
+    isActive: boolean;
+  }
+) {
+  try {
+    if (!data.name.trim()) {
+      return { success: false, message: 'Tên danh mục không được để trống' };
+    }
+
+    if (data.parentId === categoryId) {
+      return { success: false, message: 'Danh mục cha không được trùng với chính nó' };
+    }
+
+    const slug = `${slugify(data.name)}-${randomUUID().slice(0, 5)}`;
+
+    const updatedCategory = await prisma.category.update({
+      where: { id: categoryId },
+      data: {
+        name: data.name,
+        slug,
+        sizeType: data.sizeType,
+        parentId: data.parentId || null,
+        sortOrder: data.sortOrder || 0,
+        isActive: data.isActive,
+      },
+      include: {
+        parent: {
+          select: {
+            name: true,
+          },
+        },
+      },
+    });
+
+    return { success: true, category: updatedCategory };
+  } catch (error: any) {
+    console.error('Error updating category:', error);
+    return { success: false, message: error.message || 'Lỗi hệ thống khi cập nhật Danh mục' };
+  }
+}
+

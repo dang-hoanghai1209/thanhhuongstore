@@ -461,7 +461,7 @@ export default function ProductsClient({ initialProducts, categories }: Products
                       <td className="py-4 px-6 text-center">
                         <button
                           onClick={() => handleOpenEditModal(p)}
-                          className="p-2 border border-slate-200 hover:border-primary/20 hover:bg-blue-50 text-slate-500 hover:text-primary rounded-xl transition shadow-sm"
+                          className="p-2 border border-slate-200 hover:border-primary/20 hover:bg-primary/5 text-slate-500 hover:text-primary rounded-xl transition shadow-sm"
                           title="Chỉnh sửa sản phẩm"
                         >
                           <Edit2 className="w-4 h-4" />
