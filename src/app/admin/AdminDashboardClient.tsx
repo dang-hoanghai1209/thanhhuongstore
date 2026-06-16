@@ -276,7 +276,7 @@ export default function AdminDashboardClient({ stats, topSellers }: AdminDashboa
         <div className="relative z-10 space-y-2">
           <h2 className="text-xl md:text-2xl font-bold tracking-tight">Xin chào, Quản trị viên!</h2>
           <p className="text-white/80 text-sm max-w-lg">
-            Chào mừng quay lại Thanh Hương Store Admin. Dưới đây là báo cáo hiệu suất bán hàng tổng quan hôm nay.
+            Chào mừng quay lại Hoàng Hải Sneaker Admin. Dưới đây là báo cáo hiệu suất bán hàng tổng quan hôm nay.
           </p>
         </div>
       </div>

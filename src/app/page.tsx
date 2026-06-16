@@ -68,28 +68,28 @@ export default async function HomePage() {
   // Categories fallback if DB is empty or fails
   const fallbackCategories = [
     {
-      name: "Đồ Lót Cao Cấp",
-      slug: "do-boi",
-      imageUrl: "https://images.unsplash.com/photo-1594913785162-e6785b423cb1?auto=format&fit=crop&w=400&q=80",
-      description: "Thoáng khí, mềm mại"
-    },
-    {
-      name: "Tất Vớ Thời Trang",
+      name: "Tất Vớ Nam Nữ",
       slug: "vo-thoi-trang",
       imageUrl: "https://images.unsplash.com/photo-1582966772680-860e372bb558?auto=format&fit=crop&w=400&q=80",
       description: "Cotton kháng khuẩn"
     },
     {
-      name: "Bikini & Đồ Bơi",
-      slug: "do-boi",
-      imageUrl: "https://images.unsplash.com/photo-1608231387042-66d1773070a5?auto=format&fit=crop&w=400&q=80",
-      description: "Tôn dáng quyến rũ"
+      name: "Bao Tay Lao Động",
+      slug: "vo-thoi-trang",
+      imageUrl: "https://images.unsplash.com/photo-1594913785162-e6785b423cb1?auto=format&fit=crop&w=400&q=80",
+      description: "Sợi bền bỉ, chống trượt"
     },
     {
-      name: "Đồ Ngủ & Đồ Mặc Nhà",
+      name: "Xả Kho Đồ Bơi & Bikini",
+      slug: "do-boi",
+      imageUrl: "https://images.unsplash.com/photo-1608231387042-66d1773070a5?auto=format&fit=crop&w=400&q=80",
+      description: "Hàng tồn kho thanh lý"
+    },
+    {
+      name: "Phụ Kiện Thời Trang",
       slug: "do-boi",
       imageUrl: "https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=400&q=80",
-      description: "Lụa mềm cao cấp"
+      description: "Kính, nón, đai lưng sỉ"
     }
   ];
 
@@ -101,7 +101,7 @@ export default async function HomePage() {
       "https://images.unsplash.com/photo-1608231387042-66d1773070a5?auto=format&fit=crop&w=400&q=80",
       "https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=400&q=80"
     ];
-    const desc = ["Thoáng khí, mềm mại", "Cotton kháng khuẩn", "Tôn dáng quyến rũ", "Lụa mát cao cấp"];
+    const desc = ["Cotton kháng khuẩn", "Bền bỉ chống trượt", "Thanh lý giá sập sàn", "Đa dạng mẫu mã"];
     return {
       name: cat.name,
       slug: cat.slug,
@@ -124,18 +124,18 @@ export default async function HomePage() {
           <div className="flex-1 space-y-7 text-center lg:text-left">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-brand-200 text-xs font-black uppercase tracking-widest mx-auto lg:mx-0">
               <Flame className="w-3.5 h-3.5 text-accent-pink animate-pulse" />
-              Đại Tiệc Mùa Hè
+              Chuyên Sỉ Giá Tốt
             </div>
 
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight leading-none text-white uppercase">
-              Ưu Đãi Trải Nghiệm <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent-gold via-accent-pink to-brand-300">
-                Lên Đến 50%
+              Hoàng Hải Sneaker <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent-gold via-accent-pink to-brand-300 text-2xl sm:text-3xl md:text-4xl block mt-2">
+                Chuyên sỉ tất, vớ, bao tay giá tốt
               </span>
             </h1>
 
             <p className="text-sm sm:text-base text-brand-100 max-w-xl font-medium leading-relaxed mx-auto lg:mx-0">
-              Thổi bay cái nóng mùa hè bằng bộ sưu tập nội y dệt sợi tre và bikini thun Ý cao cấp của Thanh Hương Store. Mềm mại, thoáng mát và tôn dáng tự nhiên.
+              Hoàng Hải Sneaker chuyên cung cấp sỉ tất, vớ thời trang nam nữ, bao tay bảo hộ lao động và phụ kiện thời trang với giá gốc xưởng, chiết khấu bậc thang hấp dẫn cho đại lý và cửa hàng.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-2">
@@ -143,14 +143,14 @@ export default async function HomePage() {
                 href="/products"
                 className="px-8 py-4 rounded-brand-md bg-white text-gray-950 hover:bg-gray-100 font-extrabold text-xs uppercase tracking-wider transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 flex items-center justify-center gap-2"
               >
-                Săn sale ngay
+                Xem sản phẩm
                 <ArrowRight className="w-4 h-4 text-brand-600" />
               </Link>
               <Link
-                href="/wholesale"
+                href="/wholesale/register"
                 className="px-8 py-4 rounded-brand-md bg-white/10 hover:bg-white/15 text-white font-extrabold text-xs uppercase tracking-wider transition-all border border-white/20 backdrop-blur-xs flex items-center justify-center"
               >
-                Xem chính sách sỉ B2B
+                Đăng ký nhập sỉ (B2B)
               </Link>
             </div>
           </div>
@@ -158,10 +158,10 @@ export default async function HomePage() {
           {/* Quick Marketing Grid */}
           <div className="grid grid-cols-2 gap-4 w-full lg:w-auto min-w-[280px] sm:min-w-[400px]">
             {[
-              { title: "Nội Y Organic", desc: "Sợi tre tự nhiên" },
-              { title: "Bikini Italia", desc: "Thun co giãn 4 chiều" },
-              { title: "Tất Vớ Khử Mùi", desc: "Cotton chải kỹ" },
-              { title: "Đại Lý Chiết Khấu", desc: "Giảm sỉ sập sàn" }
+              { title: "Tất Vớ Cao Cấp", desc: "Cotton kháng khuẩn khử mùi" },
+              { title: "Bao Tay Lao Động", desc: "Sợi dệt bền bỉ chống trượt" },
+              { title: "Chiết Khấu Cao", desc: "Giảm sỉ tự động theo số lượng" },
+              { title: "Hàng Tồn Xả Kho", desc: "Thanh lý bikini & phụ kiện" }
             ].map((box, idx) => (
               <div key={idx} className="p-6 rounded-brand-lg bg-white/5 backdrop-blur-md border border-white/10 hover:border-white/30 hover:bg-white/10 transition-all duration-300">
                 <span className="w-5 h-5 rounded bg-brand-500/20 text-brand-300 flex items-center justify-center text-[10px] font-black mb-3">
@@ -212,7 +212,7 @@ export default async function HomePage() {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="text-center max-w-xl mx-auto mb-12 space-y-2">
           <h2 className="text-xl sm:text-2xl font-black text-gray-900 uppercase tracking-tight">Danh Mục Nổi Bật</h2>
-          <p className="text-xs text-gray-400 font-bold">Khám phá các dòng sản phẩm dệt may thiết kế cao cấp nhất.</p>
+          <p className="text-xs text-gray-400 font-bold">Khám phá các dòng sản phẩm sỉ tất vớ và phụ kiện thời trang.</p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -254,7 +254,7 @@ export default async function HomePage() {
               Sản Phẩm Mới Nhất
               <span className="w-2.5 h-2.5 rounded-full bg-brand-600 animate-pulse" />
             </h2>
-            <p className="text-xs text-gray-400 font-bold">Cập nhật xu hướng thời trang mặc nhà mới nhất.</p>
+            <p className="text-xs text-gray-400 font-bold">Cập nhật nguồn hàng sỉ vớ tất và bao tay giá tốt mới nhất.</p>
           </div>
           <Link
             href="/products"
@@ -364,19 +364,19 @@ export default async function HomePage() {
             <div className="absolute inset-0 bg-gradient-to-r from-brand-950 via-brand-900/30 to-transparent" />
 
             <div className="relative z-10 space-y-2">
-              <span className="text-[9px] text-accent-gold font-extrabold uppercase tracking-widest block">Ưu Đãi Trọn Bộ</span>
-              <h3 className="text-xl sm:text-2xl font-black uppercase tracking-tight">Mua 3 Tặng 1</h3>
+              <span className="text-[9px] text-accent-gold font-extrabold uppercase tracking-widest block">Ưu Đãi Nhập Sỉ</span>
+              <h3 className="text-xl sm:text-2xl font-black uppercase tracking-tight">Chiết Khấu Tới 15%</h3>
               <p className="text-xs text-brand-200 max-w-xs leading-relaxed">
-                Áp dụng cho dòng sản phẩm tất vớ Cotton chải kỹ kháng khuẩn. Mua càng nhiều ưu đãi sỉ càng tốt.
+                Áp dụng bảng giá sỉ chiết khấu tự động bậc thang tại giỏ hàng khi đạt số lượng mua yêu cầu.
               </p>
             </div>
 
             <div className="relative z-10 pt-6">
               <Link
-                href="/products"
+                href="/wholesale/register"
                 className="inline-flex items-center gap-1.5 text-xs font-bold text-accent-gold hover:text-white transition"
               >
-                Nhận ưu đãi ngay
+                Đăng ký đại lý B2B ngay
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
@@ -392,10 +392,10 @@ export default async function HomePage() {
             <div className="absolute inset-0 bg-gradient-to-r from-accent-pink via-accent-pink/50 to-transparent" />
 
             <div className="relative z-10 space-y-2">
-              <span className="text-[9px] text-white font-extrabold uppercase tracking-widest block">Xu Hướng Mới</span>
-              <h3 className="text-xl sm:text-2xl font-black uppercase tracking-tight">BST Lụa Băng Mát Lạnh</h3>
+              <span className="text-[9px] text-white font-extrabold uppercase tracking-widest block">Hàng Tồn Xả Kho</span>
+              <h3 className="text-xl sm:text-2xl font-black uppercase tracking-tight">Thanh Lý Bikini Đồ Bơi</h3>
               <p className="text-xs text-white/90 max-w-xs leading-relaxed">
-                Dòng sản phẩm đồ lót nam và váy ngủ cao cấp dệt sợi mát lạnh. Giảm nhiệt ngày nóng bức tức thì.
+                Các lô hàng bikini đồ bơi nam nữ xả kho với mức giá thanh lý sập sàn, phù hợp mua kèm giá tốt.
               </p>
             </div>
 
@@ -404,7 +404,7 @@ export default async function HomePage() {
                 href="/products"
                 className="inline-flex items-center gap-1.5 text-xs font-bold text-white hover:text-gray-900 hover:bg-white px-4 py-2 rounded-brand-sm bg-white/10 border border-white/20 transition-all"
               >
-                Xem chi tiết
+                Xem lô xả kho
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </div>

@@ -9,7 +9,7 @@ export default function ShippingPolicyPage() {
 
       <div>
         <h1 className="text-2xl sm:text-3xl font-extrabold text-on-surface tracking-tight">Chính Sách Vận Chuyển & Giao Nhận</h1>
-        <p className="text-xs text-on-surface-variant/70 mt-1">Cập nhật mới nhất tháng 6/2026. Áp dụng cho mọi đơn sỉ/lẻ tại Thanh Hương Store.</p>
+        <p className="text-xs text-on-surface-variant/70 mt-1">Cập nhật mới nhất tháng 6/2026. Áp dụng cho mọi đơn sỉ/lẻ tại Hoàng Hải Sneaker.</p>
       </div>
 
       <div className="bg-white border border-surface-variant/50 rounded-2xl p-6 sm:p-8 shadow-xs text-xs sm:text-sm text-on-surface-variant leading-relaxed space-y-6 font-medium">
@@ -21,7 +21,7 @@ export default function ShippingPolicyPage() {
             1. Các hình thức giao hàng áp dụng
           </h3>
           <p>
-            Nhằm tạo điều kiện tốt nhất cho khách hàng trên cả nước tiếp cận các sản phẩm thời trang tất vớ, đồ bơi cao cấp, Thanh Hương Store triển khai đa dạng kênh vận chuyển:
+            Nhằm tạo điều kiện tốt nhất cho khách hàng trên cả nước tiếp cận các sản phẩm tất vớ, bao tay lao động và phụ kiện thời trang, Hoàng Hải Sneaker triển khai đa dạng kênh vận chuyển:
           </p>
           <ul className="list-disc pl-5 space-y-1">
             <li>**Giao hàng tiêu chuẩn toàn quốc**: Hợp tác với các đơn vị vận chuyển lớn (GHTK, Viettel Post, GHN).</li>
@@ -66,7 +66,7 @@ export default function ShippingPolicyPage() {
             4. Kiểm hàng trước khi thanh toán
           </h3>
           <p>
-            Nhằm đảm bảo quyền lợi tối đa cho người mua, Thanh Hương Store hỗ trợ chính sách **ĐỒNG KIỂM** khi nhận hàng. Khi nhân viên giao hàng tới, bạn được quyền mở hộp kiểm tra số lượng và mẫu mã sản phẩm trước khi thanh toán tiền (đối với COD) hoặc ký nhận đơn hàng.
+            Nhằm đảm bảo quyền lợi tối đa cho người mua, Hoàng Hải Sneaker hỗ trợ chính sách **ĐỒNG KIỂM** khi nhận hàng. Khi nhân viên giao hàng tới, bạn được quyền mở hộp kiểm tra số lượng và mẫu mã sản phẩm trước khi thanh toán tiền (đối với COD) hoặc ký nhận đơn hàng.
           </p>
           <p>
             * Lưu ý: Việc kiểm hàng không bao gồm thử đồ (mặc thử đồ bơi, đồ lót, tất vớ) để bảo đảm vệ sinh cho sản phẩm.

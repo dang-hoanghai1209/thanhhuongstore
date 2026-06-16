@@ -35,7 +35,7 @@ export const useAuthStore = create<AuthState>()(
         })),
     }),
     {
-      name: 'Thanh Hương Storestore-auth-storage',
+      name: 'hhsneaker-auth-storage',
     }
   )
 );

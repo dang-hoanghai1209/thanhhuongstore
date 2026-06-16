@@ -116,7 +116,7 @@ export default function WholesaleRegisterPage() {
             <div className="space-y-2 max-w-lg mx-auto">
               <h1 className="text-2xl font-black text-gray-950 tracking-tight">Đăng Ký Khách Hàng Sỉ (B2B)</h1>
               <p className="text-sm text-gray-500 leading-relaxed font-medium">
-                Để tham gia chương trình khách hàng bán sỉ và nhận mức chiết khấu bậc thang hấp dẫn từ Thanh Hương Store, bạn cần đăng nhập tài khoản trước.
+                Để tham gia chương trình khách hàng bán sỉ và nhận mức chiết khấu bậc thang hấp dẫn từ Hoàng Hải Sneaker, bạn cần đăng nhập tài khoản trước.
               </p>
             </div>
 
@@ -169,7 +169,7 @@ export default function WholesaleRegisterPage() {
               <div className="p-4 bg-emerald-50 border border-emerald-100 rounded-2xl text-emerald-800 text-xs font-medium flex items-start gap-3 shadow-3xs">
                 <CheckCircle className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
                 <div className="space-y-1">
-                  <p className="font-bold text-[13px] text-emerald-950">Chúc mừng! Bạn đã là Đại lý của Thanh Hương Store</p>
+                  <p className="font-bold text-[13px] text-emerald-950">Chúc mừng! Bạn đã là Đại lý của Hoàng Hải Sneaker</p>
                   <p className="text-emerald-700 leading-relaxed font-normal">
                     Tài khoản của bạn đã được nâng cấp lên phân hệ **WHOLESALE**. Bảng chiết khấu sỉ tự động theo số lượng sẽ được hiển thị và tính toán tự động mỗi khi bạn thêm sản phẩm vào giỏ hàng.
                   </p>
@@ -183,7 +183,7 @@ export default function WholesaleRegisterPage() {
                 <div className="space-y-1">
                   <p className="font-bold text-[13px] text-amber-950">Đang chờ xét duyệt hồ sơ</p>
                   <p className="text-amber-700 leading-relaxed font-normal">
-                    Hệ thống đã ghi nhận hồ sơ đăng ký của bạn. Ban quản lý Thanh Hương Store sẽ tiến hành xác minh thông tin doanh nghiệp/cửa hàng của bạn trong vòng 24 giờ làm việc. Chúng tôi sẽ phản hồi trực tiếp qua số điện thoại hoặc email đăng ký.
+                    Hệ thống đã ghi nhận hồ sơ đăng ký của bạn. Ban quản lý Hoàng Hải Sneaker sẽ tiến hành xác minh thông tin doanh nghiệp/cửa hàng của bạn trong vòng 24 giờ làm việc. Chúng tôi sẽ phản hồi trực tiếp qua số điện thoại hoặc email đăng ký.
                   </p>
                 </div>
               </div>
@@ -274,7 +274,7 @@ export default function WholesaleRegisterPage() {
               <CheckCircle className="w-5 h-5 text-emerald-600 shrink-0" />
               <div className="space-y-0.5">
                 <p className="font-bold text-[13px] text-emerald-950">Gửi hồ sơ đăng ký thành công!</p>
-                <p className="text-emerald-700 font-normal">Vui lòng chờ ban quản trị Thanh Hương Store phê duyệt.</p>
+                <p className="text-emerald-700 font-normal">Vui lòng chờ ban quản trị Hoàng Hải Sneaker phê duyệt.</p>
               </div>
             </div>
           )}
@@ -297,7 +297,7 @@ export default function WholesaleRegisterPage() {
                 <input 
                   type="text" 
                   required
-                  placeholder="Ví dụ: Công ty TNHH Thời trang Thanh Hương" 
+                  placeholder="Ví dụ: Hộ kinh doanh Hoàng Hải Sneaker" 
                   value={companyName}
                   onChange={(e) => setCompanyName(e.target.value)}
                   className="pl-10 input-standard"

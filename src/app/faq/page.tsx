@@ -31,7 +31,7 @@ export default function FAQPage() {
         },
         {
           id: 2,
-          question: 'Thanh Hương Store hỗ trợ những phương thức thanh toán nào?',
+          question: 'Hoàng Hải Sneaker hỗ trợ những phương thức thanh toán nào?',
           answer: 'Chúng tôi hỗ trợ 3 hình thức thanh toán chính: (1) Nhận hàng thanh toán COD toàn quốc, (2) Chuyển khoản ngân hàng trực tiếp (nội dung chuyển khoản ghi kèm mã đơn hàng), (3) Thanh toán thẻ và tài khoản nội địa/quốc tế qua cổng thanh toán bảo mật VNPAY.'
         },
         {
@@ -53,7 +53,7 @@ export default function FAQPage() {
         {
           id: 5,
           question: 'Phí vận chuyển tại shop được tính như thế nào?',
-          answer: 'Thanh Hương áp dụng mức phí đồng giá 25.000đ cho đơn hàng lẻ tiêu chuẩn trên toàn quốc. Đặc biệt, miễn phí giao hàng cho tất cả các đơn hàng lẻ có giá trị từ 500.000đ trở lên. Đối với đơn hàng sỉ lớn, phí vận chuyển sẽ tính theo biểu phí của nhà xe hoặc đơn vị vận chuyển đối tác.'
+          answer: 'Hoàng Hải Sneaker áp dụng mức phí đồng giá 25.000đ cho đơn hàng lẻ tiêu chuẩn trên toàn quốc. Đặc biệt, miễn phí giao hàng cho tất cả các đơn hàng lẻ có giá trị từ 500.000đ trở lên. Đối với đơn hàng sỉ lớn, phí vận chuyển sẽ tính theo biểu phí của nhà xe hoặc đơn vị vận chuyển đối tác.'
         }
       ]
     },
@@ -63,7 +63,7 @@ export default function FAQPage() {
       items: [
         {
           id: 6,
-          question: 'Chính sách đổi trả sản phẩm tại Thanh Hương ra sao?',
+          question: 'Chính sách đổi trả sản phẩm tại Hoàng Hải Sneaker ra sao?',
           answer: 'Khách hàng được quyền đổi trả sản phẩm trong vòng 7 ngày kể từ khi nhận hàng thành công. Sản phẩm đổi trả bắt buộc phải còn nguyên tem mác, chưa qua sử dụng hay giặt là, kèm theo hóa đơn mua hàng liên quan.'
         },
         {
@@ -86,7 +86,7 @@ export default function FAQPage() {
       <div>
         <h1 className="text-2xl sm:text-3xl font-extrabold text-on-surface tracking-tight">Câu Hỏi Thường Gặp (FAQs)</h1>
         <p className="text-xs text-on-surface-variant/70 mt-1">
-          Tìm kiếm nhanh câu trả lời cho các thắc mắc phổ biến về mua hàng, vận chuyển và chế độ hậu mãi tại Thanh Hương Store.
+          Tìm kiếm nhanh câu trả lời cho các thắc mắc phổ biến về mua hàng, vận chuyển và chế độ hậu mãi tại Hoàng Hải Sneaker.
         </p>
       </div>
 

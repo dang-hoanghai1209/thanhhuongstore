@@ -73,9 +73,9 @@ export default function ForgotPasswordPage() {
           <div className="space-y-3 text-center sm:text-left">
             <Link href="/" className="inline-flex items-center gap-2 text-primary hover:opacity-90 transition-opacity">
               <div className="w-8 h-8 rounded-brand-sm bg-primary flex items-center justify-center text-white font-black text-sm shadow">
-                TH
+                HH
               </div>
-              <span className="text-sm font-black uppercase tracking-widest text-on-surface">Thanh Hương Store</span>
+              <span className="text-sm font-black uppercase tracking-widest text-on-surface">Hoàng Hải Sneaker</span>
             </Link>
             
             <h2 className="text-xl sm:text-2xl font-black text-gray-900 tracking-tight">

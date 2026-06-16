@@ -454,7 +454,7 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
 
                 {activeTab === 'b2b' && (
                   <div className="space-y-2.5 p-3 bg-gray-50 rounded border border-gray-100">
-                    <p className="font-bold text-gray-800">💼 Quyền lợi đại lý hợp tác sỉ với Thanh Hương Store:</p>
+                    <p className="font-bold text-gray-800">💼 Quyền lợi đại lý hợp tác sỉ với Hoàng Hải Sneaker:</p>
                     <p>• Chiết khấu sỉ tự động tính trực tiếp tại màn hình Giỏ Hàng khi bạn đạt đủ mốc số lượng sỉ.</p>
                     <p>• Hỗ trợ đổi trả trong vòng 15 ngày đối với hàng lỗi do nhà sản xuất.</p>
                     <p>• Đơn sỉ tối thiểu chỉ từ 500,000đ. Đăng ký tài khoản đại lý ngay để duyệt mức giá sỉ sập sàn!</p>

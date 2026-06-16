@@ -9,7 +9,7 @@ export default function ReturnPolicyPage() {
 
       <div>
         <h1 className="text-2xl sm:text-3xl font-extrabold text-on-surface tracking-tight">Chính Sách Đổi Trả Sản Phẩm</h1>
-        <p className="text-xs text-on-surface-variant/70 mt-1">Hỗ trợ khách hàng an tâm mua sắm sỉ & lẻ tại Thanh Hương Store.</p>
+        <p className="text-xs text-on-surface-variant/70 mt-1">Hỗ trợ khách hàng an tâm mua sắm sỉ & lẻ tại Hoàng Hải Sneaker.</p>
       </div>
 
       <div className="bg-white border border-surface-variant/50 rounded-2xl p-6 sm:p-8 shadow-xs text-xs sm:text-sm text-on-surface-variant leading-relaxed space-y-6 font-medium">
@@ -21,7 +21,7 @@ export default function ReturnPolicyPage() {
             1. Thời hạn đổi trả quy định
           </h3>
           <p>
-            Thanh Hương Store hỗ trợ khách hàng đổi size, đổi mẫu hoặc hoàn trả sản phẩm trong vòng **7 ngày** tính từ ngày khách hàng nhận được kiện hàng thành công từ đơn vị chuyển phát.
+            Hoàng Hải Sneaker hỗ trợ khách hàng đổi size, đổi mẫu hoặc hoàn trả sản phẩm trong vòng **7 ngày** tính từ ngày khách hàng nhận được kiện hàng thành công từ đơn vị chuyển phát.
           </p>
         </div>
 
@@ -45,7 +45,7 @@ export default function ReturnPolicyPage() {
             <span className="material-symbols-outlined text-primary text-[20px]">cancel</span>
             3. Các trường hợp KHÔNG áp dụng đổi trả
           </h3>
-          <p>Để đảm bảo vệ sinh cá nhân tối đa cho mọi khách hàng, Thanh Hương xin từ chối đổi trả đối với:</p>
+          <p>Để đảm bảo vệ sinh cá nhân tối đa cho mọi khách hàng, Hoàng Hải Sneaker xin từ chối đổi trả đối với:</p>
           <ul className="list-disc pl-5 space-y-1">
             <li>Sản phẩm tất vớ đã xé mác, đã mang thử hoặc bị trầy xước sợi.</li>
             <li>Các sản phẩm quần lót nam (underwear) đã bóc hộp hoặc mở bao bì niêm phong bảo vệ.</li>
@@ -60,7 +60,7 @@ export default function ReturnPolicyPage() {
             4. Phí vận chuyển khi đổi trả
           </h3>
           <ul className="list-disc pl-5 space-y-1">
-            <li>**Lỗi từ phía Thanh Hương Store** (giao sai mẫu, sai màu, hàng bị rách chỉ hoặc lỗi vải): Cửa hàng chịu hoàn toàn 100% phí ship thu hồi và gửi lại sản phẩm thay thế cho khách.</li>
+            <li>**Lỗi từ phía Hoàng Hải Sneaker** (giao sai mẫu, sai màu, hàng bị rách chỉ hoặc lỗi vải): Cửa hàng chịu hoàn toàn 100% phí ship thu hồi và gửi lại sản phẩm thay thế cho khách.</li>
             <li>**Theo nhu cầu cá nhân của khách** (muốn đổi size khác, đổi sang màu hoặc mẫu sản phẩm khác): Khách hàng vui lòng tự thanh toán tiền phí ship gửi hàng về kho và phí ship gửi hàng mới quay lại.</li>
           </ul>
         </div>

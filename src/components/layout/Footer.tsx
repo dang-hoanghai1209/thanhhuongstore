@@ -34,12 +34,12 @@ export default function Footer() {
         <div className="space-y-4">
           <div className="flex items-center gap-2 text-primary">
             <div className="w-8 h-8 rounded-brand-sm bg-primary flex items-center justify-center text-white font-black text-sm shadow-xs">
-              TH
+              HH
             </div>
-            <span className="text-sm font-black uppercase tracking-widest text-on-surface">Thanh Hương Store</span>
+            <span className="text-sm font-black uppercase tracking-widest text-on-surface">Hoàng Hải Sneaker</span>
           </div>
           <p className="text-xs text-gray-400 leading-relaxed font-medium">
-            Thanh Hương Store là thương hiệu hàng đầu cung cấp các dòng sản phẩm tất vớ cao cấp, đồ bơi thể thao nam nữ và đồ lót nam kháng khuẩn dệt kim cao cấp chính hãng Việt Nam.
+            Hoàng Hải Sneaker chuyên cung cấp sỉ tất, vớ, bao tay bảo hộ lao động và phụ kiện thời trang giá sỉ cực tốt cho cửa hàng, đại lý, xưởng và khách mua số lượng lớn.
           </p>
         </div>
 
@@ -77,7 +77,7 @@ export default function Footer() {
             </p>
             <p className="flex items-center gap-2">
               <span className="material-symbols-outlined text-primary text-[16px]">mail</span>
-              hotro@thanhhuongstore.vn
+              hotro@hhsneaker.id.vn
             </p>
           </div>
           <div className="flex gap-3 pt-2">
@@ -100,10 +100,10 @@ export default function Footer() {
       {/* Lower Copyright Strip */}
       <div className="bg-gray-50 py-6 border-t border-gray-100 text-center text-[10px] text-gray-400 font-medium">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p>© 2026 Thanh Hương Store. Bảo lưu mọi quyền.</p>
+          <p>© 2026 Hoàng Hải Sneaker. Bảo lưu mọi quyền.</p>
           <div className="flex items-center gap-1.5 font-bold text-gray-500">
             <span className="material-symbols-outlined text-primary text-[16px]">verified_user</span>
-            Bản quyền thuộc về Thanh Hương Store B2B/B2C Platform
+            Bản quyền thuộc về Hoàng Hải Sneaker B2B/B2C Platform
           </div>
         </div>
       </div>

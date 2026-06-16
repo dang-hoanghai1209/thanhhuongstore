@@ -170,7 +170,7 @@ function SuccessPageContent() {
 
         <div className="space-y-2">
           <span className="text-[10px] font-black text-brand-600 uppercase tracking-widest block">
-            Thanh Hương Store
+            Hoàng Hải Sneaker
           </span>
           <h1 className="text-xl sm:text-2xl font-black text-gray-950 tracking-tight">
             {getPaymentTitle(resolvedPaymentMethod)}

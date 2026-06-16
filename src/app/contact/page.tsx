@@ -76,7 +76,7 @@ export default function ContactPage() {
                 </div>
                 <div className="text-xs font-medium text-on-surface-variant">
                   <span className="text-[10px] text-gray-400 font-bold uppercase block">Hộp thư điện tử</span>
-                  <p className="text-on-surface font-bold">hotro@thanhhuongstore.vn</p>
+                  <p className="text-on-surface font-bold">hotro@hhsneaker.id.vn</p>
                   <p>Phản hồi trong vòng 24 giờ làm việc</p>
                 </div>
               </div>
@@ -121,7 +121,7 @@ export default function ContactPage() {
               <div className="space-y-0.5">
                 <p className="font-bold text-[13px]">Lời nhắn đã gửi thành công!</p>
                 <p className="text-[11px] text-emerald-600 font-normal">
-                  Cảm ơn bạn đã gửi ý kiến. Nhân viên hỗ trợ của Thanh Hương Store sẽ phản hồi lại bạn sớm nhất.
+                  Cảm ơn bạn đã gửi ý kiến. Nhân viên hỗ trợ của Hoàng Hải Sneaker sẽ phản hồi lại bạn sớm nhất.
                 </p>
               </div>
             </div>

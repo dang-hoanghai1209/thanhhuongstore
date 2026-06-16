@@ -145,7 +145,7 @@ export default function AccountOrdersPage() {
       ) : (
         <EmptyState
           title="Chưa có lịch sử mua sắm"
-          description="Bạn chưa thực hiện bất kỳ giao dịch nào tại Thanh Hương Store."
+          description="Bạn chưa thực hiện bất kỳ giao dịch nào tại Hoàng Hải Sneaker."
           icon="receipt_long"
           actionLabel="Bắt đầu mua sắm"
           actionHref="/products"

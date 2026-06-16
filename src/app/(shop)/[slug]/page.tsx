@@ -34,7 +34,7 @@ export async function generateMetadata({ params }: ProductDetailPageProps) {
 
   if (!product) {
     return {
-      title: 'Không tìm thấy sản phẩm - Thanh Hương Store',
+      title: 'Không tìm thấy sản phẩm - Hoàng Hải Sneaker',
     };
   }
 
@@ -46,16 +46,16 @@ export async function generateMetadata({ params }: ProductDetailPageProps) {
       : `${baseUrl}${primaryImage.url}`
     : `${baseUrl}/images/default-product.jpg`;
 
-  const metaDescription = `Mua ${product.name} chính hãng chất lượng cao tại Thanh Hương Store. Dòng sản phẩm ${product.category?.name || ''} cao cấp dệt sợi tự nhiên kháng khuẩn, mềm mại, thoải mái tối đa.`;
+  const metaDescription = `Mua ${product.name} chất lượng tốt, giá sỉ tốt nhất tại Hoàng Hải Sneaker. Chuyên cung cấp tất, vớ, bao tay và phụ kiện thời trang sỉ lẻ toàn quốc.`;
 
   return {
-    title: `${product.name} - Thanh Hương Store`,
+    title: `${product.name} - Hoàng Hải Sneaker`,
     description: metaDescription,
     alternates: {
       canonical: `${baseUrl}/${slug}`,
     },
     openGraph: {
-      title: `${product.name} - Thanh Hương Store`,
+      title: `${product.name} - Hoàng Hải Sneaker`,
       description: metaDescription,
       images: [
         {

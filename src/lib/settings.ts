@@ -48,12 +48,12 @@ export interface SystemSettings {
 
 const DEFAULT_SETTINGS: SystemSettings = {
   storeInfo: {
-    name: "Thanh Hương Store",
+    name: "Hoàng Hải Sneaker",
     phone: "0912345678",
-    email: "contact@thanhhuongstore.vn",
+    email: "contact@hhsneaker.id.vn",
     address: "Số 123 Đường Lê Lợi, Quận 1, TP. Hồ Chí Minh",
     businessHours: "08:00 - 22:00 (Hàng ngày)",
-    footerDescription: "Chuyên cung cấp các loại tất vớ cao cấp và đồ dùng tiện ích chất lượng cao tại Việt Nam."
+    footerDescription: "Hoàng Hải Sneaker chuyên sỉ tất, vớ, bao tay và phụ kiện thời trang giá tốt."
   },
   paymentSettings: {
     codEnabled: true,
@@ -70,8 +70,8 @@ const DEFAULT_SETTINGS: SystemSettings = {
   },
   supportSettings: {
     hotline: "1900 1234",
-    supportEmail: "support@thanhhuongstore.vn",
-    facebookLink: "https://facebook.com/thanhhuongstore",
+    supportEmail: "support@hhsneaker.id.vn",
+    facebookLink: "https://facebook.com/hhsneaker.id.vn",
     zaloLink: "https://zalo.me/0912345678"
   },
   policySummary: {

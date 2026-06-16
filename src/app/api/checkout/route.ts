@@ -26,7 +26,7 @@ function getBankTransferPayload({
   orderNumber: string;
 }) {
   const bankTransfer = getBankTransferDetails();
-  const transferContent = `THANH HUONG ${orderNumber}`;
+  const transferContent = `HHSNEAKER ${orderNumber}`;
   const qrParams = new URLSearchParams({
     amount: String(Math.round(amount)),
     addInfo: transferContent,

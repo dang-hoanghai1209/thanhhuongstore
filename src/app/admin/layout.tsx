@@ -91,7 +91,7 @@ export default function AdminLayout({
         <div className="h-16 flex items-center px-6 border-b border-slate-100">
           <div className="flex items-center gap-2">
             <span className="text-xl font-black tracking-tight text-primary">
-              Thanh Hương Admin
+              Hoàng Hải Admin
             </span>
           </div>
         </div>
@@ -133,7 +133,7 @@ export default function AdminLayout({
       <div className="flex-grow flex flex-col min-w-0">
         {/* Mobile menu indicator row (small screen only) */}
         <header className="h-14 bg-white border-b border-slate-200 flex items-center justify-between px-6 md:hidden">
-          <span className="text-sm font-bold text-slate-800">Thanh Hương Admin</span>
+          <span className="text-sm font-bold text-slate-800">Hoàng Hải Admin</span>
           <div className="flex gap-2">
             <Link href="/admin/orders" className="text-xs text-primary font-semibold px-2 py-1 bg-primary/10 rounded">
               Đơn hàng

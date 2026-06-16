@@ -262,7 +262,7 @@ export default function CartPage() {
                 {/* Hints for testing */}
                 <div className="text-[9px] text-gray-400 space-y-0.5 leading-relaxed pt-1">
                   <p>💡 Mã thử nghiệm:</p>
-                  <p>• <span className="font-bold text-gray-500">Thanh Hương StoreSTORE10</span>: Giảm 10% tổng đơn lẻ</p>
+                  <p>• <span className="font-bold text-gray-500">STORE10</span>: Giảm 10% tổng đơn lẻ</p>
                   <p>• <span className="font-bold text-gray-500">FREESHIP</span>: Giảm 30,000đ vận chuyển</p>
                 </div>
               </form>

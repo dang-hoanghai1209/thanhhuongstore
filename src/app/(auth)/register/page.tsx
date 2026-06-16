@@ -144,9 +144,9 @@ export default function RegisterPage() {
           <div className="space-y-2 text-center sm:text-left">
             <Link href="/" className="inline-flex items-center gap-2 text-primary hover:opacity-90 transition-opacity">
               <div className="w-8 h-8 rounded-brand-sm bg-primary flex items-center justify-center text-white font-black text-sm shadow">
-                TH
+                HH
               </div>
-              <span className="text-sm font-black uppercase tracking-widest text-on-surface">Thanh Hương Store</span>
+              <span className="text-sm font-black uppercase tracking-widest text-on-surface">Hoàng Hải Sneaker</span>
             </Link>
             
             <h2 className="text-xl sm:text-2xl font-black text-gray-900 tracking-tight">
@@ -324,7 +324,7 @@ export default function RegisterPage() {
                   className="w-4 h-4 mt-0.5 text-primary focus:ring-primary border-gray-300 rounded"
                 />
                 <span className="leading-tight select-none">
-                  Tôi đồng ý với <Link href="/terms" className="font-bold text-primary hover:underline">Điều khoản dịch vụ</Link> và <Link href="/privacy-policy" className="font-bold text-primary hover:underline">Chính sách bảo mật</Link> của Thanh Hương Store.
+                  Tôi đồng ý với <Link href="/terms" className="font-bold text-primary hover:underline">Điều khoản dịch vụ</Link> và <Link href="/privacy-policy" className="font-bold text-primary hover:underline">Chính sách bảo mật</Link> của Hoàng Hải Sneaker.
                 </span>
               </label>
             </div>
@@ -377,7 +377,7 @@ export default function RegisterPage() {
             Khơi nguồn tự tin, dẫn lối phong cách.
           </h3>
           <p className="text-sm text-white/80 max-w-md font-normal leading-relaxed">
-            Hưởng các đặc quyền chiết khấu tự động sỉ B2B, quản lý đơn hàng thông minh và hỗ trợ trực tuyến 24/7 từ Thanh Hương Store.
+            Hưởng các đặc quyền chiết khấu tự động sỉ B2B, quản lý đơn hàng thông minh và hỗ trợ trực tuyến 24/7 từ Hoàng Hải Sneaker.
           </p>
         </div>
       </div>

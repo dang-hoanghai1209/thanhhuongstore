@@ -144,9 +144,9 @@ export default function Header() {
             {/* 2. Brand Logo */}
             <Link href="/" className="flex items-center gap-2 text-primary shrink-0">
               <div className="w-9 h-9 rounded-brand-md bg-primary flex items-center justify-center text-white font-black text-base shadow-sm">
-                TH
+                HH
               </div>
-              <span className="text-base sm:text-lg font-black uppercase tracking-widest text-on-surface">Thanh Hương Store</span>
+              <span className="text-base sm:text-lg font-black uppercase tracking-widest text-on-surface">Hoàng Hải Sneaker</span>
             </Link>
 
             {/* 3. DESKTOP NAVIGATION MEGA MENU */}
@@ -339,9 +339,9 @@ export default function Header() {
             <div className="flex items-center justify-between pb-4 border-b border-gray-100">
               <div className="flex items-center gap-2 text-primary">
                 <div className="w-8 h-8 rounded-brand-sm bg-primary flex items-center justify-center text-white font-black text-sm shadow-xs">
-                  TH
+                  HH
                 </div>
-                <span className="text-sm font-black uppercase tracking-widest text-on-surface">Thanh Hương Store</span>
+                <span className="text-sm font-black uppercase tracking-widest text-on-surface">Hoàng Hải Sneaker</span>
               </div>
               <button
                 onClick={() => setMobileMenuOpen(false)}
@@ -467,9 +467,9 @@ export default function Header() {
               </p>
               <p className="flex items-center gap-1">
                 <span className="material-symbols-outlined text-primary text-[16px]">mail</span>
-                hotro@thanhhuongstore.vn
+                hotro@hhsneaker.id.vn
               </p>
-              <p className="text-[10px] text-gray-300 pt-2 font-normal">© 2026 Thanh Hương Store. All rights reserved.</p>
+              <p className="text-[10px] text-gray-300 pt-2 font-normal">© 2026 Hoàng Hải Sneaker. All rights reserved.</p>
             </div>
 
           </div>

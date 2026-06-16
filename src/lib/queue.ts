@@ -26,7 +26,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-const SMTP_FROM = process.env.SMTP_FROM || 'Thanh Hương Store <no-reply@thanhhuongstore.vn>';
+const SMTP_FROM = process.env.SMTP_FROM || 'Hoàng Hải Sneaker <no-reply@hhsneaker.id.vn>';
 
 // Worker processing logic
 if (process.env.START_EMAIL_WORKER === 'true') {
@@ -39,9 +39,9 @@ if (process.env.START_EMAIL_WORKER === 'true') {
 
     switch (type) {
       case 'order-confirmation':
-        subject = `[Thanh Hương Store] Xác nhận đơn hàng #${data.orderNumber}`;
+        subject = `[Hoàng Hải Sneaker] Xác nhận đơn hàng #${data.orderNumber}`;
         htmlContent = `
-          <h2>Cảm ơn bạn đã mua sắm tại Thanh Hương Store!</h2>
+          <h2>Cảm ơn bạn đã mua sắm tại Hoàng Hải Sneaker!</h2>
           <p>Xin chào ${data.customerName},</p>
           <p>Đơn hàng <strong>#${data.orderNumber}</strong> của bạn đã được tiếp nhận thành công.</p>
           <p>Tổng thanh toán: <strong>${data.totalAmount.toLocaleString()}đ</strong></p>
@@ -50,7 +50,7 @@ if (process.env.START_EMAIL_WORKER === 'true') {
         break;
 
       case 'order-status-update':
-        subject = `[Thanh Hương Store] Cập nhật đơn hàng #${data.orderNumber}`;
+        subject = `[Hoàng Hải Sneaker] Cập nhật đơn hàng #${data.orderNumber}`;
         htmlContent = `
           <p>Xin chào ${data.firstName},</p>
           <p>Đơn hàng <strong>#${data.orderNumber}</strong> đã chuyển sang trạng thái: <strong>${data.statusLabel}</strong>.</p>
@@ -58,29 +58,29 @@ if (process.env.START_EMAIL_WORKER === 'true') {
         break;
 
       case 'password-reset':
-        subject = '[Thanh Hương Store] Yêu cầu đặt lại mật khẩu';
+        subject = '[Hoàng Hải Sneaker] Yêu cầu đặt lại mật khẩu';
         const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
         const resetLink = `${appUrl}/reset-password?token=${data.resetToken}`;
         htmlContent = `
           <p>Xin chào ${data.firstName},</p>
-          <p>Bạn nhận được email này vì đã yêu cầu đặt lại mật khẩu cho tài khoản Thanh Hương Store.</p>
+          <p>Bạn nhận được email này vì đã yêu cầu đặt lại mật khẩu cho tài khoản Hoàng Hải Sneaker.</p>
           <p>Vui lòng click vào link dưới đây để tiếp tục (hết hạn trong 1 giờ):</p>
           <a href="${resetLink}" target="_blank">${resetLink}</a>
         `;
         break;
 
       case 'wholesale-approved':
-        subject = '[Thanh Hương Store] Chúc mừng! Hồ sơ bán sỉ (B2B) đã được duyệt';
+        subject = '[Hoàng Hải Sneaker] Chúc mừng! Hồ sơ bán sỉ (B2B) đã được duyệt';
         htmlContent = `
           <p>Xin chào ${data.firstName},</p>
           <p>Đại diện của doanh nghiệp <strong>${data.companyName}</strong>,</p>
-          <p>Hồ sơ đăng ký tài khoản bán sỉ (B2B) của bạn đã được ban quản trị Thanh Hương Store phê duyệt.</p>
+          <p>Hồ sơ đăng ký tài khoản bán sỉ (B2B) của bạn đã được ban quản trị Hoàng Hải Sneaker phê duyệt.</p>
           <p>Bây giờ bạn có thể đăng nhập để hưởng mức giá ưu đãi sỉ và chiết khấu bậc thang.</p>
         `;
         break;
 
       case 'low-stock-alert':
-        subject = '[Thanh Hương Store - Alert] Cảnh báo sản phẩm sắp hết hàng';
+        subject = '[Hoàng Hải Sneaker - Alert] Cảnh báo sản phẩm sắp hết hàng';
         const itemsList = data.variants
           .map((v: any) => `<li>Variant [SKU: ${v.sku}] - ${v.name} (Tồn kho: ${v.stock})</li>`)
           .join('');

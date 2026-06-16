@@ -9,7 +9,7 @@ export default function PaymentPolicyPage() {
 
       <div>
         <h1 className="text-2xl sm:text-3xl font-extrabold text-on-surface tracking-tight">Phương Thức & Quy Định Thanh Toán</h1>
-        <p className="text-xs text-on-surface-variant/70 mt-1">Linh hoạt và an toàn cho mọi giao dịch mua sắm tại Thanh Hương Store.</p>
+        <p className="text-xs text-on-surface-variant/70 mt-1">Linh hoạt và an toàn cho mọi giao dịch mua sắm tại Hoàng Hải Sneaker.</p>
       </div>
 
       <div className="bg-white border border-surface-variant/50 rounded-2xl p-6 sm:p-8 shadow-xs text-xs sm:text-sm text-on-surface-variant leading-relaxed space-y-6 font-medium">
@@ -34,16 +34,16 @@ export default function PaymentPolicyPage() {
           <p>Dành cho khách hàng muốn thanh toán trước hoặc các đại lý mua sỉ thanh toán giá trị đơn hàng lớn:</p>
           <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3 text-xs font-mono text-on-surface max-w-md">
             <div>
-              <p className="font-bold text-[10px] text-gray-400 uppercase">Tài khoản Ngân hàng Vietcombank</p>
-              <p>Số tài khoản: **0071001234567**</p>
-              <p>Chủ tài khoản: **NGUYEN THI THANH HUONG**</p>
-              <p>Chi nhánh: Nam Sài Gòn, TP.HCM</p>
+              <p className="font-bold text-[10px] text-gray-400 uppercase">Tài khoản Ngân hàng Techcombank</p>
+              <p>Số tài khoản: **3988899979**</p>
+              <p>Chủ tài khoản: **DANG HOANG HAI**</p>
+              <p>Chi nhánh: TP. Hồ Chí Minh</p>
             </div>
             <div className="pt-2 border-t border-slate-200/60">
               <p className="font-bold text-[10px] text-gray-400 uppercase">Cú pháp chuyển khoản bắt buộc</p>
-              <p className="text-primary font-bold">THS [Mã đơn hàng của bạn]</p>
+              <p className="text-primary font-bold">HHSNEAKER [Mã đơn hàng của bạn]</p>
               <p className="text-[10px] font-sans text-on-surface-variant font-medium pt-1">
-                Ví dụ: **THS ORD-20260605-0001**. Hệ thống sẽ tự kiểm duyệt tự động và cập nhật trạng thái đã thanh toán sau khi nhận được tiền gửi từ 2 - 5 phút.
+                Ví dụ: **HHSNEAKER ORD-20260605-0001**. Hệ thống sẽ tự kiểm duyệt tự động và cập nhật trạng thái đã thanh toán sau khi nhận được tiền gửi từ 2 - 5 phút.
               </p>
             </div>
           </div>
@@ -67,7 +67,7 @@ export default function PaymentPolicyPage() {
             4. Bảo mật thông tin thanh toán
           </h3>
           <p>
-            Thanh Hương cam kết không lưu giữ thông tin thẻ ngân hàng hoặc tài khoản thanh toán của bạn trên máy chủ của shop. Mọi quy trình nhập liệu thông tin tài chính đều diễn ra trực tiếp trên cổng thanh toán trung gian được cấp phép của Nhà nước, đảm bảo an toàn tuyệt đối trước mọi nguy cơ rò rỉ dữ liệu.
+            Hoàng Hải Sneaker cam kết không lưu giữ thông tin thẻ ngân hàng hoặc tài khoản thanh toán của bạn trên máy chủ của shop. Mọi quy trình nhập liệu thông tin tài chính đều diễn ra trực tiếp trên cổng thanh toán trung gian được cấp phép của Nhà nước, đảm bảo an toàn tuyệt đối trước mọi nguy cơ rò rỉ dữ liệu.
           </p>
         </div>
 

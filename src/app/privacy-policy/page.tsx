@@ -9,7 +9,7 @@ export default function PrivacyPolicyPage() {
 
       <div>
         <h1 className="text-2xl sm:text-3xl font-extrabold text-on-surface tracking-tight">Chính Sách Bảo Mật Thông Tin</h1>
-        <p className="text-xs text-on-surface-variant/70 mt-1">Bảo vệ quyền lợi riêng tư tuyệt đối cho khách hàng sỉ/lẻ tại Thanh Hương Store.</p>
+        <p className="text-xs text-on-surface-variant/70 mt-1">Bảo vệ quyền lợi riêng tư tuyệt đối cho khách hàng sỉ/lẻ tại Hoàng Hải Sneaker.</p>
       </div>
 
       <div className="bg-white border border-surface-variant/50 rounded-2xl p-6 sm:p-8 shadow-xs text-xs sm:text-sm text-on-surface-variant leading-relaxed space-y-6 font-medium">
@@ -21,7 +21,7 @@ export default function PrivacyPolicyPage() {
             1. Mục đích thu thập dữ liệu khách hàng
           </h3>
           <p>
-            Thanh Hương Store chỉ thu thập các thông tin cơ bản liên quan trực tiếp đến việc xử lý đơn hàng và cung cấp dịch vụ khách hàng:
+            Hoàng Hải Sneaker chỉ thu thập các thông tin cơ bản liên quan trực tiếp đến việc xử lý đơn hàng và cung cấp dịch vụ khách hàng:
           </p>
           <ul className="list-disc pl-5 space-y-1">
             <li>Họ và tên, địa chỉ nhận hàng để shipper bàn giao sản phẩm.</li>
@@ -51,7 +51,7 @@ export default function PrivacyPolicyPage() {
             3. Cam kết bảo mật an toàn thông tin
           </h3>
           <p>
-            Chúng tôi cam kết bảo mật tuyệt đối các dữ liệu cá nhân của người mua. Thanh Hương Store tuyệt đối **KHÔNG chia sẻ, bán, hoặc cho thuê** thông tin người dùng cho bất kỳ bên thứ ba nào vì mục đích thương mại riêng của họ.
+            Chúng tôi cam kết bảo mật tuyệt đối các dữ liệu cá nhân của người mua. Hoàng Hải Sneaker tuyệt đối **KHÔNG chia sẻ, bán, hoặc cho thuê** thông tin người dùng cho bất kỳ bên thứ ba nào vì mục đích thương mại riêng của họ.
           </p>
           <p>
             Các thông tin giao nhận hàng chỉ được chia sẻ duy nhất cho đơn vị bưu cục đối tác giao hàng (như GHTK, Viettel Post) để đảm bảo việc giao vận hàng hóa chính xác.
@@ -65,7 +65,7 @@ export default function PrivacyPolicyPage() {
             4. Quyền chỉnh sửa và xóa thông tin dữ liệu
           </h3>
           <p>
-            Bạn có quyền đăng nhập vào tài khoản cá nhân trên website để cập nhật số điện thoại, mật khẩu hoặc cấu hình sổ địa chỉ nhận hàng bất kỳ lúc nào. Nếu có nhu cầu yêu cầu hệ thống xóa vĩnh viễn tài khoản và các dữ liệu liên quan, bạn vui lòng gửi thư yêu cầu tới địa chỉ Email: **hotro@thanhhuongstore.vn** để nhân viên hỗ trợ xóa thủ công.
+            Bạn có quyền đăng nhập vào tài khoản cá nhân trên website để cập nhật số điện thoại, mật khẩu hoặc cấu hình sổ địa chỉ nhận hàng bất kỳ lúc nào. Nếu có nhu cầu yêu cầu hệ thống xóa vĩnh viễn tài khoản và các dữ liệu liên quan, bạn vui lòng gửi thư yêu cầu tới địa chỉ Email: **support@hhsneaker.id.vn** để nhân viên hỗ trợ xóa thủ công.
           </p>
         </div>
 
