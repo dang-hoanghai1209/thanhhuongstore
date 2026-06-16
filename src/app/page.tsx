@@ -69,25 +69,25 @@ export default async function HomePage() {
   const fallbackCategories = [
     {
       name: "Tất Vớ Nam Nữ",
-      slug: "vo-thoi-trang",
+      slug: "tat-vo-nu",
       imageUrl: "https://images.unsplash.com/photo-1582966772680-860e372bb558?auto=format&fit=crop&w=400&q=80",
       description: "Cotton kháng khuẩn"
     },
     {
       name: "Bao Tay Lao Động",
-      slug: "vo-thoi-trang",
+      slug: "bao-ho-lao-dong",
       imageUrl: "https://images.unsplash.com/photo-1594913785162-e6785b423cb1?auto=format&fit=crop&w=400&q=80",
       description: "Sợi bền bỉ, chống trượt"
     },
     {
       name: "Xả Kho Đồ Bơi & Bikini",
-      slug: "do-boi",
+      slug: "do-lot-cao-cap",
       imageUrl: "https://images.unsplash.com/photo-1608231387042-66d1773070a5?auto=format&fit=crop&w=400&q=80",
       description: "Hàng tồn kho thanh lý"
     },
     {
       name: "Phụ Kiện Thời Trang",
-      slug: "do-boi",
+      slug: "phu-kien-chong-nang",
       imageUrl: "https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=400&q=80",
       description: "Kính, nón, đai lưng sỉ"
     }
@@ -319,7 +319,7 @@ export default async function HomePage() {
                       <span className="text-[9px] font-black text-brand-600 uppercase tracking-widest block">
                         {product.category?.name || 'Sản phẩm'}
                       </span>
-                      <h3 className="text-xs font-bold text-gray-900 group-hover:text-brand-600 transition-colors line-clamp-1 leading-tight">
+                      <h3 className="text-xs font-bold text-gray-900 group-hover:text-brand-600 transition-colors line-clamp-2 leading-tight">
                         {product.name}
                       </h3>
                     </div>

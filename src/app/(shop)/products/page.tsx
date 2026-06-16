@@ -142,7 +142,7 @@ export default async function ProductsCatalogPage({ searchParams }: ProductsPage
     <main className="min-h-screen bg-[#FAF9F6] text-gray-900 pb-24">
       <PageHeader 
         title={searchQuery ? `Tìm kiếm: "${searchQuery}"` : activeCategory ? activeCategory.name : 'Tất Cả Sản Phẩm'}
-        description={activeCategory ? `Bộ sưu tập các mẫu mã mới nhất thuộc danh mục ${activeCategory.name} cao cấp.` : 'Trải nghiệm mua sắm đẳng cấp với các dòng tất vớ, bikini nữ và đồ lót nam dệt sợi tự nhiên, kháng khuẩn vượt trội.'}
+        description={activeCategory ? `Bộ sưu tập các mẫu mã mới nhất thuộc danh mục ${activeCategory.name} cao cấp.` : 'Hoàng Hải Sneaker chuyên cung cấp sỉ các dòng tất vớ thời trang, bao tay lao động dệt sợi tự nhiên và phụ kiện thời trang giá tốt nhất.'}
         badge="Danh mục sản phẩm"
       />
 
