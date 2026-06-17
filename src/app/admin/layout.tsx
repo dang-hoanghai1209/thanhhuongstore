@@ -14,7 +14,8 @@ import {
   Tag,
   Percent,
   UserCheck,
-  BarChart2
+  BarChart2,
+  MessageCircle
 } from 'lucide-react';
 
 interface SidebarItem {
@@ -48,6 +49,11 @@ const sidebarItems: SidebarItem[] = [
     name: 'Khách hàng',
     href: '/admin/customers',
     icon: Users,
+  },
+  {
+    name: 'Tin nháº¯n',
+    href: '/admin/chat',
+    icon: MessageCircle,
   },
   {
     name: 'Tài khoản sỉ',
@@ -154,6 +160,8 @@ export default function AdminLayout({
               items.push({ label: 'Sản phẩm' });
             } else if (pathname.startsWith('/admin/customers')) {
               items.push({ label: 'Khách hàng' });
+            } else if (pathname.startsWith('/admin/chat')) {
+              items.push({ label: 'Tin nháº¯n' });
             } else if (pathname.startsWith('/admin/banners')) {
               items.push({ label: 'Banners' });
             } else if (pathname.startsWith('/admin/coupons')) {
