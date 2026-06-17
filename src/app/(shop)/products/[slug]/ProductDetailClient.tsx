@@ -17,6 +17,8 @@ import Link from 'next/link';
 import { useCartStore } from '@/store/useCartStore';
 import Breadcrumb from '@/components/ui/Breadcrumb';
 
+const DEFAULT_PRODUCT_IMAGE = '/uploads/products/tat-da-min.jpg';
+
 interface Variant {
   id: string;
   sku: string;
@@ -58,7 +60,7 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
   const { name, category, images, variants } = product;
 
   // 1. Gallery State
-  const defaultImage = images.find(img => img.isPrimary)?.url || images[0]?.url || 'https://images.unsplash.com/photo-1594913785162-e6785b423cb1?auto=format&fit=crop&w=600&q=80';
+  const defaultImage = images.find(img => img.isPrimary)?.url || images[0]?.url || DEFAULT_PRODUCT_IMAGE;
   const [activeImage, setActiveImage] = useState<string>(defaultImage);
 
   // 2. Zustand Store Actions

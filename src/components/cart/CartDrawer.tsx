@@ -39,7 +39,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
       color: "Trắng",
       price: 45000,
       quantity: 2,
-      imageUrl: "https://images.unsplash.com/photo-1582966772680-860e372bb558?auto=format&fit=crop&w=150&q=80",
+      imageUrl: "/uploads/products/tat-da-min.jpg",
       stock: 10
     },
     {
@@ -50,7 +50,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
       color: "Hồng Neon",
       price: 290000,
       quantity: 1,
-      imageUrl: "https://images.unsplash.com/photo-1608231387042-66d1773070a5?auto=format&fit=crop&w=150&q=80",
+      imageUrl: "/uploads/products/tat-bong-999.jpg",
       stock: 5
     }
   ]);

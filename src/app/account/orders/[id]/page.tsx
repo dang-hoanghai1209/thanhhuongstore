@@ -229,7 +229,7 @@ export default function AccountOrderDetailPage() {
                 <tbody className="divide-y divide-surface-variant/20 bg-white">
                   {order.items.map((item) => {
                     const primaryImage = item.variant?.product?.images?.find(img => img.isPrimary) || item.variant?.product?.images?.[0];
-                    const productImageUrl = primaryImage?.url || 'https://images.unsplash.com/photo-1582966772680-860e372bb558?auto=format&fit=crop&w=150&q=80';
+                    const productImageUrl = primaryImage?.url || '/uploads/products/tat-da-min.jpg';
                     const unitPrice = item.priceAtPurchase || item.unitPrice || 0;
                     const lineTotal = unitPrice * item.quantity;
 

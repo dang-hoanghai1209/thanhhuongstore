@@ -50,7 +50,7 @@ const products = [
     ],
     images: [
       {
-        url: 'https://images.unsplash.com/photo-1586350977771-b3b0abd50c82',
+        url: '/uploads/products/tat-da-min.jpg',
         isPrimary: true,
         sortOrder: 0,
       },
@@ -76,7 +76,7 @@ const products = [
     ],
     images: [
       {
-        url: 'https://images.unsplash.com/photo-1582966772680-860e372bb558',
+        url: '/uploads/products/tat-tron-min-mausang.jpg',
         isPrimary: true,
         sortOrder: 0,
       },
@@ -114,7 +114,7 @@ const products = [
     ],
     images: [
       {
-        url: 'https://images.unsplash.com/photo-1570976447640-ac859083963f',
+        url: '/uploads/products/tat-bong-999.jpg',
         isPrimary: true,
         sortOrder: 0,
       },
@@ -149,7 +149,7 @@ const products = [
     ],
     images: [
       {
-        url: 'https://images.unsplash.com/photo-1530137073520-4ea6e2f8e5e3',
+        url: '/uploads/products/bao-tay-lao-dong-den-xam.jpg',
         isPrimary: true,
         sortOrder: 0,
       },

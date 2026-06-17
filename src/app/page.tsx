@@ -2,6 +2,14 @@ import { ShoppingBag, Sparkles, ArrowRight, ShieldCheck, Truck, RotateCcw, Flame
 import Link from 'next/link';
 import prisma from '@/lib/prisma';
 
+const DEFAULT_PRODUCT_IMAGE = '/uploads/products/tat-da-min.jpg';
+const CATEGORY_IMAGE_FALLBACKS = [
+  '/uploads/products/tat-da-min.jpg',
+  '/uploads/products/bao-tay-lao-dong-den-xam.jpg',
+  '/uploads/products/tat-bong-999.jpg',
+  '/uploads/products/tat-nam-5-bo-bao-bi.jpg',
+];
+
 // Define TS types for safe mapping
 interface ProductImage {
   id: string;
@@ -70,42 +78,36 @@ export default async function HomePage() {
     {
       name: "Tất Vớ Nam Nữ",
       slug: "tat-vo-nu",
-      imageUrl: "https://images.unsplash.com/photo-1582966772680-860e372bb558?auto=format&fit=crop&w=400&q=80",
+      imageUrl: CATEGORY_IMAGE_FALLBACKS[0],
       description: "Cotton kháng khuẩn"
     },
     {
       name: "Bao Tay Lao Động",
       slug: "bao-ho-lao-dong",
-      imageUrl: "https://images.unsplash.com/photo-1594913785162-e6785b423cb1?auto=format&fit=crop&w=400&q=80",
+      imageUrl: CATEGORY_IMAGE_FALLBACKS[1],
       description: "Sợi bền bỉ, chống trượt"
     },
     {
       name: "Xả Kho Đồ Bơi & Bikini",
       slug: "do-lot-cao-cap",
-      imageUrl: "https://images.unsplash.com/photo-1608231387042-66d1773070a5?auto=format&fit=crop&w=400&q=80",
+      imageUrl: CATEGORY_IMAGE_FALLBACKS[2],
       description: "Hàng tồn kho thanh lý"
     },
     {
       name: "Phụ Kiện Thời Trang",
       slug: "phu-kien-chong-nang",
-      imageUrl: "https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=400&q=80",
+      imageUrl: CATEGORY_IMAGE_FALLBACKS[3],
       description: "Kính, nón, đai lưng sỉ"
     }
   ];
 
-  // Map Unsplash thumbnails dynamically if we have category items from DB
+  // Map local product thumbnails dynamically if we have category items from DB
   const mappedCategories = categories.length > 0 ? categories.map((cat, idx) => {
-    const fallbacks = [
-      "https://images.unsplash.com/photo-1594913785162-e6785b423cb1?auto=format&fit=crop&w=400&q=80",
-      "https://images.unsplash.com/photo-1582966772680-860e372bb558?auto=format&fit=crop&w=400&q=80",
-      "https://images.unsplash.com/photo-1608231387042-66d1773070a5?auto=format&fit=crop&w=400&q=80",
-      "https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=400&q=80"
-    ];
     const desc = ["Cotton kháng khuẩn", "Bền bỉ chống trượt", "Thanh lý giá sập sàn", "Đa dạng mẫu mã"];
     return {
       name: cat.name,
       slug: cat.slug,
-      imageUrl: fallbacks[idx % fallbacks.length],
+      imageUrl: CATEGORY_IMAGE_FALLBACKS[idx % CATEGORY_IMAGE_FALLBACKS.length],
       description: desc[idx % desc.length]
     };
   }) : fallbackCategories;
@@ -284,7 +286,7 @@ export default async function HomePage() {
 
               // Images fallback
               const primaryImage = product.images.find(img => img.isPrimary) || product.images[0];
-              const imageUrl = primaryImage ? primaryImage.url : 'https://images.unsplash.com/photo-1594913785162-e6785b423cb1?auto=format&fit=crop&w=400&q=80';
+              const imageUrl = primaryImage ? primaryImage.url : DEFAULT_PRODUCT_IMAGE;
 
               return (
                 <div
@@ -357,7 +359,7 @@ export default async function HomePage() {
           {/* Banner 1 */}
           <div className="relative rounded-brand-lg overflow-hidden bg-brand-950 p-8 sm:p-12 flex flex-col justify-between min-h-60 text-white shadow-2xs group border border-white/5">
             <img
-              src="https://images.unsplash.com/photo-1582966772680-860e372bb558?auto=format&fit=crop&w=600&q=80"
+              src="/uploads/products/tat-nam-5-bo-bao-bi.jpg"
               alt="Promo 1"
               className="absolute inset-0 w-full h-full object-cover opacity-25 group-hover:scale-102 transition duration-500"
             />
@@ -385,7 +387,7 @@ export default async function HomePage() {
           {/* Banner 2 */}
           <div className="relative rounded-brand-lg overflow-hidden bg-accent-pink/95 p-8 sm:p-12 flex flex-col justify-between min-h-60 text-white shadow-2xs group">
             <img
-              src="https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=600&q=80"
+              src="/uploads/products/tat-bong-999.jpg"
               alt="Promo 2"
               className="absolute inset-0 w-full h-full object-cover opacity-20 group-hover:scale-102 transition duration-500"
             />

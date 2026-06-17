@@ -4,6 +4,8 @@ import React from 'react';
 import Link from 'next/link';
 import { useCart } from '@/hooks';
 
+const DEFAULT_PRODUCT_IMAGE = '/uploads/products/tat-da-min.jpg';
+
 export interface ProductCardProps {
   product: {
     id: string;
@@ -45,7 +47,7 @@ export default function ProductCard({ product }: ProductCardProps) {
   const isOutOfStock = totalStock === 0;
 
   const primaryImage = product.images?.find(img => img.isPrimary) || product.images?.[0];
-  const imageUrl = primaryImage ? primaryImage.url : 'https://images.unsplash.com/photo-1582966772680-860e372bb558?auto=format&fit=crop&w=400&q=80';
+  const imageUrl = primaryImage ? primaryImage.url : DEFAULT_PRODUCT_IMAGE;
 
   const handleQuickAdd = async (e: React.MouseEvent) => {
     e.preventDefault();

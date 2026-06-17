@@ -237,7 +237,7 @@ export default function ProductsClient({ initialProducts, categories }: Products
     setSaving(true);
     try {
       // Use fallback image if empty
-      const finalImageUrl = formImageUrl.trim() || 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&w=500&q=80';
+      const finalImageUrl = formImageUrl.trim() || '/uploads/products/tat-da-min.jpg';
       const imagesPayload = [{ url: finalImageUrl, isPrimary: true }];
 
       if (editingProduct) {
