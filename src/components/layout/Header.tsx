@@ -7,43 +7,82 @@ import { useCartStore } from '@/store/useCartStore';
 import { useAuthStore } from '@/store';
 import { useRouter } from 'next/navigation';
 
+interface Subcategory {
+  name: string;
+  href: string;
+}
+
+interface NavItem {
+  name: string;
+  slug?: string;
+  featured?: string;
+  subcategories?: Subcategory[];
+  href?: string;
+}
+
 // Navigation Items structure for Mega Menu
-const navItems = [
+const navItems: NavItem[] = [
   {
-    name: "Tất Vớ Cao Cấp",
-    slug: "vo-co-ngan-cotton-premium", // maps to a sample category
-    type: "SOCK",
-    featured: "Tất kháng khuẩn, khử mùi vượt trội dệt sợi cotton cao cấp.",
+    name: "Tất / Vớ",
+    slug: "tat-da-min",
+    featured: "Tất vớ sỉ thời trang dệt sợi tự nhiên, kháng khuẩn khử mùi và cực kỳ êm ái.",
     subcategories: [
-      { name: "Tất Cổ Ngắn Cushioning", href: "/products/vo-co-ngan-cotton-premium" },
-      { name: "Tất Dệt Lông Cừu Merino", href: "/categories/vo-thoi-trang" },
-      { name: "Vớ Lười Silicon Chống Tuột", href: "/categories/vo-thoi-trang" },
-      { name: "Tất Dài Thể Thao", href: "/categories/vo-thoi-trang" }
+      { name: "Tất Cả Tất & Vớ", href: "/categories/tat-vo" },
+      { name: "Tất Da Mịn", href: "/products/tat-da-min" },
+      { name: "Tất Hảo Li", href: "/products/tat-hao-li" },
+      { name: "Tất T&T", href: "/products/tat-t-and-t" },
+      { name: "Tất Trơn Mịn Sáng Màu", href: "/products/tat-tron-min-mau-sang" }
     ]
   },
   {
-    name: "Bikini & Đồ Bơi Nữ",
-    slug: "ao-boi-nu-ocean",
-    type: "SWIMWEAR",
-    featured: "BST Áo bơi nữ Ocean thun Ý co giãn tuyệt vời tôn dáng thon thả.",
+    name: "Tất Nam",
+    slug: "tat-nam-5-doi-co-bao-bi",
+    featured: "Tất nam cổ ngắn, cổ trung chất liệu cotton co giãn tốt, thoáng khí.",
     subcategories: [
-      { name: "Bikini Hai Mảnh Sexy", href: "/categories/do-boi" },
-      { name: "Bikini Một Mảnh Cut-out", href: "/categories/do-boi" },
-      { name: "Đồ Bơi Dài Tay Chống Nắng", href: "/categories/do-boi" },
-      { name: "Váy Đi Biển Nữ Tính", href: "/categories/do-boi" }
+      { name: "Tất Cả Tất Nam", href: "/categories/tat-nam" },
+      { name: "Tất Nam 5 Đôi Có Bao Bì", href: "/products/tat-nam-5-doi-co-bao-bi" },
+      { name: "Tất A Nam", href: "/products/tat-a-nam" }
     ]
   },
   {
-    name: "Đồ Lót Nam Premium",
-    slug: "quan-boi-nam-active",
-    type: "UNDERWEAR",
-    featured: "Dòng sịp nam trunk và quần bơi mát mẻ co giãn vượt trội.",
+    name: "Tất Bông / Tất Dày",
+    slug: "tat-bong-999",
+    featured: "Tất bông, tất xù dày ấm áp, chất liệu cao cấp giữ nhiệt cực tốt.",
     subcategories: [
-      { name: "Quần Lót Boxer Co Giãn", href: "/categories/do-boi" },
-      { name: "Quần Lót Brief Gọn Gàng", href: "/categories/do-boi" },
-      { name: "Quần Lót Trunk Mát Mẻ", href: "/categories/do-boi" },
-      { name: "Áo Ba Lỗ Ôm Sát Nam", href: "/categories/do-boi" }
+      { name: "Tất Cả Tất Bông & Dày", href: "/categories/tat-bong-tat-day" },
+      { name: "Tất Bông 999", href: "/products/tat-bong-999" },
+      { name: "Tất Xù Bông", href: "/products/tat-xu-bong" }
     ]
+  },
+  {
+    name: "Bao Tay Lao Động",
+    slug: "bao-tay-lao-dong-den-xam",
+    featured: "Bao tay bảo hộ dệt sợi siêu bền, chống trơn trượt và bảo vệ an toàn.",
+    subcategories: [
+      { name: "Tất Cả Bao Tay", href: "/categories/bao-tay-lao-dong" },
+      { name: "Bao Tay Đen Xám", href: "/products/bao-tay-lao-dong-den-xam" },
+      { name: "Bao Tay Đen", href: "/products/bao-tay-lao-dong-den" },
+      { name: "Bao Tay Trắng", href: "/products/bao-tay-lao-dong-trang" }
+    ]
+  },
+  {
+    name: "Hàng Nhiều Mẫu Sỉ",
+    slug: "tat-nhieu-mau-gia-si",
+    featured: "Các mẫu tất vớ bán sỉ đa dạng kiểu dáng màu sắc theo từng lô xả kho.",
+    subcategories: [
+      { name: "Hàng Nhiều Mẫu Giá Sỉ", href: "/categories/hang-nhieu-mau-gia-si" },
+      { name: "Tất Nhiều Mẫu Giá Sỉ", href: "/products/tat-nhieu-mau-gia-si" },
+      { name: "Tất Vớ Sỉ Nhiều Màu", href: "/products/mau-tat-vo-ban-si-nhieu-mau" },
+      { name: "Tất Vớ Nhiều Màu Tùy Lô", href: "/products/tat-vo-nhieu-mau-tuy-lo-hang" }
+    ]
+  },
+  {
+    name: "Sản Phẩm",
+    href: "/products"
+  },
+  {
+    name: "Liên Hệ Sỉ",
+    href: "/wholesale/register"
   }
 ];
 
@@ -151,83 +190,101 @@ export default function Header() {
 
             {/* 3. DESKTOP NAVIGATION MEGA MENU */}
             <nav className="hidden lg:flex items-center gap-8 h-full">
-              {navItems.map((item, idx) => (
-                <div
-                  key={idx}
-                  className="h-full flex items-center"
-                  onMouseEnter={() => setHoveredMenu(idx)}
-                  onMouseLeave={() => setHoveredMenu(null)}
-                >
-                  <button className="flex items-center gap-1 text-xs font-bold text-gray-700 hover:text-primary uppercase tracking-wider transition py-8">
-                    {item.name}
-                    <span className="material-symbols-outlined text-gray-400 text-[18px] transition-transform duration-200" style={{ transform: hoveredMenu === idx ? 'rotate(180deg)' : 'rotate(0deg)' }}>
-                      keyboard_arrow_down
-                    </span>
-                  </button>
+              {navItems.map((item, idx) => {
+                if (item.href) {
+                  return (
+                    <Link
+                      key={idx}
+                      href={item.href}
+                      className="text-xs font-bold text-gray-700 hover:text-primary uppercase tracking-wider transition py-8"
+                    >
+                      {item.name}
+                    </Link>
+                  );
+                }
 
-                  {/* Mega Menu Dropdown Box */}
-                  {hoveredMenu === idx && (
-                    <div className="absolute top-20 left-0 w-full bg-white border-b border-gray-200 shadow-xl animate-fadeIn z-50">
-                      <div className="max-w-7xl mx-auto px-8 py-10 grid grid-cols-4 gap-8">
-                        {/* Subcategory List (Cols 1 & 2) */}
-                        <div className="col-span-2 grid grid-cols-2 gap-x-8 gap-y-3">
-                          <h4 className="col-span-2 text-[10px] font-black text-gray-400 uppercase tracking-widest pb-2 border-b border-gray-100 mb-2">
-                            Dòng sản phẩm
-                          </h4>
-                          {item.subcategories.map((sub, sIdx) => (
-                            <Link
-                              key={sIdx}
-                              href={sub.href}
-                              className="text-xs font-bold text-gray-700 hover:text-primary transition flex items-center gap-1 group"
-                            >
-                              <span className="material-symbols-outlined text-gray-300 group-hover:text-primary text-[16px] transition-transform group-hover:translate-x-0.5">
-                                arrow_right_alt
-                              </span>
-                              {sub.name}
-                            </Link>
-                          ))}
-                        </div>
+                return (
+                  <div
+                    key={idx}
+                    className="h-full flex items-center"
+                    onMouseEnter={() => setHoveredMenu(idx)}
+                    onMouseLeave={() => setHoveredMenu(null)}
+                  >
+                    <button className="flex items-center gap-1 text-xs font-bold text-gray-700 hover:text-primary uppercase tracking-wider transition py-8">
+                      {item.name}
+                      <span className="material-symbols-outlined text-gray-400 text-[18px] transition-transform duration-200" style={{ transform: hoveredMenu === idx ? 'rotate(180deg)' : 'rotate(0deg)' }}>
+                        keyboard_arrow_down
+                      </span>
+                    </button>
 
-                        {/* Middle Category Intro Column */}
-                        <div className="p-5 bg-gray-50 border border-gray-100 rounded-brand-md flex flex-col justify-between">
-                          <div className="space-y-2">
-                            <span className="text-[9px] font-extrabold text-white bg-primary px-2 py-0.5 rounded uppercase tracking-wider">
-                              Nổi bật
-                            </span>
-                            <h4 className="text-xs font-extrabold text-gray-900 mt-1">{item.name}</h4>
-                            <p className="text-[11px] text-gray-500 leading-relaxed mt-2 font-medium">
-                              {item.featured}
-                            </p>
+                    {/* Mega Menu Dropdown Box */}
+                    {hoveredMenu === idx && item.subcategories && (
+                      <div className="absolute top-20 left-0 w-full bg-white border-b border-gray-200 shadow-xl animate-fadeIn z-50">
+                        <div className="max-w-7xl mx-auto px-8 py-10 grid grid-cols-4 gap-8">
+                          {/* Subcategory List (Cols 1 & 2) */}
+                          <div className="col-span-2 grid grid-cols-2 gap-x-8 gap-y-3">
+                            <h4 className="col-span-2 text-[10px] font-black text-gray-400 uppercase tracking-widest pb-2 border-b border-gray-100 mb-2">
+                              Dòng sản phẩm
+                            </h4>
+                            {item.subcategories.map((sub, sIdx) => (
+                              <Link
+                                key={sIdx}
+                                href={sub.href}
+                                className="text-xs font-bold text-gray-700 hover:text-primary transition flex items-center gap-1 group"
+                              >
+                                <span className="material-symbols-outlined text-gray-300 group-hover:text-primary text-[16px] transition-transform group-hover:translate-x-0.5">
+                                  arrow_right_alt
+                                </span>
+                                {sub.name}
+                              </Link>
+                            ))}
                           </div>
 
-                          <Link
-                            href={`/products/${item.slug}`}
-                            className="text-xs font-bold text-primary hover:text-primary-container mt-4 flex items-center gap-1 group"
-                          >
-                            Xem sản phẩm bán chạy nhất
-                            <span className="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">arrow_right_alt</span>
-                          </Link>
-                        </div>
+                          {/* Middle Category Intro Column */}
+                          <div className="p-5 bg-gray-50 border border-gray-100 rounded-brand-md flex flex-col justify-between">
+                            <div className="space-y-2">
+                              <span className="text-[9px] font-extrabold text-white bg-primary px-2 py-0.5 rounded uppercase tracking-wider">
+                                Nổi bật
+                              </span>
+                              <h4 className="text-xs font-extrabold text-gray-900 mt-1">{item.name}</h4>
+                              {item.featured && (
+                                <p className="text-[11px] text-gray-500 leading-relaxed mt-2 font-medium">
+                                  {item.featured}
+                                </p>
+                              )}
+                            </div>
 
-                        {/* Marketing Promo Card Banner */}
-                        <div className="relative rounded-brand-md overflow-hidden bg-primary-container flex flex-col justify-end p-5 text-white">
-                          <img
-                            src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&w=400&q=80"
-                            alt="Collection Promo"
-                            className="absolute inset-0 w-full h-full object-cover opacity-35"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                          <div className="relative z-10 space-y-1">
-                            <p className="text-[9px] text-accent-gold font-extrabold uppercase tracking-widest">Đặc quyền B2B</p>
-                            <p className="text-xs font-extrabold">Chiết khấu sỉ tự động</p>
-                            <p className="text-[10px] text-white/70 font-medium">Mua nhiều giảm lớn tại giỏ hàng</p>
+                            {item.slug && (
+                              <Link
+                                href={`/products/${item.slug}`}
+                                className="text-xs font-bold text-primary hover:text-primary-container mt-4 flex items-center gap-1 group"
+                              >
+                                Xem sản phẩm bán chạy nhất
+                                <span className="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">arrow_right_alt</span>
+                              </Link>
+                            )}
+                          </div>
+
+                          {/* Marketing Promo Card Banner */}
+                          <div className="relative rounded-brand-md overflow-hidden bg-primary-container flex flex-col justify-end p-5 text-white">
+                            <img
+                              src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&w=400&q=80"
+                              alt="Collection Promo"
+                              className="absolute inset-0 w-full h-full object-cover opacity-35"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                            <div className="relative z-10 space-y-1">
+                              <p className="text-[9px] text-accent-gold font-extrabold uppercase tracking-widest">Đặc quyền B2B</p>
+                              <p className="text-xs font-extrabold">Chiết khấu sỉ tự động</p>
+                              <p className="text-[10px] text-white/70 font-medium">Mua nhiều giảm lớn tại giỏ hàng</p>
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  )}
-                </div>
-              ))}
+                    )}
+                  </div>
+                );
+              })}
             </nav>
 
             {/* 4. SEARCH BAR (Desktop) */}
@@ -437,26 +494,42 @@ export default function Header() {
 
             {/* Mobile Nav Links list */}
             <div className="flex-1 space-y-6">
-              {navItems.map((item, idx) => (
-                <div key={idx} className="space-y-3">
-                  <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest border-b border-gray-100 pb-1.5">
-                    {item.name}
-                  </h4>
-                  <div className="grid grid-cols-1 gap-2.5 pl-2">
-                    {item.subcategories.map((sub, sIdx) => (
+              {navItems.map((item, idx) => {
+                if (item.href) {
+                  return (
+                    <div key={idx} className="pt-2">
                       <Link
-                        key={sIdx}
-                        href={sub.href}
+                        href={item.href}
                         onClick={() => setMobileMenuOpen(false)}
-                        className="text-xs font-bold text-gray-700 hover:text-primary transition flex items-center gap-1"
+                        className="text-xs font-extrabold text-gray-900 uppercase tracking-widest block py-2 border-b border-gray-100"
                       >
-                        <span className="material-symbols-outlined text-gray-300 text-[16px]">keyboard_arrow_right</span>
-                        {sub.name}
+                        {item.name}
                       </Link>
-                    ))}
+                    </div>
+                  );
+                }
+
+                return (
+                  <div key={idx} className="space-y-3">
+                    <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest border-b border-gray-100 pb-1.5">
+                      {item.name}
+                    </h4>
+                    <div className="grid grid-cols-1 gap-2.5 pl-2">
+                      {item.subcategories?.map((sub, sIdx) => (
+                        <Link
+                          key={sIdx}
+                          href={sub.href}
+                          onClick={() => setMobileMenuOpen(false)}
+                          className="text-xs font-bold text-gray-700 hover:text-primary transition flex items-center gap-1"
+                        >
+                          <span className="material-symbols-outlined text-gray-300 text-[16px]">keyboard_arrow_right</span>
+                          {sub.name}
+                        </Link>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
 
             {/* Mobile Footer Area */}

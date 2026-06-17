@@ -76,28 +76,28 @@ export default async function HomePage() {
   // Categories fallback if DB is empty or fails
   const fallbackCategories = [
     {
-      name: "Tất Vớ Nam Nữ",
-      slug: "tat-vo-nu",
+      name: "Tất / Vớ",
+      slug: "tat-vo",
       imageUrl: CATEGORY_IMAGE_FALLBACKS[0],
       description: "Cotton kháng khuẩn"
     },
     {
-      name: "Bao Tay Lao Động",
-      slug: "bao-ho-lao-dong",
+      name: "Bao tay lao động",
+      slug: "bao-tay-lao-dong",
       imageUrl: CATEGORY_IMAGE_FALLBACKS[1],
       description: "Sợi bền bỉ, chống trượt"
     },
     {
-      name: "Xả Kho Đồ Bơi & Bikini",
-      slug: "do-lot-cao-cap",
+      name: "Tất bông / tất dày",
+      slug: "tat-bong-tat-day",
       imageUrl: CATEGORY_IMAGE_FALLBACKS[2],
-      description: "Hàng tồn kho thanh lý"
+      description: "Mềm mại ấm áp"
     },
     {
-      name: "Phụ Kiện Thời Trang",
-      slug: "phu-kien-chong-nang",
+      name: "Tất nam",
+      slug: "tat-nam",
       imageUrl: CATEGORY_IMAGE_FALLBACKS[3],
-      description: "Kính, nón, đai lưng sỉ"
+      description: "Lịch lãm thoải mái"
     }
   ];
 
