@@ -7,82 +7,89 @@ import { useCartStore } from '@/store/useCartStore';
 import { useAuthStore } from '@/store';
 import { useRouter } from 'next/navigation';
 
-interface Subcategory {
+interface DropdownItem {
   name: string;
   href: string;
 }
 
-interface NavItem {
+interface FeaturedProduct {
   name: string;
-  slug?: string;
-  featured?: string;
-  subcategories?: Subcategory[];
-  href?: string;
+  slug: string;
+  image: string;
+  price: string;
 }
 
-// Navigation Items structure for Mega Menu
+interface NavItem {
+  name: string;
+  href?: string;
+  badge?: string;
+  dropdownItems?: DropdownItem[];
+  featuredProducts?: FeaturedProduct[];
+}
+
+// Navigation Items structure for Main Menu
 const navItems: NavItem[] = [
   {
-    name: "Tất / Vớ",
-    slug: "tat-da-min",
-    featured: "Tất vớ sỉ thời trang dệt sợi tự nhiên, kháng khuẩn khử mùi và cực kỳ êm ái.",
-    subcategories: [
-      { name: "Tất Cả Tất & Vớ", href: "/categories/tat-vo" },
-      { name: "Tất Da Mịn", href: "/products/tat-da-min" },
-      { name: "Tất Hảo Li", href: "/products/tat-hao-li" },
-      { name: "Tất T&T", href: "/products/tat-t-and-t" },
-      { name: "Tất Trơn Mịn Sáng Màu", href: "/products/tat-tron-min-mau-sang" }
-    ]
+    name: "Trang chủ",
+    href: "/"
   },
   {
-    name: "Tất Nam",
-    slug: "tat-nam-5-doi-co-bao-bi",
-    featured: "Tất nam cổ ngắn, cổ trung chất liệu cotton co giãn tốt, thoáng khí.",
-    subcategories: [
-      { name: "Tất Cả Tất Nam", href: "/categories/tat-nam" },
-      { name: "Tất Nam 5 Đôi Có Bao Bì", href: "/products/tat-nam-5-doi-co-bao-bi" },
-      { name: "Tất A Nam", href: "/products/tat-a-nam" }
-    ]
-  },
-  {
-    name: "Tất Bông / Tất Dày",
-    slug: "tat-bong-999",
-    featured: "Tất bông, tất xù dày ấm áp, chất liệu cao cấp giữ nhiệt cực tốt.",
-    subcategories: [
-      { name: "Tất Cả Tất Bông & Dày", href: "/categories/tat-bong-tat-day" },
-      { name: "Tất Bông 999", href: "/products/tat-bong-999" },
-      { name: "Tất Xù Bông", href: "/products/tat-xu-bong" }
-    ]
-  },
-  {
-    name: "Bao Tay Lao Động",
-    slug: "bao-tay-lao-dong-den-xam",
-    featured: "Bao tay bảo hộ dệt sợi siêu bền, chống trơn trượt và bảo vệ an toàn.",
-    subcategories: [
-      { name: "Tất Cả Bao Tay", href: "/categories/bao-tay-lao-dong" },
-      { name: "Bao Tay Đen Xám", href: "/products/bao-tay-lao-dong-den-xam" },
-      { name: "Bao Tay Đen", href: "/products/bao-tay-lao-dong-den" },
-      { name: "Bao Tay Trắng", href: "/products/bao-tay-lao-dong-trang" }
-    ]
-  },
-  {
-    name: "Hàng Nhiều Mẫu Sỉ",
-    slug: "tat-nhieu-mau-gia-si",
-    featured: "Các mẫu tất vớ bán sỉ đa dạng kiểu dáng màu sắc theo từng lô xả kho.",
-    subcategories: [
-      { name: "Hàng Nhiều Mẫu Giá Sỉ", href: "/categories/hang-nhieu-mau-gia-si" },
-      { name: "Tất Nhiều Mẫu Giá Sỉ", href: "/products/tat-nhieu-mau-gia-si" },
-      { name: "Tất Vớ Sỉ Nhiều Màu", href: "/products/mau-tat-vo-ban-si-nhieu-mau" },
-      { name: "Tất Vớ Nhiều Màu Tùy Lô", href: "/products/tat-vo-nhieu-mau-tuy-lo-hang" }
-    ]
-  },
-  {
-    name: "Sản Phẩm",
+    name: "Sản phẩm",
     href: "/products"
   },
   {
-    name: "Liên Hệ Sỉ",
-    href: "/wholesale/register"
+    name: "Tất / Vớ",
+    dropdownItems: [
+      { name: "Tất cả Tất & Vớ", href: "/categories/tat-vo" },
+      { name: "Tất nam", href: "/categories/tat-nam" },
+      { name: "Tất bông / tất dày", href: "/categories/tat-bong-tat-day" },
+      { name: "Hàng nhiều mẫu giá sỉ", href: "/categories/hang-nhieu-mau-gia-si" }
+    ],
+    featuredProducts: [
+      {
+        name: "Tất da mịn",
+        slug: "tat-da-min",
+        image: "/uploads/products/tat-da-min.jpg",
+        price: "15.000 đ"
+      },
+      {
+        name: "Tất Nam 5 Đôi",
+        slug: "tat-nam-5-doi-co-bao-bi",
+        image: "/uploads/products/tat-nam-5-bo-bao-bi.jpg",
+        price: "35.000 đ"
+      }
+    ]
+  },
+  {
+    name: "Bao tay",
+    dropdownItems: [
+      { name: "Bao tay lao động", href: "/categories/bao-tay-lao-dong" },
+      { name: "Bao tay đen xám", href: "/products/bao-tay-lao-dong-den-xam" },
+      { name: "Bao tay trắng", href: "/products/bao-tay-lao-dong-trang" }
+    ],
+    featuredProducts: [
+      {
+        name: "Bao tay đen xám",
+        slug: "bao-tay-lao-dong-den-xam",
+        image: "/uploads/products/bao-tay-lao-dong-den-xam.jpg",
+        price: "6.000 đ"
+      },
+      {
+        name: "Bao tay trắng",
+        slug: "bao-tay-lao-dong-trang",
+        image: "/uploads/products/bao-tay-lao-dong-trang.jpg",
+        price: "5.000 đ"
+      }
+    ]
+  },
+  {
+    name: "Hàng sỉ",
+    href: "/wholesale/register",
+    badge: "B2B"
+  },
+  {
+    name: "Liên hệ",
+    href: "/contact"
   }
 ];
 
@@ -188,17 +195,22 @@ export default function Header() {
               <span className="text-base sm:text-lg font-black uppercase tracking-widest text-on-surface">Hoàng Hải Sneaker</span>
             </Link>
 
-            {/* 3. DESKTOP NAVIGATION MEGA MENU */}
-            <nav className="hidden lg:flex items-center gap-8 h-full">
+            {/* 3. DESKTOP NAVIGATION MENU */}
+            <nav className="hidden lg:flex items-center gap-6 xl:gap-8 h-full">
               {navItems.map((item, idx) => {
                 if (item.href) {
                   return (
                     <Link
                       key={idx}
                       href={item.href}
-                      className="text-xs font-bold text-gray-700 hover:text-primary uppercase tracking-wider transition py-8"
+                      className="text-xs font-bold text-gray-750 hover:text-primary uppercase tracking-wider transition py-8 flex items-center gap-1 group"
                     >
                       {item.name}
+                      {item.badge && (
+                        <span className="bg-primary/10 text-primary text-[8px] font-extrabold px-1.5 py-0.5 rounded-full uppercase tracking-wider transition-all group-hover:bg-primary group-hover:text-white">
+                          {item.badge}
+                        </span>
+                      )}
                     </Link>
                   );
                 }
@@ -206,80 +218,70 @@ export default function Header() {
                 return (
                   <div
                     key={idx}
-                    className="h-full flex items-center"
+                    className="h-full flex items-center relative"
                     onMouseEnter={() => setHoveredMenu(idx)}
                     onMouseLeave={() => setHoveredMenu(null)}
                   >
-                    <button className="flex items-center gap-1 text-xs font-bold text-gray-700 hover:text-primary uppercase tracking-wider transition py-8">
+                    <button className="flex items-center gap-1 text-xs font-bold text-gray-750 hover:text-primary uppercase tracking-wider transition py-8">
                       {item.name}
                       <span className="material-symbols-outlined text-gray-400 text-[18px] transition-transform duration-200" style={{ transform: hoveredMenu === idx ? 'rotate(180deg)' : 'rotate(0deg)' }}>
                         keyboard_arrow_down
                       </span>
                     </button>
 
-                    {/* Mega Menu Dropdown Box */}
-                    {hoveredMenu === idx && item.subcategories && (
-                      <div className="absolute top-20 left-0 w-full bg-white border-b border-gray-200 shadow-xl animate-fadeIn z-50">
-                        <div className="max-w-7xl mx-auto px-8 py-10 grid grid-cols-4 gap-8">
-                          {/* Subcategory List (Cols 1 & 2) */}
-                          <div className="col-span-2 grid grid-cols-2 gap-x-8 gap-y-3">
-                            <h4 className="col-span-2 text-[10px] font-black text-gray-400 uppercase tracking-widest pb-2 border-b border-gray-100 mb-2">
-                              Dòng sản phẩm
-                            </h4>
-                            {item.subcategories.map((sub, sIdx) => (
+                    {/* Clean Dropdown Box */}
+                    {hoveredMenu === idx && item.dropdownItems && (
+                      <div className="absolute top-[80px] left-1/2 -translate-x-1/2 w-[460px] bg-white border border-gray-100 rounded-brand-md shadow-lg py-5 px-6 grid grid-cols-2 gap-6 animate-fadeIn z-50">
+                        {/* Left: Category Links */}
+                        <div className="space-y-3 text-left">
+                          <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest pb-1.5 border-b border-gray-100">
+                            Danh mục
+                          </p>
+                          <div className="space-y-2 flex flex-col">
+                            {item.dropdownItems.map((sub, sIdx) => (
                               <Link
                                 key={sIdx}
                                 href={sub.href}
-                                className="text-xs font-bold text-gray-700 hover:text-primary transition flex items-center gap-1 group"
+                                className="text-xs font-bold text-gray-700 hover:text-primary transition flex items-center gap-1 group/link"
                               >
-                                <span className="material-symbols-outlined text-gray-300 group-hover:text-primary text-[16px] transition-transform group-hover:translate-x-0.5">
-                                  arrow_right_alt
+                                <span className="material-symbols-outlined text-gray-300 group-hover/link:text-primary text-[16px] transition-transform group-hover/link:translate-x-0.5">
+                                  chevron_right
                                 </span>
                                 {sub.name}
                               </Link>
                             ))}
                           </div>
-
-                          {/* Middle Category Intro Column */}
-                          <div className="p-5 bg-gray-50 border border-gray-100 rounded-brand-md flex flex-col justify-between">
-                            <div className="space-y-2">
-                              <span className="text-[9px] font-extrabold text-white bg-primary px-2 py-0.5 rounded uppercase tracking-wider">
-                                Nổi bật
-                              </span>
-                              <h4 className="text-xs font-extrabold text-gray-900 mt-1">{item.name}</h4>
-                              {item.featured && (
-                                <p className="text-[11px] text-gray-500 leading-relaxed mt-2 font-medium">
-                                  {item.featured}
-                                </p>
-                              )}
-                            </div>
-
-                            {item.slug && (
-                              <Link
-                                href={`/products/${item.slug}`}
-                                className="text-xs font-bold text-primary hover:text-primary-container mt-4 flex items-center gap-1 group"
-                              >
-                                Xem sản phẩm bán chạy nhất
-                                <span className="material-symbols-outlined text-[16px] group-hover:translate-x-1 transition-transform">arrow_right_alt</span>
-                              </Link>
-                            )}
-                          </div>
-
-                          {/* Marketing Promo Card Banner */}
-                          <div className="relative rounded-brand-md overflow-hidden bg-primary-container flex flex-col justify-end p-5 text-white">
-                            <img
-                              src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&w=400&q=80"
-                              alt="Collection Promo"
-                              className="absolute inset-0 w-full h-full object-cover opacity-35"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                            <div className="relative z-10 space-y-1">
-                              <p className="text-[9px] text-accent-gold font-extrabold uppercase tracking-widest">Đặc quyền B2B</p>
-                              <p className="text-xs font-extrabold">Chiết khấu sỉ tự động</p>
-                              <p className="text-[10px] text-white/70 font-medium">Mua nhiều giảm lớn tại giỏ hàng</p>
-                            </div>
-                          </div>
                         </div>
+
+                        {/* Right: Featured Products */}
+                        {item.featuredProducts && (
+                          <div className="border-l border-gray-100 pl-6 space-y-3 text-left">
+                            <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest pb-1.5 border-b border-gray-100">
+                              Bán chạy nổi bật
+                            </p>
+                            <div className="space-y-3">
+                              {item.featuredProducts.map((feat, fIdx) => (
+                                <Link
+                                  key={fIdx}
+                                  href={`/products/${feat.slug}`}
+                                  className="flex items-center gap-3 group/prod"
+                                >
+                                  <img
+                                    src={feat.image}
+                                    alt={feat.name}
+                                    className="w-10 h-10 object-cover rounded-brand-sm border border-gray-100 group-hover/prod:opacity-95 transition-opacity"
+                                  />
+                                  <div className="min-w-0">
+                                    <h5 className="text-[11px] font-bold text-gray-800 group-hover/prod:text-primary line-clamp-1">
+                                      {feat.name}
+                                    </h5>
+                                    <p className="text-[10px] text-gray-450 font-extrabold mt-0.5">{feat.price}</p>
+                                  </div>
+                                </Link>
+                              ))}
+                            </div>
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>
@@ -287,20 +289,19 @@ export default function Header() {
               })}
             </nav>
 
-            {/* 4. SEARCH BAR (Desktop) */}
-            <form onSubmit={handleSearchSubmit} className="hidden md:flex items-center relative flex-1 max-w-sm mx-4">
-              <input
-                type="text"
-                placeholder="Tìm sản phẩm, danh mục..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 input-standard"
-              />
-              <span className="material-symbols-outlined text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 text-[18px]">search</span>
-            </form>
-
-            {/* 5. RIGHT ICONS (User & Cart) */}
+            {/* 5. RIGHT SECTION (Search + User + Cart) */}
             <div className="flex items-center gap-4 shrink-0">
+              {/* Search bar input (Desktop) */}
+              <form onSubmit={handleSearchSubmit} className="hidden lg:flex items-center relative w-44 xl:w-52">
+                <input
+                  type="text"
+                  placeholder="Tìm kiếm..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-9 pr-3 py-1.5 border border-gray-200 rounded-brand-md text-xs font-semibold focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/20 transition-all bg-gray-50/50"
+                />
+                <span className="material-symbols-outlined text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 text-[16px]">search</span>
+              </form>
 
               {/* Account icon */}
               {mounted && user ? (
@@ -493,43 +494,78 @@ export default function Header() {
             </div>
 
             {/* Mobile Nav Links list */}
-            <div className="flex-1 space-y-6">
-              {navItems.map((item, idx) => {
-                if (item.href) {
-                  return (
-                    <div key={idx} className="pt-2">
-                      <Link
-                        href={item.href}
-                        onClick={() => setMobileMenuOpen(false)}
-                        className="text-xs font-extrabold text-gray-900 uppercase tracking-widest block py-2 border-b border-gray-100"
-                      >
-                        {item.name}
-                      </Link>
-                    </div>
-                  );
-                }
-
-                return (
-                  <div key={idx} className="space-y-3">
-                    <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest border-b border-gray-100 pb-1.5">
-                      {item.name}
-                    </h4>
-                    <div className="grid grid-cols-1 gap-2.5 pl-2">
-                      {item.subcategories?.map((sub, sIdx) => (
-                        <Link
-                          key={sIdx}
-                          href={sub.href}
-                          onClick={() => setMobileMenuOpen(false)}
-                          className="text-xs font-bold text-gray-700 hover:text-primary transition flex items-center gap-1"
-                        >
-                          <span className="material-symbols-outlined text-gray-300 text-[16px]">keyboard_arrow_right</span>
-                          {sub.name}
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                );
-              })}
+            <div className="flex-1 space-y-4 py-4 text-left">
+              <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest border-b border-gray-100 pb-1">
+                Danh mục chính
+              </p>
+              <div className="flex flex-col space-y-3 pl-1">
+                <Link
+                  href="/"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-sm font-bold text-gray-700 hover:text-primary transition"
+                >
+                  Trang chủ
+                </Link>
+                <Link
+                  href="/products"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-sm font-bold text-gray-700 hover:text-primary transition"
+                >
+                  Sản phẩm
+                </Link>
+                <Link
+                  href="/categories/tat-vo"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-sm font-bold text-gray-700 hover:text-primary transition"
+                >
+                  Tất / Vớ
+                </Link>
+                <Link
+                  href="/categories/tat-nam"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-sm font-bold text-gray-700 hover:text-primary transition"
+                >
+                  Tất nam
+                </Link>
+                <Link
+                  href="/categories/tat-bong-tat-day"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-sm font-bold text-gray-700 hover:text-primary transition"
+                >
+                  Tất bông / tất dày
+                </Link>
+                <Link
+                  href="/categories/bao-tay-lao-dong"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-sm font-bold text-gray-700 hover:text-primary transition"
+                >
+                  Bao tay lao động
+                </Link>
+                <Link
+                  href="/categories/hang-nhieu-mau-gia-si"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-sm font-bold text-gray-700 hover:text-primary transition"
+                >
+                  Hàng nhiều mẫu giá sỉ
+                </Link>
+                <Link
+                  href="/wholesale/register"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-sm font-bold text-primary hover:text-primary-container transition flex items-center gap-1.5"
+                >
+                  Hàng sỉ B2B
+                  <span className="bg-primary/10 text-primary text-[8px] font-extrabold px-1.5 py-0.5 rounded-full uppercase tracking-wider">
+                    Sỉ
+                  </span>
+                </Link>
+                <Link
+                  href="/contact"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-sm font-bold text-gray-700 hover:text-primary transition"
+                >
+                  Liên hệ
+                </Link>
+              </div>
             </div>
 
             {/* Mobile Footer Area */}
