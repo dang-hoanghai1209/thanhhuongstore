@@ -75,11 +75,6 @@ export default function ProductCard({ product }: ProductCardProps) {
           </span>
         )}
 
-        {product.wholesaleTiers && (
-          <span className="absolute top-2 right-2 bg-secondary-container text-on-secondary-container px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider">
-            GIÁ SỈ
-          </span>
-        )}
 
         {isOutOfStock && (
           <div className="absolute inset-0 bg-black/40 flex items-center justify-center">

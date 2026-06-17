@@ -9,7 +9,7 @@ export default function ShippingPolicyPage() {
 
       <div>
         <h1 className="text-2xl sm:text-3xl font-extrabold text-on-surface tracking-tight">Chính Sách Vận Chuyển & Giao Nhận</h1>
-        <p className="text-xs text-on-surface-variant/70 mt-1">Cập nhật mới nhất tháng 6/2026. Áp dụng cho mọi đơn sỉ/lẻ tại Hoàng Hải Sneaker.</p>
+        <p className="text-xs text-on-surface-variant/70 mt-1">Cập nhật mới nhất tháng 6/2026. Áp dụng cho mọi đơn hàng tại Hoàng Hải Sneaker.</p>
       </div>
 
       <div className="bg-white border border-surface-variant/50 rounded-2xl p-6 sm:p-8 shadow-xs text-xs sm:text-sm text-on-surface-variant leading-relaxed space-y-6 font-medium">
@@ -26,7 +26,7 @@ export default function ShippingPolicyPage() {
           <ul className="list-disc pl-5 space-y-1">
             <li>**Giao hàng tiêu chuẩn toàn quốc**: Hợp tác với các đơn vị vận chuyển lớn (GHTK, Viettel Post, GHN).</li>
             <li>**Giao hàng hỏa tốc trong ngày**: Chỉ áp dụng cho khu vực nội thành TP. Hồ Chí Minh với các đơn hàng cần gấp.</li>
-            <li>**Giao qua xe khách/Chành xe**: Áp dụng cho các đại lý mua sỉ lớn ở tỉnh để tiết kiệm tối đa thời gian và chi phí.</li>
+            <li>**Giao qua xe khách/Chành xe**: Áp dụng đối với các đơn hàng số lượng lớn theo yêu cầu của khách hàng.</li>
           </ul>
         </div>
 
@@ -37,9 +37,8 @@ export default function ShippingPolicyPage() {
             2. Biểu phí vận chuyển
           </h3>
           <ul className="list-disc pl-5 space-y-1">
-            <li>**Đơn hàng mua lẻ**: Áp dụng phí vận chuyển đồng giá **25.000đ** cho mọi đơn hàng dưới 500.000đ.</li>
-            <li>**Miễn phí vận chuyển**: Áp dụng cho đơn hàng lẻ có giá trị thanh toán thực tế từ **500.000đ** trở lên.</li>
-            <li>**Đơn hàng mua sỉ B2B**: Phí vận chuyển được thỏa thuận riêng theo số lượng đặt và phương thức vận chuyển (giao chành xe, bưu điện). Cửa hàng hỗ trợ vận chuyển ra chành xe miễn phí tại TP.HCM cho hóa đơn sỉ trên 5.000.000đ.</li>
+            <li>**Đơn hàng tiêu chuẩn**: Áp dụng phí vận chuyển đồng giá **25.000đ** cho mọi đơn hàng dưới 500.000đ.</li>
+            <li>**Miễn phí vận chuyển**: Áp dụng cho đơn hàng có giá trị thanh toán thực tế từ **500.000đ** trở lên.</li>
           </ul>
         </div>
 

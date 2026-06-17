@@ -31,7 +31,7 @@ export default function PaymentPolicyPage() {
             <span className="material-symbols-outlined text-primary text-[20px]">account_balance</span>
             2. Chuyển khoản ngân hàng trực tiếp
           </h3>
-          <p>Dành cho khách hàng muốn thanh toán trước hoặc các đại lý mua sỉ thanh toán giá trị đơn hàng lớn:</p>
+          <p>Dành cho khách hàng muốn chuyển khoản thanh toán trước đơn hàng:</p>
           <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3 text-xs font-mono text-on-surface max-w-md">
             <div>
               <p className="font-bold text-[10px] text-gray-400 uppercase">Tài khoản Ngân hàng Techcombank</p>

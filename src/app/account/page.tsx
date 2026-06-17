@@ -127,7 +127,7 @@ export default function AccountPage() {
           </div>
           <div className="space-y-1">
             <span className="text-[10px] font-bold text-primary uppercase tracking-wider">
-              {user.role === 'WHOLESALE' ? 'Khách Hàng B2B (Mua Sỉ)' : user.role === 'ADMIN' ? 'Quản trị viên' : 'Khách Hàng B2C (Mua Lẻ)'}
+              {user.role === 'WHOLESALE' ? 'Tài khoản Thành viên' : user.role === 'ADMIN' ? 'Quản trị viên' : 'Khách hàng'}
             </span>
             <h3 className="font-bold text-on-surface text-lg leading-tight">{userFullName}</h3>
             <p className="text-xs text-on-surface-variant/80 flex items-center gap-1.5">

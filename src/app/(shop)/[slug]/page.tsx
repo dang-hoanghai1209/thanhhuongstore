@@ -46,7 +46,7 @@ export async function generateMetadata({ params }: ProductDetailPageProps) {
       : `${baseUrl}${primaryImage.url}`
     : `${baseUrl}/images/default-product.jpg`;
 
-  const metaDescription = `Mua ${product.name} chất lượng tốt, giá sỉ tốt nhất tại Hoàng Hải Sneaker. Chuyên cung cấp tất, vớ, bao tay và phụ kiện thời trang sỉ lẻ toàn quốc.`;
+  const metaDescription = `Mua ${product.name} chất lượng tốt tại Hoàng Hải Sneaker. Chuyên cung cấp các loại tất, vớ, bao tay và phụ kiện thời trang chất lượng cao.`;
 
   return {
     title: `${product.name} - Hoàng Hải Sneaker`,

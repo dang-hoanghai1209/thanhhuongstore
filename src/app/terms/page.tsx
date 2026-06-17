@@ -9,7 +9,7 @@ export default function TermsPage() {
 
       <div>
         <h1 className="text-2xl sm:text-3xl font-extrabold text-on-surface tracking-tight">Điều Khoản Dịch Vụ & Sử Dụng Website</h1>
-        <p className="text-xs text-on-surface-variant/70 mt-1">Các quy định chung đối với người dùng truy cập mua sỉ và lẻ tại Hoàng Hải Sneaker.</p>
+        <p className="text-xs text-on-surface-variant/70 mt-1">Các quy định chung đối với người dùng truy cập mua sắm tại Hoàng Hải Sneaker.</p>
       </div>
 
       <div className="bg-white border border-surface-variant/50 rounded-2xl p-6 sm:p-8 shadow-xs text-xs sm:text-sm text-on-surface-variant leading-relaxed space-y-6 font-medium">
@@ -21,7 +21,7 @@ export default function TermsPage() {
             1. Trách nhiệm bảo mật tài khoản
           </h3>
           <p>
-            Khi đăng ký tài khoản mua sỉ hoặc lẻ trên Hoàng Hải Sneaker, bạn chịu trách nhiệm hoàn toàn về việc bảo mật thông tin mật khẩu truy cập của mình. Nếu có bất kỳ dấu hiệu truy cập trái phép nào xảy ra, vui lòng thông báo ngay cho đội ngũ hỗ trợ kỹ thuật của shop để khóa tài khoản tạm thời.
+            Khi đăng ký tài khoản trên Hoàng Hải Sneaker, bạn chịu trách nhiệm hoàn toàn về việc bảo mật thông tin mật khẩu truy cập của mình. Nếu có bất kỳ dấu hiệu truy cập trái phép nào xảy ra, vui lòng thông báo ngay cho đội ngũ hỗ trợ kỹ thuật của shop để khóa tài khoản tạm thời.
           </p>
         </div>
 
@@ -39,22 +39,11 @@ export default function TermsPage() {
         {/* Section 3 */}
         <div className="space-y-2">
           <h3 className="text-base font-bold text-on-surface flex items-center gap-2">
-            <span className="material-symbols-outlined text-primary text-[20px]">handshake</span>
-            3. Quy định đối với khách hàng mua sỉ B2B
-          </h3>
-          <p>
-            Đại lý hoặc cửa hàng mua sỉ cam kết bảo mật bảng giá sỉ và các chính sách ưu đãi Wholesale được cung cấp nội bộ bởi Hoàng Hải Sneaker. Việc cố tình tiết lộ thông tin giá chiết khấu đại lý cho các đơn vị cạnh tranh khác có thể dẫn đến việc tài khoản sỉ bị thu hồi vĩnh viễn không cần báo trước.
-          </p>
-        </div>
-
-        {/* Section 4 */}
-        <div className="space-y-2">
-          <h3 className="text-base font-bold text-on-surface flex items-center gap-2">
             <span className="material-symbols-outlined text-primary text-[20px]">gavel</span>
-            4. Điều khoản giao dịch chung
+            3. Điều khoản giao dịch chung
           </h3>
           <p>
-            Mọi tranh chấp phát sinh trong quá trình mua bán hàng hóa sỉ/lẻ trên website trước hết sẽ được ưu tiên giải quyết dựa trên tinh thần hòa giải và thương lượng song phương. Trong trường hợp không thể thỏa thuận, vụ việc sẽ được đưa ra phân xử tại Cơ quan quản lý có thẩm quyền theo quy định của pháp luật Việt Nam.
+            Mọi tranh chấp phát sinh trong quá trình mua bán hàng hóa trên website trước hết sẽ được ưu tiên giải quyết dựa trên tinh thần hòa giải và thương lượng song phương. Trong trường hợp không thể thỏa thuận, vụ việc sẽ được đưa ra phân xử tại Cơ quan quản lý có thẩm quyền theo quy định của pháp luật Việt Nam.
           </p>
         </div>
 

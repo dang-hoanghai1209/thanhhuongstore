@@ -21,10 +21,10 @@ export default function AboutPage() {
             Chào mừng đến với Hoàng Hải Sneaker
           </span>
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-tight">
-            Chuyên sỉ tất, vớ, bao tay giá tốt hàng đầu
+            Thương hiệu tất, vớ, bao tay chất lượng hàng đầu
           </h1>
           <p className="text-sm sm:text-base text-white/80 leading-relaxed font-medium">
-            Chúng tôi tự hào là đơn vị phân phối tất, vớ thời trang nam nữ, trẻ em và bao tay bảo hộ lao động chất lượng cao, cung cấp nguồn hàng sỉ ổn định và tối ưu chi phí cho các đại lý toàn quốc.
+            Chúng tôi tự hào là đơn vị cung cấp tất, vớ thời trang nam nữ, trẻ em và bao tay bảo hộ lao động chất lượng cao, mang lại trải nghiệm mua sắm tối ưu và sản phẩm bền bỉ cho mọi khách hàng.
           </p>
         </div>
       </div>
@@ -34,16 +34,16 @@ export default function AboutPage() {
         <div className="space-y-4 text-xs sm:text-sm text-on-surface-variant leading-relaxed">
           <h2 className="text-xl sm:text-2xl font-black text-on-surface tracking-tight">Câu chuyện thương hiệu</h2>
           <p>
-            Được thành lập với sứ mệnh mang đến cho thị trường Việt Nam nguồn hàng sỉ chất lượng cao và giá cả cạnh tranh nhất, **Hoàng Hải Sneaker** tập trung phát triển dòng sản phẩm cốt lõi gồm tất vớ dệt kim kháng khuẩn và bao tay bảo hộ lao động bền bỉ.
+            Được thành lập với sứ mệnh mang đến cho thị trường Việt Nam những sản phẩm chất lượng cao và giá cả hợp lý nhất, **Hoàng Hải Sneaker** tập trung phát triển dòng sản phẩm cốt lõi gồm tất vớ dệt kim kháng khuẩn và bao tay bảo hộ lao động bền bỉ.
           </p>
           <p>
-            Chúng tôi hiểu rằng đối với các cửa hàng bán lẻ, xưởng sản xuất hay đại lý phân phối, nguồn hàng ổn định cùng mức chiết khấu tốt là yếu tố sống còn cho hoạt động kinh doanh. Vì vậy, Hoàng Hải Sneaker luôn tối ưu quy trình từ sản xuất đến vận chuyển, mang lại giải pháp nhập sỉ B2B thông minh, nhanh chóng và tiết kiệm.
+            Chúng tôi luôn đặt chất lượng sản phẩm và sự hài lòng của khách hàng làm trọng tâm phát triển. Vì vậy, Hoàng Hải Sneaker luôn tối ưu quy trình từ khâu sản xuất đến dịch vụ chăm sóc khách hàng, mang lại những sản phẩm tối ưu, an toàn và bền bỉ.
           </p>
           <h3 className="font-bold text-on-surface text-sm pt-2">Giá trị cốt lõi của Hoàng Hải Sneaker:</h3>
           <ul className="list-disc pl-5 space-y-1 font-medium">
-            <li>**Giá sỉ tận xưởng**: Cung cấp mức giá sỉ cực tốt cho các cửa hàng, xưởng, đại lý và khách mua số lượng lớn.</li>
+            <li>**Giá cả cạnh tranh**: Cung cấp mức giá cực tốt đi kèm với chất lượng sản phẩm vượt trội.</li>
             <li>**Chất lượng đảm bảo**: Mọi sản phẩm tất vớ và bao tay đều được kiểm tra kỹ về độ bền, co giãn và kháng khuẩn.</li>
-            <li>**Chiết khấu tự động**: Tích hợp công nghệ tính chiết khấu bậc thang tự động trực tiếp trên giỏ hàng, minh bạch và tiện lợi.</li>
+            <li>**Hỗ trợ nhanh chóng**: Sẵn sàng giải đáp thắc mắc và hỗ trợ khách hàng đổi trả linh hoạt trong vòng 7 ngày.</li>
           </ul>
         </div>
         
@@ -56,41 +56,41 @@ export default function AboutPage() {
         </div>
       </div>
 
-      {/* Retail & Wholesale Operations */}
+      {/* Product categories highlight */}
       <div className="bg-surface-container-low border border-surface-variant/40 rounded-2xl p-6 sm:p-8 grid grid-cols-1 md:grid-cols-2 gap-8 shadow-2xs">
         <div className="space-y-3">
           <div className="w-10 h-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
-            <span className="material-symbols-outlined text-[24px]">shopping_cart</span>
+            <span className="material-symbols-outlined text-[24px]">style</span>
           </div>
-          <h3 className="text-base font-bold text-on-surface">Mua sắm tiện lợi (B2C)</h3>
+          <h3 className="text-base font-bold text-on-surface">Tất / Vớ thời trang</h3>
           <p className="text-xs text-on-surface-variant leading-relaxed font-medium">
-            Hỗ trợ khách hàng mua lẻ dễ dàng trên website với các lô tất vớ kháng khuẩn chất lượng cao cùng các lô hàng quần áo xả kho giá tốt. Giao hàng toàn quốc nhanh chóng.
+            Các dòng tất vớ đa dạng chất liệu từ cotton organic, thun co giãn đa chiều kháng khuẩn tốt dành cho cả nam, nữ và trẻ em.
           </p>
         </div>
         
         <div className="space-y-3">
           <div className="w-10 h-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
-            <span className="material-symbols-outlined text-[24px]">groups</span>
+            <span className="material-symbols-outlined text-[24px]">front_hand</span>
           </div>
-          <h3 className="text-base font-bold text-on-surface">Đại lý & Bán sỉ (B2B)</h3>
+          <h3 className="text-base font-bold text-on-surface">Bao tay lao động</h3>
           <p className="text-xs text-on-surface-variant leading-relaxed font-medium">
-            Áp dụng chính sách giá sỉ sập sàn và chiết khấu cộng dồn tự động khi đặt số lượng lớn. Đơn giản hóa quy trình đặt hàng, kiểm duyệt và giao nhận dành riêng cho khách sỉ.
+            Bao tay bảo hộ dệt sợi tự nhiên dày dặn, độ bền cao, chống trơn trượt tối đa, phù hợp sử dụng cho các công việc lao động, nhà xưởng.
           </p>
         </div>
       </div>
 
       {/* CTA section */}
       <div className="text-center bg-white border border-surface-variant/60 rounded-2xl p-8 sm:p-10 shadow-xs space-y-4 max-w-2xl mx-auto">
-        <h3 className="text-base sm:text-lg font-bold text-on-surface">Bắt đầu nhập hàng tại Hoàng Hải Sneaker ngay hôm nay</h3>
+        <h3 className="text-base sm:text-lg font-bold text-on-surface">Khám phá sản phẩm của Hoàng Hải Sneaker ngay hôm nay</h3>
         <p className="text-xs text-on-surface-variant max-w-sm mx-auto leading-relaxed font-medium">
-          Đăng ký tài khoản đại lý sỉ để mở khóa các đặc quyền chiết khấu lớn nhất trên toàn bộ danh mục sản phẩm của chúng tôi.
+          Xem qua danh mục các sản phẩm tất vớ và bao tay chất lượng cao của chúng tôi.
         </p>
         <div className="flex flex-wrap justify-center gap-3 pt-2">
           <Link href="/products" className="px-6 py-2.5 bg-primary hover:bg-primary-container text-on-primary text-xs font-bold rounded-xl transition shadow active:scale-95">
-            Xem sản phẩm
+            Xem tất cả sản phẩm
           </Link>
-          <Link href="/wholesale/register" className="px-6 py-2.5 bg-surface-container-lowest border-2 border-primary text-primary hover:bg-primary/5 text-xs font-bold rounded-xl transition active:scale-95">
-            Đăng ký mua sỉ
+          <Link href="/contact" className="px-6 py-2.5 bg-surface-container-lowest border-2 border-primary text-primary hover:bg-primary/5 text-xs font-bold rounded-xl transition active:scale-95">
+            Liên hệ tư vấn
           </Link>
         </div>
       </div>

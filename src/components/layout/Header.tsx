@@ -40,10 +40,10 @@ const navItems: NavItem[] = [
   {
     name: "Tất / Vớ",
     dropdownItems: [
-      { name: "Tất cả Tất & Vớ", href: "/categories/tat-vo" },
+      { name: "Tất / Vớ", href: "/categories/tat-vo" },
       { name: "Tất nam", href: "/categories/tat-nam" },
       { name: "Tất bông / tất dày", href: "/categories/tat-bong-tat-day" },
-      { name: "Hàng nhiều mẫu giá sỉ", href: "/categories/hang-nhieu-mau-gia-si" }
+      { name: "Sản phẩm nhiều mẫu", href: "/categories/hang-nhieu-mau-gia-si" }
     ],
     featuredProducts: [
       {
@@ -63,9 +63,7 @@ const navItems: NavItem[] = [
   {
     name: "Bao tay",
     dropdownItems: [
-      { name: "Bao tay lao động", href: "/categories/bao-tay-lao-dong" },
-      { name: "Bao tay đen xám", href: "/products/bao-tay-lao-dong-den-xam" },
-      { name: "Bao tay trắng", href: "/products/bao-tay-lao-dong-trang" }
+      { name: "Bao tay lao động", href: "/categories/bao-tay-lao-dong" }
     ],
     featuredProducts: [
       {
@@ -83,9 +81,8 @@ const navItems: NavItem[] = [
     ]
   },
   {
-    name: "Hàng sỉ",
-    href: "/wholesale/register",
-    badge: "B2B"
+    name: "Nổi bật",
+    href: "/products?featured=true"
   },
   {
     name: "Liên hệ",
@@ -165,11 +162,11 @@ export default function Header() {
         </div>
         <div className="mx-auto sm:mx-0 flex items-center gap-1.5 justify-center">
           <span className="material-symbols-outlined text-accent-pink text-[14px] animate-pulse">auto_awesome</span>
-          <span>Freeship cho mọi đơn lẻ bán lẻ từ 500,000đ</span>
+          <span>Freeship cho đơn từ 500.000đ</span>
         </div>
         <div className="hidden md:flex items-center gap-1">
-          <span className="material-symbols-outlined text-white/70 text-[14px]">help</span>
-          Hỗ trợ đại lý B2B sỉ
+          <span className="material-symbols-outlined text-white/70 text-[14px]">fiber_new</span>
+          Xem sản phẩm mới mỗi ngày
         </div>
       </div>
 
@@ -545,17 +542,14 @@ export default function Header() {
                   onClick={() => setMobileMenuOpen(false)}
                   className="text-sm font-bold text-gray-700 hover:text-primary transition"
                 >
-                  Hàng nhiều mẫu giá sỉ
+                  Sản phẩm nhiều mẫu
                 </Link>
                 <Link
-                  href="/wholesale/register"
+                  href="/products?featured=true"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="text-sm font-bold text-primary hover:text-primary-container transition flex items-center gap-1.5"
+                  className="text-sm font-bold text-gray-700 hover:text-primary transition"
                 >
-                  Hàng sỉ B2B
-                  <span className="bg-primary/10 text-primary text-[8px] font-extrabold px-1.5 py-0.5 rounded-full uppercase tracking-wider">
-                    Sỉ
-                  </span>
+                  Nổi bật
                 </Link>
                 <Link
                   href="/contact"

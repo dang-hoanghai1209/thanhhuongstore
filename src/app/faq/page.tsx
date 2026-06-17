@@ -26,8 +26,8 @@ export default function FAQPage() {
       items: [
         {
           id: 1,
-          question: 'Làm thế nào để đăng ký tài khoản mua sỉ (B2B)?',
-          answer: 'Bạn chỉ cần tạo tài khoản thông thường, sau đó truy cập vào trang cá nhân hoặc liên hệ trực tiếp bộ phận CSKH hỗ trợ duyệt nâng cấp lên tài khoản Wholesale. Sau khi được duyệt, giá sỉ bậc thang sẽ tự động áp dụng khi số lượng sản phẩm trong giỏ hàng đạt mức tối thiểu.'
+          question: 'Làm thế nào để đặt mua hàng tại Hoàng Hải Sneaker?',
+          answer: 'Bạn chỉ cần chọn sản phẩm yêu thích, lựa chọn màu sắc, kích cỡ và số lượng phù hợp rồi thêm vào giỏ hàng. Tiến hành điền thông tin giao hàng và chọn phương thức thanh toán tại trang Thanh toán để hoàn tất đơn đặt hàng.'
         },
         {
           id: 2,
@@ -53,7 +53,7 @@ export default function FAQPage() {
         {
           id: 5,
           question: 'Phí vận chuyển tại shop được tính như thế nào?',
-          answer: 'Hoàng Hải Sneaker áp dụng mức phí đồng giá 25.000đ cho đơn hàng lẻ tiêu chuẩn trên toàn quốc. Đặc biệt, miễn phí giao hàng cho tất cả các đơn hàng lẻ có giá trị từ 500.000đ trở lên. Đối với đơn hàng sỉ lớn, phí vận chuyển sẽ tính theo biểu phí của nhà xe hoặc đơn vị vận chuyển đối tác.'
+          answer: 'Hoàng Hải Sneaker áp dụng mức phí đồng giá 25.000đ cho đơn hàng tiêu chuẩn trên toàn quốc. Đặc biệt, miễn phí giao hàng cho tất cả các đơn hàng có giá trị từ 500.000đ trở lên.'
         }
       ]
     },

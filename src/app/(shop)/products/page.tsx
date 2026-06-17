@@ -14,6 +14,7 @@ interface ProductsPageProps {
     maxPrice?: string;
     sort?: string;
     page?: string;
+    featured?: string;
   };
 }
 
@@ -46,6 +47,10 @@ export default async function ProductsCatalogPage({ searchParams }: ProductsPage
 
   // 2. Build database filter query
   const where: any = { isActive: true };
+  const isFeaturedOnly = searchParams.featured === 'true';
+  if (isFeaturedOnly) {
+    where.isFeatured = true;
+  }
   if (categorySlug) {
     where.category = { slug: categorySlug };
   }
@@ -111,6 +116,7 @@ export default async function ProductsCatalogPage({ searchParams }: ProductsPage
     sort?: string | null;
     page?: number | null;
     search?: string | null;
+    featured?: string | null;
   }) => {
     const query = new URLSearchParams();
 
@@ -132,6 +138,9 @@ export default async function ProductsCatalogPage({ searchParams }: ProductsPage
     const pageVal = params.page !== undefined ? params.page : 1;
     if (pageVal && pageVal > 1) query.set('page', String(pageVal));
 
+    const featuredVal = params.featured !== undefined ? params.featured : (isFeaturedOnly ? 'true' : null);
+    if (featuredVal) query.set('featured', featuredVal);
+
     return `/products?${query.toString()}`;
   };
 
@@ -141,8 +150,8 @@ export default async function ProductsCatalogPage({ searchParams }: ProductsPage
   return (
     <main className="min-h-screen bg-[#FAF9F6] text-gray-900 pb-24">
       <PageHeader 
-        title={searchQuery ? `Tìm kiếm: "${searchQuery}"` : activeCategory ? activeCategory.name : 'Tất Cả Sản Phẩm'}
-        description={activeCategory ? `Bộ sưu tập các mẫu mã mới nhất thuộc danh mục ${activeCategory.name} cao cấp.` : 'Hoàng Hải Sneaker chuyên cung cấp sỉ các dòng tất vớ thời trang, bao tay lao động dệt sợi tự nhiên và phụ kiện thời trang giá tốt nhất.'}
+        title={searchQuery ? `Tìm kiếm: "${searchQuery}"` : isFeaturedOnly ? 'Sản Phẩm Nổi Bật' : activeCategory ? activeCategory.name : 'Tất Cả Sản Phẩm'}
+        description={isFeaturedOnly ? 'Danh sách các sản phẩm tiêu biểu bán chạy nhất tại Hoàng Hải Sneaker.' : activeCategory ? `Bộ sưu tập các mẫu mã mới nhất thuộc danh mục ${activeCategory.name}.` : 'Hoàng Hải Sneaker giới thiệu các dòng tất vớ thời trang, bao tay lao động dệt sợi và phụ kiện thời trang chất lượng cao.'}
         badge="Danh mục sản phẩm"
       />
 

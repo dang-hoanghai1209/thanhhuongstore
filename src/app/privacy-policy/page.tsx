@@ -9,7 +9,7 @@ export default function PrivacyPolicyPage() {
 
       <div>
         <h1 className="text-2xl sm:text-3xl font-extrabold text-on-surface tracking-tight">Chính Sách Bảo Mật Thông Tin</h1>
-        <p className="text-xs text-on-surface-variant/70 mt-1">Bảo vệ quyền lợi riêng tư tuyệt đối cho khách hàng sỉ/lẻ tại Hoàng Hải Sneaker.</p>
+        <p className="text-xs text-on-surface-variant/70 mt-1">Bảo vệ quyền lợi riêng tư tuyệt đối cho khách hàng tại Hoàng Hải Sneaker.</p>
       </div>
 
       <div className="bg-white border border-surface-variant/50 rounded-2xl p-6 sm:p-8 shadow-xs text-xs sm:text-sm text-on-surface-variant leading-relaxed space-y-6 font-medium">
@@ -26,7 +26,7 @@ export default function PrivacyPolicyPage() {
           <ul className="list-disc pl-5 space-y-1">
             <li>Họ và tên, địa chỉ nhận hàng để shipper bàn giao sản phẩm.</li>
             <li>Số điện thoại và Email để thông báo mã đơn hàng, xác minh thanh toán hoặc khôi phục tài khoản mật khẩu.</li>
-            <li>Công ty và Mã số thuế (chỉ áp dụng đối với đại lý mua sỉ đăng ký Wholesale).</li>
+            <li>Thông tin Công ty và Mã số thuế (nếu khách hàng yêu cầu xuất hóa đơn đỏ).</li>
           </ul>
         </div>
 

@@ -9,7 +9,7 @@ export default function ReturnPolicyPage() {
 
       <div>
         <h1 className="text-2xl sm:text-3xl font-extrabold text-on-surface tracking-tight">Chính Sách Đổi Trả Sản Phẩm</h1>
-        <p className="text-xs text-on-surface-variant/70 mt-1">Hỗ trợ khách hàng an tâm mua sắm sỉ & lẻ tại Hoàng Hải Sneaker.</p>
+        <p className="text-xs text-on-surface-variant/70 mt-1">Hỗ trợ khách hàng an tâm mua sắm tại Hoàng Hải Sneaker.</p>
       </div>
 
       <div className="bg-white border border-surface-variant/50 rounded-2xl p-6 sm:p-8 shadow-xs text-xs sm:text-sm text-on-surface-variant leading-relaxed space-y-6 font-medium">

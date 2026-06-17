@@ -63,7 +63,7 @@ export default function ContactPage() {
                   <span className="material-symbols-outlined text-[18px]">phone</span>
                 </div>
                 <div className="text-xs font-medium text-on-surface-variant">
-                  <span className="text-[10px] text-gray-400 font-bold uppercase block">Hotline mua sỉ/lẻ</span>
+                  <span className="text-[10px] text-gray-400 font-bold uppercase block">Hotline hỗ trợ</span>
                   <p className="text-on-surface font-bold">0987.654.321</p>
                   <p>Hỗ trợ khẩn cấp từ 08:00 - 21:00</p>
                 </div>
@@ -174,7 +174,7 @@ export default function ContactPage() {
                 <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Chủ đề</label>
                 <input
                   type="text"
-                  placeholder="Mua sỉ, phản hồi chất lượng..."
+                  placeholder="Hỏi đáp sản phẩm, phản hồi..."
                   value={subject}
                   onChange={(e) => setSubject(e.target.value)}
                   className="input-standard"

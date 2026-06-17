@@ -39,7 +39,7 @@ export default function Footer() {
             <span className="text-sm font-black uppercase tracking-widest text-on-surface">Hoàng Hải Sneaker</span>
           </div>
           <p className="text-xs text-gray-400 leading-relaxed font-medium">
-            Hoàng Hải Sneaker chuyên cung cấp sỉ tất, vớ, bao tay bảo hộ lao động và phụ kiện thời trang giá sỉ cực tốt cho cửa hàng, đại lý, xưởng và khách mua số lượng lớn.
+            Hoàng Hải Sneaker chuyên cung cấp các loại tất, vớ, bao tay bảo hộ lao động và phụ kiện thời trang chất lượng cao cho mọi khách hàng.
           </p>
         </div>
 
@@ -63,7 +63,6 @@ export default function Footer() {
             <li><Link href="/contact" className="hover:text-primary transition">Liên hệ CSKH</Link></li>
             <li><Link href="/faq" className="hover:text-primary transition">Câu hỏi thường gặp (FAQ)</Link></li>
             <li><Link href="/order-lookup" className="hover:text-primary transition">Tra cứu đơn hàng nhanh</Link></li>
-            <li><Link href="/wholesale/register" className="hover:text-primary transition">Đăng ký mua sỉ (B2B)</Link></li>
           </ul>
         </div>
 
@@ -103,7 +102,7 @@ export default function Footer() {
           <p>© 2026 Hoàng Hải Sneaker. Bảo lưu mọi quyền.</p>
           <div className="flex items-center gap-1.5 font-bold text-gray-500">
             <span className="material-symbols-outlined text-primary text-[16px]">verified_user</span>
-            Bản quyền thuộc về Hoàng Hải Sneaker B2B/B2C Platform
+            Bản quyền thuộc về Hoàng Hải Sneaker
           </div>
         </div>
       </div>

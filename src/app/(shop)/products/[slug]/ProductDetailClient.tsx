@@ -93,7 +93,7 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [quantity, setQuantity] = useState<number>(1);
   const [addedStatus, setAddedStatus] = useState<boolean>(false);
-  const [activeTab, setActiveTab] = useState<'desc' | 'b2b' | 'size'>('desc');
+  const [activeTab, setActiveTab] = useState<'desc' | 'size'>('desc');
 
   // 5. Match selection to exact variant
   const selectedVariant = useMemo(() => {
@@ -249,7 +249,7 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
             {/* Display Retail Price */}
             <div className="bg-gray-50/50 p-4 border border-gray-100 rounded-brand-md flex items-baseline justify-between">
               <div>
-                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block">Giá Bán Lẻ</span>
+                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block">Giá bán</span>
                 <span className="text-2xl font-black text-brand-600 mt-1 block">
                   {priceDisplay}
                 </span>
@@ -389,27 +389,6 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
               </div>
             </div>
 
-            {/* Wholesale Info Banner for B2B */}
-            {tiers.length > 0 && (
-              <div className="bg-brand-50/60 p-4 border border-brand-100/50 rounded-brand-lg space-y-2">
-                <span className="text-[10px] font-black text-brand-700 uppercase tracking-widest flex items-center gap-1">
-                  <Sparkles className="w-3 h-3 text-accent-pink animate-pulse" />
-                  Chiết Khấu Đại Lý B2B (Đại Lý Sỉ)
-                </span>
-                <p className="text-[11px] text-brand-900 leading-relaxed">
-                  Đại lý sỉ sẽ được áp dụng bảng giá sỉ chiết khấu tự động khi số lượng đạt mốc:
-                </p>
-                <div className="grid grid-cols-3 gap-2 pt-1 text-[10px] text-center font-bold">
-                  {tiers.map((tier: any, index: number) => (
-                    <div key={index} className="bg-white px-2.5 py-1.5 rounded border border-brand-200/50 shadow-3xs">
-                      <p className="text-gray-500">Mua từ {tier.minQty} cái</p>
-                      <p className="text-brand-600 font-extrabold mt-0.5">Giảm {tier.discount}% / cái</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
             {/* Tabs details specifications */}
             <div className="space-y-4 pt-6 border-t border-gray-100">
               <div className="flex border-b border-gray-100 text-xs font-bold text-gray-400">
@@ -420,14 +399,6 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
                   }`}
                 >
                   Mô tả sản phẩm
-                </button>
-                <button
-                  onClick={() => setActiveTab('b2b')}
-                  className={`pb-2.5 px-4 border-b-2 transition ${
-                    activeTab === 'b2b' ? 'border-brand-600 text-brand-600 font-extrabold' : 'border-transparent hover:text-gray-800'
-                  }`}
-                >
-                  Bán Sỉ / B2B
                 </button>
                 <button
                   onClick={() => setActiveTab('size')}
@@ -451,15 +422,6 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
                       <li>Co giãn co giãn đa chiều, không nhão xù sau giặt máy.</li>
                       <li>Sợi vải cao cấp an toàn và thân thiện tuyệt đối với làn da nhạy cảm.</li>
                     </ul>
-                  </div>
-                )}
-
-                {activeTab === 'b2b' && (
-                  <div className="space-y-2.5 p-3 bg-gray-50 rounded border border-gray-100">
-                    <p className="font-bold text-gray-800">💼 Quyền lợi đại lý hợp tác sỉ với Hoàng Hải Sneaker:</p>
-                    <p>• Chiết khấu sỉ tự động tính trực tiếp tại màn hình Giỏ Hàng khi bạn đạt đủ mốc số lượng sỉ.</p>
-                    <p>• Hỗ trợ đổi trả trong vòng 15 ngày đối với hàng lỗi do nhà sản xuất.</p>
-                    <p>• Đơn sỉ tối thiểu chỉ từ 500,000đ. Đăng ký tài khoản đại lý ngay để duyệt mức giá sỉ sập sàn!</p>
                   </div>
                 )}
 
