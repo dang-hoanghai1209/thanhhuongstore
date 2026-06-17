@@ -3,8 +3,8 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 
 export const metadata = {
-  title: 'Hoàng Hải Sneaker - Sỉ tất, vớ, bao tay giá tốt',
-  description: 'Hoàng Hải Sneaker chuyên cung cấp tất, vớ, bao tay và phụ kiện thời trang giá sỉ. Phù hợp cho cửa hàng, đại lý, xưởng và khách mua số lượng lớn.',
+  title: 'Hoàng Hải Sneaker - Tất, vớ, bao tay và phụ kiện thời trang cao cấp',
+  description: 'Hoàng Hải Sneaker chuyên cung cấp các loại tất, vớ, bao tay bảo hộ lao động và phụ kiện thời trang chất lượng cao cho mọi khách hàng.',
 };
 
 export default function RootLayout({

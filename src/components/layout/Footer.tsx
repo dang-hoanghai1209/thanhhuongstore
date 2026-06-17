@@ -33,9 +33,11 @@ export default function Footer() {
         {/* Col 1: About */}
         <div className="space-y-4">
           <div className="flex items-center gap-2 text-primary">
-            <div className="w-8 h-8 rounded-brand-sm bg-primary flex items-center justify-center text-white font-black text-sm shadow-xs">
-              HH
-            </div>
+            <img
+              src="/uploads/products/hoang-hai-sneaker-logo.jpg"
+              alt="Hoàng Hải Sneaker Logo"
+              className="w-9 h-9 object-cover rounded-brand-sm shadow-xs border border-gray-150"
+            />
             <span className="text-sm font-black uppercase tracking-widest text-on-surface">Hoàng Hải Sneaker</span>
           </div>
           <p className="text-xs text-gray-400 leading-relaxed font-medium">

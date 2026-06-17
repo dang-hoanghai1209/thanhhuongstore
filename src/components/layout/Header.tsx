@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import MiniCart from '@/components/cart/MiniCart';
 import { useCartStore } from '@/store/useCartStore';
@@ -95,6 +95,27 @@ export default function Header() {
   const [searchQuery, setSearchQuery] = useState('');
   const [hoveredMenu, setHoveredMenu] = useState<number | null>(null);
   const [mounted, setMounted] = useState(false);
+  const [userDropdownOpen, setUserDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setUserDropdownOpen(false);
+      }
+    }
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === 'Escape') {
+        setUserDropdownOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
 
   // Zustand states and actions
   const cartItems = useCartStore((state) => state.items);
@@ -186,9 +207,11 @@ export default function Header() {
 
             {/* 2. Brand Logo */}
             <Link href="/" className="flex items-center gap-1.5 text-primary flex-shrink-0">
-              <div className="w-8 h-8 rounded-brand-md bg-primary flex items-center justify-center text-white font-black text-sm shadow-sm">
-                HH
-              </div>
+              <img
+                src="/uploads/products/hoang-hai-sneaker-logo.jpg"
+                alt="Hoàng Hải Sneaker Logo"
+                className="w-9 h-9 md:w-11 md:h-11 object-cover rounded-brand-md shadow-sm border border-gray-100"
+              />
               <span className="text-sm sm:text-base font-black uppercase tracking-wider text-on-surface whitespace-nowrap">Hoàng Hải Sneaker</span>
             </Link>
 
@@ -301,36 +324,56 @@ export default function Header() {
 
               {/* Account icon */}
               {mounted && user ? (
-                <div className="relative group">
-                  <button className="flex items-center gap-1.5 p-2 rounded-brand-md text-gray-500 hover:bg-gray-50 hover:text-gray-900 transition">
+                <div className="relative" ref={dropdownRef}>
+                  <button
+                    onClick={() => setUserDropdownOpen(!userDropdownOpen)}
+                    className="flex items-center gap-1.5 p-2 rounded-brand-md text-gray-500 hover:bg-gray-50 hover:text-gray-900 transition"
+                  >
                     <span className="material-symbols-outlined text-[20px]">person</span>
                     <span className="hidden md:inline text-xs font-bold text-gray-700">
                       {user.firstName}
                     </span>
                   </button>
-                  <div className="absolute right-0 top-full mt-2 w-48 bg-white border border-gray-100 rounded-brand-md shadow-lg py-2 hidden group-hover:block animate-fadeIn z-50">
-                    <div className="px-4 py-2 border-b border-gray-50">
-                      <p className="text-xs font-bold text-gray-800">{user.lastName} {user.firstName}</p>
-                      <p className="text-[10px] text-gray-400 truncate">{user.email}</p>
-                    </div>
-                    {user.role === 'ADMIN' && (
-                      <Link href="/admin" className="block px-4 py-2 text-xs font-bold text-primary hover:bg-slate-50 transition">
-                        Quản trị
+                  {userDropdownOpen && (
+                    <div className="absolute right-0 top-full mt-2 w-48 bg-white border border-gray-100 rounded-brand-md shadow-lg py-2 animate-fadeIn z-[100]">
+                      <div className="px-4 py-2 border-b border-gray-50">
+                        <p className="text-xs font-bold text-gray-800">{user.lastName} {user.firstName}</p>
+                        <p className="text-[10px] text-gray-400 truncate">{user.email}</p>
+                      </div>
+                      {user.role === 'ADMIN' && (
+                        <Link
+                          href="/admin"
+                          onClick={() => setUserDropdownOpen(false)}
+                          className="block px-4 py-2 text-xs font-bold text-primary hover:bg-slate-50 transition"
+                        >
+                          Quản trị
+                        </Link>
+                      )}
+                      <Link
+                        href="/account"
+                        onClick={() => setUserDropdownOpen(false)}
+                        className="block px-4 py-2 text-xs font-bold text-gray-700 hover:bg-gray-50 transition"
+                      >
+                        Tài khoản
                       </Link>
-                    )}
-                    <Link href="/account" className="block px-4 py-2 text-xs font-bold text-gray-700 hover:bg-gray-50 transition">
-                      Tài khoản
-                    </Link>
-                    <Link href="/account/orders" className="block px-4 py-2 text-xs font-bold text-gray-700 hover:bg-gray-50 transition">
-                      Đơn hàng
-                    </Link>
-                    <button
-                      onClick={handleLogout}
-                      className="w-full text-left px-4 py-2 text-xs font-bold text-red-600 hover:bg-red-50 transition border-t border-gray-50 mt-1"
-                    >
-                      Đăng xuất
-                    </button>
-                  </div>
+                      <Link
+                        href="/account/orders"
+                        onClick={() => setUserDropdownOpen(false)}
+                        className="block px-4 py-2 text-xs font-bold text-gray-700 hover:bg-gray-50 transition"
+                      >
+                        Đơn hàng
+                      </Link>
+                      <button
+                        onClick={() => {
+                          setUserDropdownOpen(false);
+                          handleLogout();
+                        }}
+                        className="w-full text-left px-4 py-2 text-xs font-bold text-red-600 hover:bg-red-50 transition border-t border-gray-50 mt-1"
+                      >
+                        Đăng xuất
+                      </button>
+                    </div>
+                  )}
                 </div>
               ) : (
                 <div className="hidden sm:flex items-center gap-1.5 text-xs font-bold text-gray-700">
@@ -392,9 +435,11 @@ export default function Header() {
             {/* Header: Logo and Close */}
             <div className="flex items-center justify-between pb-4 border-b border-gray-100">
               <div className="flex items-center gap-2 text-primary">
-                <div className="w-8 h-8 rounded-brand-sm bg-primary flex items-center justify-center text-white font-black text-sm shadow-xs">
-                  HH
-                </div>
+                <img
+                  src="/uploads/products/hoang-hai-sneaker-logo.jpg"
+                  alt="Hoàng Hải Sneaker Logo"
+                  className="w-9 h-9 object-cover rounded-brand-sm shadow-xs border border-gray-150"
+                />
                 <span className="text-sm font-black uppercase tracking-widest text-on-surface">Hoàng Hải Sneaker</span>
               </div>
               <button

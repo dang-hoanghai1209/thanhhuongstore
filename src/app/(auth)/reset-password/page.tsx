@@ -88,9 +88,11 @@ function ResetPasswordForm() {
       {/* Logo & Headings */}
       <div className="space-y-3 text-center sm:text-left">
         <Link href="/" className="inline-flex items-center gap-2 text-primary hover:opacity-90 transition-opacity">
-          <div className="w-8 h-8 rounded-brand-sm bg-primary flex items-center justify-center text-white font-black text-sm shadow">
-            HH
-          </div>
+          <img
+            src="/uploads/products/hoang-hai-sneaker-logo.jpg"
+            alt="Hoàng Hải Sneaker Logo"
+            className="w-8 h-8 object-cover rounded-brand-sm shadow border border-gray-100"
+          />
           <span className="text-sm font-black uppercase tracking-widest text-on-surface">Hoàng Hải Sneaker</span>
         </Link>
         
