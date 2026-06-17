@@ -188,26 +188,26 @@ export default function Header() {
             </button>
 
             {/* 2. Brand Logo */}
-            <Link href="/" className="flex items-center gap-2 text-primary shrink-0">
-              <div className="w-9 h-9 rounded-brand-md bg-primary flex items-center justify-center text-white font-black text-base shadow-sm">
+            <Link href="/" className="flex items-center gap-1.5 text-primary flex-shrink-0">
+              <div className="w-8 h-8 rounded-brand-md bg-primary flex items-center justify-center text-white font-black text-sm shadow-sm">
                 HH
               </div>
-              <span className="text-base sm:text-lg font-black uppercase tracking-widest text-on-surface">Hoàng Hải Sneaker</span>
+              <span className="text-sm sm:text-base font-black uppercase tracking-wider text-on-surface whitespace-nowrap">Hoàng Hải Sneaker</span>
             </Link>
 
             {/* 3. DESKTOP NAVIGATION MENU */}
-            <nav className="hidden lg:flex items-center gap-6 xl:gap-8 h-full">
+            <nav className="hidden lg:flex items-center gap-4 xl:gap-5 h-full flex-shrink-0 whitespace-nowrap">
               {navItems.map((item, idx) => {
                 if (item.href) {
                   return (
                     <Link
                       key={idx}
                       href={item.href}
-                      className="text-xs font-bold text-gray-750 hover:text-primary uppercase tracking-wider transition py-8 flex items-center gap-1 group"
+                      className="text-xs font-bold text-gray-750 hover:text-primary uppercase tracking-wider transition py-8 flex items-center gap-1 group whitespace-nowrap flex-shrink-0"
                     >
                       {item.name}
                       {item.badge && (
-                        <span className="bg-primary/10 text-primary text-[8px] font-extrabold px-1.5 py-0.5 rounded-full uppercase tracking-wider transition-all group-hover:bg-primary group-hover:text-white">
+                        <span className="bg-primary/10 text-primary text-[8px] font-extrabold px-1.5 py-0.5 rounded-full uppercase tracking-wider transition-all group-hover:bg-primary group-hover:text-white flex-shrink-0">
                           {item.badge}
                         </span>
                       )}
@@ -218,13 +218,13 @@ export default function Header() {
                 return (
                   <div
                     key={idx}
-                    className="h-full flex items-center relative"
+                    className="h-full flex items-center relative whitespace-nowrap flex-shrink-0"
                     onMouseEnter={() => setHoveredMenu(idx)}
                     onMouseLeave={() => setHoveredMenu(null)}
                   >
-                    <button className="flex items-center gap-1 text-xs font-bold text-gray-750 hover:text-primary uppercase tracking-wider transition py-8">
+                    <button className="flex items-center gap-1 text-xs font-bold text-gray-750 hover:text-primary uppercase tracking-wider transition py-8 whitespace-nowrap flex-shrink-0">
                       {item.name}
-                      <span className="material-symbols-outlined text-gray-400 text-[18px] transition-transform duration-200" style={{ transform: hoveredMenu === idx ? 'rotate(180deg)' : 'rotate(0deg)' }}>
+                      <span className="material-symbols-outlined text-gray-400 text-[18px] transition-transform duration-200 flex-shrink-0" style={{ transform: hoveredMenu === idx ? 'rotate(180deg)' : 'rotate(0deg)' }}>
                         keyboard_arrow_down
                       </span>
                     </button>
@@ -289,10 +289,9 @@ export default function Header() {
               })}
             </nav>
 
-            {/* 5. RIGHT SECTION (Search + User + Cart) */}
-            <div className="flex items-center gap-4 shrink-0">
+            <div className="flex items-center gap-3 xl:gap-4 flex-shrink-0">
               {/* Search bar input (Desktop) */}
-              <form onSubmit={handleSearchSubmit} className="hidden lg:flex items-center relative w-44 xl:w-52">
+              <form onSubmit={handleSearchSubmit} className="hidden lg:flex items-center relative w-32 xl:w-40 flex-shrink-0">
                 <input
                   type="text"
                   placeholder="Tìm kiếm..."
