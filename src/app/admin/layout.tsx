@@ -51,7 +51,7 @@ const sidebarItems: SidebarItem[] = [
     icon: Users,
   },
   {
-    name: 'Tin nháº¯n',
+    name: 'Tin nhắn',
     href: '/admin/chat',
     icon: MessageCircle,
   },
@@ -161,7 +161,7 @@ export default function AdminLayout({
             } else if (pathname.startsWith('/admin/customers')) {
               items.push({ label: 'Khách hàng' });
             } else if (pathname.startsWith('/admin/chat')) {
-              items.push({ label: 'Tin nháº¯n' });
+              items.push({ label: 'Tin nhắn' });
             } else if (pathname.startsWith('/admin/banners')) {
               items.push({ label: 'Banners' });
             } else if (pathname.startsWith('/admin/coupons')) {
