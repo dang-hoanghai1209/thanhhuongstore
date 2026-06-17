@@ -1,6 +1,7 @@
 import './globals.css';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import ZaloChatWidget from '@/components/common/ZaloChatWidget';
 
 export const metadata = {
   title: 'Hoàng Hải Sneaker - Tất, vớ, bao tay và phụ kiện thời trang cao cấp',
@@ -20,6 +21,7 @@ export default function RootLayout({
           {children}
         </div>
         <Footer />
+        <ZaloChatWidget />
       </body>
     </html>
   );
