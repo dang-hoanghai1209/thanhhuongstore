@@ -35,7 +35,7 @@ function formatOrder<T extends {
   items: Array<{
     unitPrice: unknown;
     priceAtPurchase: unknown;
-    variant: null | { retailPrice: unknown; wholesalePrice: unknown };
+    variant: null | { retailPrice: unknown; wholesalePrice?: unknown };
   }>;
 }>(order: T) {
   return {
@@ -49,11 +49,13 @@ function formatOrder<T extends {
       unitPrice: Number(item.unitPrice),
       priceAtPurchase: Number(item.priceAtPurchase),
       variant: item.variant
-        ? {
-            ...item.variant,
-            retailPrice: Number(item.variant.retailPrice),
-            wholesalePrice: Number(item.variant.wholesalePrice),
-          }
+        ? (() => {
+            const { wholesalePrice: _wholesalePrice, ...variant } = item.variant;
+            return {
+              ...variant,
+              retailPrice: Number(item.variant.retailPrice),
+            };
+          })()
         : null,
     })),
   };

@@ -273,7 +273,7 @@ export default function ResetPasswordPage() {
             Tài khoản của bạn luôn được bảo vệ tối đa.
           </h3>
           <p className="text-sm text-white/80 max-w-md font-normal leading-relaxed">
-            Hệ thống bảo mật đa lớp giúp đảm bảo giao dịch mua bán sỉ/lẻ diễn ra thuận lợi, minh bạch và an toàn tuyệt đối.
+            Hệ thống bảo mật đa lớp giúp đảm bảo giao dịch mua sắm diễn ra thuận lợi, minh bạch và an toàn tuyệt đối.
           </p>
         </div>
       </div>

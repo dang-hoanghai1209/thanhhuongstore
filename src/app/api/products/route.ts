@@ -67,7 +67,6 @@ const productInclude = {
       color: true,
       colorHex: true,
       retailPrice: true,
-      wholesalePrice: true,
       stock: true,
     },
     orderBy: [{ retailPrice: 'asc' as const }, { size: 'asc' as const }, { color: 'asc' as const }],
@@ -88,7 +87,6 @@ function formatProduct(product: ListedProduct) {
   const variants = product.variants.map((variant) => ({
     ...variant,
     retailPrice: toNumber(variant.retailPrice),
-    wholesalePrice: toNumber(variant.wholesalePrice),
   }));
   const variantPrices = variants.map((variant) => variant.retailPrice).filter((price) => price > 0);
   const price = variantPrices.length > 0 ? Math.min(...variantPrices) : 0;
@@ -110,7 +108,6 @@ function formatProduct(product: ListedProduct) {
     totalStock,
     isActive: product.isActive,
     isFeatured: product.isFeatured,
-    wholesaleTiers: product.wholesaleTiers,
     createdAt: product.createdAt,
     updatedAt: product.updatedAt,
   };

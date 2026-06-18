@@ -27,7 +27,6 @@ const productInclude = {
       color: true,
       colorHex: true,
       retailPrice: true,
-      wholesalePrice: true,
       stock: true,
     },
     orderBy: [{ retailPrice: 'asc' as const }],
@@ -48,7 +47,6 @@ function formatProduct(product: CategoryProduct) {
   const variants = product.variants.map((variant) => ({
     ...variant,
     retailPrice: toNumber(variant.retailPrice),
-    wholesalePrice: toNumber(variant.wholesalePrice),
   }));
   const prices = variants.map((variant) => variant.retailPrice).filter((price) => price > 0);
   const price = prices.length > 0 ? Math.min(...prices) : 0;

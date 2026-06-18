@@ -44,7 +44,7 @@ const navItems: NavItem[] = [
       { name: "Tất / Vớ", href: "/categories/tat-vo" },
       { name: "Tất nam", href: "/categories/tat-nam" },
       { name: "Tất bông / tất dày", href: "/categories/tat-bong-tat-day" },
-      { name: "Sản phẩm nhiều mẫu", href: "/categories/hang-nhieu-mau-gia-si" }
+      { name: "Sản phẩm nhiều mẫu", href: "/categories/san-pham-nhieu-mau" }
     ],
     featuredProducts: [
       {
@@ -578,7 +578,7 @@ export default function Header() {
                   Bao tay lao động
                 </Link>
                 <Link
-                  href="/categories/hang-nhieu-mau-gia-si"
+                  href="/categories/san-pham-nhieu-mau"
                   onClick={() => setMobileMenuOpen(false)}
                   className="text-sm font-bold text-gray-700 hover:text-primary transition"
                 >

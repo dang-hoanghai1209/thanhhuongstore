@@ -13,7 +13,6 @@ export interface ProductCardProps {
     name: string;
     slug: string;
     isFeatured?: boolean;
-    wholesaleTiers?: any;
     category?: {
       name: string;
     } | null;

@@ -28,7 +28,6 @@ interface Variant {
   color: string;
   colorHex: string;
   retailPrice: number;
-  wholesalePrice: number;
   stock: number;
 }
 
@@ -51,7 +50,6 @@ interface Product {
   category: Category;
   images: Image[];
   variants: Variant[];
-  wholesaleTiers?: any;
 }
 
 interface ProductDetailClientProps {
@@ -225,18 +223,6 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
     // Dynamic feed forward to slide open the MiniCart right away
     openCart();
   };
-
-  // Wholesale tiered values parsing
-  const tiers = useMemo(() => {
-    if (!product.wholesaleTiers) return [];
-    try {
-      return typeof product.wholesaleTiers === 'string'
-        ? JSON.parse(product.wholesaleTiers)
-        : product.wholesaleTiers;
-    } catch (e) {
-      return [];
-    }
-  }, [product.wholesaleTiers]);
 
   return (
     <main className="min-h-screen bg-[#FAF9F6] text-gray-900 pb-20 pt-6">

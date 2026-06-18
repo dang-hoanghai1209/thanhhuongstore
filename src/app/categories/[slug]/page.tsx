@@ -85,7 +85,16 @@ export default async function CategoryCatalogPage({ params, searchParams }: Cate
     include: {
       category: { select: { name: true } },
       images: true,
-      variants: true,
+      variants: {
+        select: {
+          id: true,
+          size: true,
+          color: true,
+          colorHex: true,
+          retailPrice: true,
+          stock: true,
+        },
+      },
     },
   });
   const products = rawProducts.map((product) => ({
@@ -93,7 +102,6 @@ export default async function CategoryCatalogPage({ params, searchParams }: Cate
     variants: product.variants.map((variant) => ({
       ...variant,
       retailPrice: Number(variant.retailPrice),
-      wholesalePrice: Number(variant.wholesalePrice),
     })),
   }));
 

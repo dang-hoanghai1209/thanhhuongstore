@@ -97,12 +97,17 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
   }
 
   // CRITICAL RULE: Wrap all Prisma Decimals with Number() to prevent hydration or type serialization errors
+  const { wholesaleTiers: _wholesaleTiers, ...publicProduct } = product;
   const serializedProduct = {
-    ...product,
+    ...publicProduct,
     variants: product.variants.map((v) => ({
-      ...v,
+      id: v.id,
+      sku: v.sku,
+      size: v.size,
+      color: v.color,
+      colorHex: v.colorHex,
       retailPrice: Number(v.retailPrice),
-      wholesalePrice: Number(v.wholesalePrice),
+      stock: v.stock,
     })),
   };
 

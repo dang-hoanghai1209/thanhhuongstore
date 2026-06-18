@@ -49,20 +49,25 @@ function formatCart<
   T extends {
     items: Array<{
       quantity: unknown;
-      variant: { retailPrice: unknown; wholesalePrice: unknown };
+      variant: { retailPrice: unknown };
     }>;
   },
 >(
   cart: T,
 ) {
-  const items = cart.items.map((item) => ({
-    ...item,
-    variant: {
-      ...item.variant,
-      retailPrice: Number(item.variant.retailPrice),
-      wholesalePrice: Number(item.variant.wholesalePrice),
-    },
-  }));
+  const items = cart.items.map((item) => {
+    const { wholesalePrice: _wholesalePrice, ...variant } = item.variant as typeof item.variant & {
+      wholesalePrice?: unknown;
+    };
+
+    return {
+      ...item,
+      variant: {
+        ...variant,
+        retailPrice: Number(item.variant.retailPrice),
+      },
+    };
+  });
   const subtotal = items.reduce(
     (sum, item) => sum + Number(item.variant.retailPrice) * Number(item.quantity ?? 0),
     0,

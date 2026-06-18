@@ -57,11 +57,13 @@ export async function GET(request: NextRequest, context: { params: { id: string 
         unitPrice: Number(item.unitPrice),
         priceAtPurchase: Number(item.priceAtPurchase),
         variant: item.variant
-          ? {
-              ...item.variant,
-              retailPrice: Number(item.variant.retailPrice),
-              wholesalePrice: Number(item.variant.wholesalePrice),
-            }
+          ? (() => {
+              const { wholesalePrice: _wholesalePrice, ...variant } = item.variant;
+              return {
+                ...variant,
+                retailPrice: Number(item.variant.retailPrice),
+              };
+            })()
           : null,
       })),
     });

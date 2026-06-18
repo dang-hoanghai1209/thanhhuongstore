@@ -17,7 +17,6 @@ const relatedProductInclude = {
     select: {
       id: true,
       retailPrice: true,
-      wholesalePrice: true,
       stock: true,
     },
     orderBy: [{ retailPrice: 'asc' as const }],
@@ -39,7 +38,6 @@ function formatRelatedProduct(product: RelatedProduct) {
   const variants = product.variants.map((variant) => ({
     ...variant,
     retailPrice: toNumber(variant.retailPrice),
-    wholesalePrice: toNumber(variant.wholesalePrice),
   }));
   const price = variants[0]?.retailPrice ?? 0;
   const totalStock = variants.reduce((sum, variant) => sum + toNumber(variant.stock), 0);
@@ -89,7 +87,6 @@ export async function GET(_request: Request, context: { params: { slug: string }
     const variants = product.variants.map((variant) => ({
       ...variant,
       retailPrice: toNumber(variant.retailPrice),
-      wholesalePrice: toNumber(variant.wholesalePrice),
     }));
     const prices = variants.map((variant) => variant.retailPrice).filter((price) => price > 0);
     const price = prices.length > 0 ? Math.min(...prices) : 0;
@@ -121,7 +118,6 @@ export async function GET(_request: Request, context: { params: { slug: string }
       totalStock,
       isActive: product.isActive,
       isFeatured: product.isFeatured,
-      wholesaleTiers: product.wholesaleTiers,
       createdAt: product.createdAt,
       updatedAt: product.updatedAt,
       relatedProducts: relatedProducts.map(formatRelatedProduct),

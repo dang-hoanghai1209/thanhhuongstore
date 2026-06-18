@@ -379,7 +379,7 @@ export default function RegisterPage() {
             Khơi nguồn tự tin, dẫn lối phong cách.
           </h3>
           <p className="text-sm text-white/80 max-w-md font-normal leading-relaxed">
-            Hưởng các đặc quyền chiết khấu tự động sỉ B2B, quản lý đơn hàng thông minh và hỗ trợ trực tuyến 24/7 từ Hoàng Hải Sneaker.
+            Quản lý tài khoản, theo dõi đơn hàng và nhận hỗ trợ trực tuyến 24/7 từ Hoàng Hải Sneaker.
           </p>
         </div>
       </div>

@@ -23,7 +23,7 @@ const wishlistInclude = {
             take: 1,
           },
           variants: {
-            select: { retailPrice: true, wholesalePrice: true, stock: true },
+            select: { retailPrice: true, stock: true },
             take: 1,
           },
         },
@@ -34,7 +34,7 @@ const wishlistInclude = {
 } as const;
 
 function formatWishlist<T extends {
-  items: Array<{ product: { variants: Array<{ retailPrice: unknown; wholesalePrice: unknown }> } }>;
+  items: Array<{ product: { variants: Array<{ retailPrice: unknown }> } }>;
 }>(wishlist: T) {
   return {
     ...wishlist,
@@ -45,7 +45,6 @@ function formatWishlist<T extends {
         variants: item.product.variants.map((variant) => ({
           ...variant,
           retailPrice: Number(variant.retailPrice),
-          wholesalePrice: Number(variant.wholesalePrice),
         })),
       },
     })),
