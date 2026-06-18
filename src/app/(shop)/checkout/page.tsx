@@ -331,7 +331,7 @@ export default function CheckoutPage() {
                     <Truck className="w-4.5 h-4.5 text-brand-600" />
                   </div>
                   <div className="flex-1">
-                    <h4 className="text-xs font-extrabold text-gray-900">Thanh toán khi nhận hàng (COD)</h4>
+                    <h4 className="text-xs font-extrabold text-gray-900">Thanh toán khi nhận hàng (COD) / Shop liên hệ xác nhận</h4>
                     <p className="text-[10px] text-gray-400 font-semibold mt-0.5">Khách hàng kiểm tra hàng trước khi thanh toán cho shipper.</p>
                   </div>
                   <span className={`w-4.5 h-4.5 rounded-full border-4 ${

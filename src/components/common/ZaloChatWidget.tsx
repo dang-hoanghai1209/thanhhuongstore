@@ -18,7 +18,7 @@ const welcomeMessage: ChatMessage = {
   id: 'welcome-msg',
   senderType: 'ADMIN',
   senderName: 'Hoàng Hải Sneaker',
-  content: 'Xin chào! Hoàng Hải Sneaker rất vui được hỗ trợ bạn.',
+  content: 'Xin chào! Hoàng Hải Sneaker rất vui được hỗ trợ bạn. Bạn cần tư vấn về sản phẩm hay chính sách nào ạ?',
   createdAt: new Date().toISOString(),
 };
 
@@ -51,7 +51,9 @@ export default function ZaloChatWidget() {
   const [isSending, setIsSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [hasUnread, setHasUnread] = useState(true);
+  
   const messageEndRef = useRef<HTMLDivElement>(null);
+  const lastSentTimeRef = useRef<number>(0);
 
   const ensureConversation = async () => {
     const storedConversationId = localStorage.getItem(CONVERSATION_ID_KEY);
@@ -159,6 +161,32 @@ export default function ZaloChatWidget() {
     }
   };
 
+  const handleQuickReplyClick = async (content: string) => {
+    if (isSending) return;
+    setError(null);
+    setIsSending(true);
+
+    try {
+      const activeConversationId = await ensureConversation();
+      const response = await fetch(`/api/chat/conversations/${activeConversationId}/messages`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content }),
+      });
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Không gửi được tin nhắn.');
+      }
+
+      await loadMessages(activeConversationId);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Không gửi được tin nhắn.');
+    } finally {
+      setIsSending(false);
+    }
+  };
+
   useEffect(() => {
     const storedConversationId = localStorage.getItem(CONVERSATION_ID_KEY);
 
@@ -172,6 +200,52 @@ export default function ZaloChatWidget() {
     if (localStorage.getItem('hhsneaker_chat_unread') === 'false') {
       setHasUnread(false);
     }
+  }, []);
+
+  useEffect(() => {
+    const handleOpenChatEvent = async (e: Event) => {
+      const customEvent = e as CustomEvent<{ message: string }>;
+      const msgContent = customEvent.detail?.message;
+      if (!msgContent) return;
+
+      // Prevent duplicate event handling if clicked within 3 seconds
+      const now = Date.now();
+      if (now - lastSentTimeRef.current < 3000) {
+        return;
+      }
+      lastSentTimeRef.current = now;
+
+      setIsOpen(true);
+      setHasUnread(false);
+      setError(null);
+      setIsLoading(true);
+
+      try {
+        const activeConversationId = await ensureConversation();
+        
+        const response = await fetch(`/api/chat/conversations/${activeConversationId}/messages`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ content: msgContent }),
+        });
+        const result = await response.json();
+
+        if (!response.ok) {
+          throw new Error(result.error || 'Không gửi được tin nhắn.');
+        }
+
+        await loadMessages(activeConversationId);
+      } catch (err) {
+        console.error('Failed to auto send context message:', err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    window.addEventListener('hhsneaker:open-chat', handleOpenChatEvent);
+    return () => {
+      window.removeEventListener('hhsneaker:open-chat', handleOpenChatEvent);
+    };
   }, []);
 
   useEffect(() => {
@@ -193,6 +267,8 @@ export default function ZaloChatWidget() {
     return () => window.clearInterval(intervalId);
   }, [isOpen, conversationId]);
 
+  const hasUserMessages = messages.some((m) => m.senderType === 'VISITOR');
+
   return (
     <div className="fixed bottom-6 right-6 z-50 font-sans select-none">
       {!isOpen && (
@@ -213,6 +289,7 @@ export default function ZaloChatWidget() {
 
       {isOpen && (
         <div className="flex h-[calc(100vh-140px)] w-[calc(100vw-32px)] flex-col overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-2xl sm:h-[580px] sm:w-[380px]">
+          {/* Header */}
           <div className="flex shrink-0 items-center justify-between bg-[#0068FF] p-4 text-white shadow-sm">
             <div className="flex items-center gap-3">
               <div className="relative flex h-10 w-10 items-center justify-center rounded-full border-2 border-white/80 bg-white text-sm font-black text-[#0068FF]">
@@ -234,6 +311,7 @@ export default function ZaloChatWidget() {
             </button>
           </div>
 
+          {/* Messages */}
           <div className="flex-grow space-y-4 overflow-y-auto bg-slate-50 p-4">
             {isLoading && (
               <p className="py-4 text-center text-xs font-semibold text-slate-500">Đang tải hội thoại...</p>
@@ -273,12 +351,34 @@ export default function ZaloChatWidget() {
             <div ref={messageEndRef} />
           </div>
 
+          {/* Quick replies above inputs */}
+          {!hasUserMessages && (
+            <div className="flex flex-wrap gap-2 px-4 py-2 bg-slate-50 border-t border-slate-100/50 shrink-0">
+              {[
+                'Tôi muốn hỏi giá sản phẩm',
+                'Sản phẩm này còn hàng không?',
+                'Tôi muốn xem thêm mẫu',
+                'Tôi muốn đặt hàng',
+              ].map((reply, idx) => (
+                <button
+                  key={idx}
+                  type="button"
+                  onClick={() => handleQuickReplyClick(reply)}
+                  className="rounded-full border border-[#0068FF]/20 bg-white px-3 py-1.5 text-xs font-bold text-[#0068FF] shadow-2xs hover:bg-[#0068FF]/5 hover:border-[#0068FF] transition-all active:scale-95 text-left"
+                >
+                  {reply}
+                </button>
+              ))}
+            </div>
+          )}
+
           {error && (
             <div className="border-t border-red-100 bg-red-50 px-4 py-2 text-xs font-semibold text-red-700">
               {error}
             </div>
           )}
 
+          {/* Chat input */}
           <form onSubmit={handleSendMessage} className="flex shrink-0 items-center gap-2 border-t border-slate-100 bg-white p-3">
             <input
               type="text"
@@ -302,4 +402,3 @@ export default function ZaloChatWidget() {
     </div>
   );
 }
-

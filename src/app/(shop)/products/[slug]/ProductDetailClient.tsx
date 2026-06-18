@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import {
   Plus,
   Minus,
@@ -11,7 +11,9 @@ import {
   RotateCcw,
   Sparkles,
   HelpCircle,
-  Check
+  Check,
+  Heart,
+  MessageCircle
 } from 'lucide-react';
 import Link from 'next/link';
 import { useCartStore } from '@/store/useCartStore';
@@ -58,6 +60,59 @@ interface ProductDetailClientProps {
 
 export default function ProductDetailClient({ product }: ProductDetailClientProps) {
   const { name, category, images, variants } = product;
+
+  const [isWishlisted, setIsWishlisted] = useState(false);
+  const [isAsking, setIsAsking] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem('hhsneaker_wishlist');
+      if (stored) {
+        try {
+          const list = JSON.parse(stored) as string[];
+          setIsWishlisted(list.includes(product.id));
+        } catch (e) {
+          console.error(e);
+        }
+      }
+    }
+  }, [product.id]);
+
+  const toggleWishlist = () => {
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem('hhsneaker_wishlist');
+      let list: string[] = [];
+      if (stored) {
+        try {
+          list = JSON.parse(stored) as string[];
+        } catch (e) {
+          console.error(e);
+        }
+      }
+      if (list.includes(product.id)) {
+        list = list.filter(id => id !== product.id);
+        setIsWishlisted(false);
+      } else {
+        list.push(product.id);
+        setIsWishlisted(true);
+      }
+      localStorage.setItem('hhsneaker_wishlist', JSON.stringify(list));
+      window.dispatchEvent(new Event('storage'));
+    }
+  };
+
+  const handleAskProduct = () => {
+    if (isAsking) return;
+    setIsAsking(true);
+    setTimeout(() => setIsAsking(false), 2000);
+
+    const productUrl = typeof window !== 'undefined' ? `${window.location.origin}/products/${product.slug}` : `/products/${product.slug}`;
+    const contextMsg = `Tôi muốn hỏi thông tin sản phẩm: ${product.name} (Link: ${productUrl})`;
+
+    window.dispatchEvent(new CustomEvent('hhsneaker:open-chat', {
+      detail: { message: contextMsg }
+    }));
+  };
 
   // 1. Gallery State
   const defaultImage = images.find(img => img.isPrimary)?.url || images[0]?.url || DEFAULT_PRODUCT_IMAGE;
@@ -244,6 +299,9 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
               <h1 className="text-xl sm:text-2xl font-black text-gray-950 leading-tight tracking-tight">
                 {name}
               </h1>
+              <p className="text-[11px] font-bold text-gray-450 uppercase tracking-wider">
+                Mã sản phẩm: {product.slug}
+              </p>
             </div>
 
             {/* Display Retail Price */}
@@ -332,7 +390,7 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
 
             {/* Quantity adjust & Add actions */}
             <div className="space-y-4 pt-4 border-t border-gray-100/60">
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-3">
 
                 {/* Quantity modifier */}
                 <div className="flex items-center border border-gray-200 rounded-brand-md bg-white p-1 shadow-2xs">
@@ -359,7 +417,7 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
                 <button
                   onClick={handleAddToCart}
                   disabled={!selectedVariant || selectedVariant.stock === 0}
-                  className={`flex-1 py-3.5 rounded-brand-md text-xs font-black uppercase tracking-wider transition flex items-center justify-center gap-2 border shadow-xs ${
+                  className={`flex-grow py-3.5 rounded-brand-md text-xs font-black uppercase tracking-wider transition flex items-center justify-center gap-2 border shadow-xs ${
                     !selectedVariant
                       ? 'bg-gray-100 text-gray-400 border-transparent cursor-not-allowed'
                       : selectedVariant.stock === 0
@@ -372,21 +430,39 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
                   {addedStatus ? (
                     <>
                       <Check className="w-4 h-4" />
-                      Đã thêm vào giỏ!
+                      Đã thêm!
                     </>
                   ) : (
                     <>
                       <ShoppingBag className="w-4 h-4" />
                       {!selectedVariant
-                        ? 'Vui lòng chọn phân loại'
+                        ? 'Chọn phân loại'
                         : selectedVariant.stock === 0
                           ? 'Hết hàng'
-                          : 'Thêm vào giỏ hàng'}
+                          : 'Thêm vào giỏ'}
                     </>
                   )}
                 </button>
 
+                {/* Heart Favorite Button */}
+                <button
+                  onClick={toggleWishlist}
+                  className="p-3.5 rounded-brand-md border border-gray-200 hover:border-gray-300 hover:bg-gray-50 transition flex items-center justify-center shadow-2xs"
+                  title={isWishlisted ? 'Xóa khỏi yêu thích' : 'Thêm vào yêu thích'}
+                >
+                  <Heart className={`w-4 h-4 transition-colors ${isWishlisted ? 'text-red-500 fill-red-500' : 'text-gray-400'}`} />
+                </button>
               </div>
+
+              {/* Hỏi tư vấn button */}
+              <button
+                onClick={handleAskProduct}
+                disabled={isAsking}
+                className="w-full py-3 bg-[#0068FF] hover:bg-[#0055D0] text-white rounded-brand-md text-xs font-bold transition flex items-center justify-center gap-2 shadow-xs disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <MessageCircle className="w-4 h-4" />
+                Hỏi tư vấn về sản phẩm này
+              </button>
             </div>
 
             {/* Tabs details specifications */}
@@ -418,9 +494,9 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
                       Sản phẩm được gia công dệt sợi tỉ mỉ trên chất liệu thun cotton organic và thun Ý mềm mại dẻo dai. Dáng thiết kế thoải mái nâng niu cơ thể, thấm hút mồ hôi và cực kỳ thoáng khí, thích hợp mặc hàng ngày.
                     </p>
                     <ul className="list-disc list-inside space-y-1 text-gray-600 font-medium pl-1">
-                      <li>Kháng khuẩn, khử mùi tự nhiên tối đa.</li>
-                      <li>Co giãn co giãn đa chiều, không nhão xù sau giặt máy.</li>
-                      <li>Sợi vải cao cấp an toàn và thân thiện tuyệt đối với làn da nhạy cảm.</li>
+                      <li>Thoáng khí, giảm mùi hôi tự nhiên.</li>
+                      <li>Co giãn đa chiều, giữ dáng tốt sau nhiều lần giặt.</li>
+                      <li>Sợi vải mềm mại, thân thiện với làn da.</li>
                     </ul>
                   </div>
                 )}

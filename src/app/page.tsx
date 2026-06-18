@@ -44,6 +44,7 @@ export const revalidate = 60; // Revalidate the page cache every 60 seconds
 
 export default async function HomePage() {
   let products: DBProduct[] = [];
+  let featuredProducts: DBProduct[] = [];
   let categories: { name: string; slug: string; id: string; sizeType: string }[] = [];
 
   try {
@@ -51,6 +52,22 @@ export default async function HomePage() {
     products = await prisma.product.findMany({
       where: { isActive: true },
       take: 8,
+      include: {
+        category: true,
+        images: {
+          orderBy: { sortOrder: 'asc' }
+        },
+        variants: {
+          orderBy: { size: 'asc' }
+        }
+      },
+      orderBy: { createdAt: 'desc' }
+    }) as any;
+
+    // 1b. Fetch 4 featured products from PostgreSQL
+    featuredProducts = await prisma.product.findMany({
+      where: { isActive: true, isFeatured: true },
+      take: 4,
       include: {
         category: true,
         images: {
@@ -245,8 +262,85 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* 4. FEATURED PRODUCTS (8 ITEMS FROM DATABASE) */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {/* FEATURED PRODUCTS SHOWCASE */}
+      {featuredProducts.length > 0 && (
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-10 pb-4 border-b border-gray-200 gap-4">
+            <div className="space-y-1">
+              <h2 className="text-xl sm:text-2xl font-black text-gray-900 uppercase tracking-tight flex items-center gap-2">
+                Sản Phẩm Nổi Bật
+                <span className="w-2.5 h-2.5 rounded-full bg-brand-600 animate-pulse" />
+              </h2>
+              <p className="text-xs text-gray-400 font-bold">Các sản phẩm tiêu biểu bán chạy nhất tại Hoàng Hải Sneaker.</p>
+            </div>
+            <Link
+              href="/products?featured=true"
+              className="text-xs font-bold text-brand-600 hover:text-brand-700 flex items-center gap-1.5 group shrink-0"
+            >
+              Xem sản phẩm nổi bật
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 sm:gap-8">
+            {featuredProducts.map((product) => {
+              const firstVariant = product.variants && product.variants[0];
+              const price = firstVariant ? Number(firstVariant.retailPrice) : 0;
+              const primaryImage = product.images.find(img => img.isPrimary) || product.images[0];
+              const imageUrl = primaryImage ? primaryImage.url : DEFAULT_PRODUCT_IMAGE;
+
+              return (
+                <div
+                  key={product.id}
+                  className="group bg-white rounded-brand-lg border border-gray-100 overflow-hidden shadow-xs hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col relative"
+                >
+                  <div className="relative w-full aspect-[4/5] bg-gray-50 overflow-hidden border-b border-gray-100">
+                    <img
+                      src={imageUrl}
+                      alt={product.name}
+                      className="w-full h-full object-cover object-center group-hover:scale-103 transition-transform duration-500"
+                    />
+                    <span className="absolute top-3 left-3 px-2 py-0.5 rounded bg-brand-600 text-white text-[8px] font-black uppercase tracking-widest shadow-xs">
+                      Nổi bật
+                    </span>
+                  </div>
+
+                  <div className="p-4 flex-1 flex flex-col justify-between space-y-4">
+                    <div className="space-y-1">
+                      <span className="text-[9px] font-black text-brand-600 uppercase tracking-widest block">
+                        {product.category?.name || 'Sản phẩm'}
+                      </span>
+                      <h3 className="text-xs font-bold text-gray-900 group-hover:text-brand-600 transition-colors line-clamp-2 leading-tight">
+                        {product.name}
+                      </h3>
+                    </div>
+
+                    <div className="flex items-center justify-between pt-1">
+                      <div>
+                        <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest block">Giá bán</span>
+                        <p className="text-sm font-black text-gray-900 mt-0.5">
+                          {price > 0 ? `${price.toLocaleString('vi-VN')} đ` : 'Liên hệ'}
+                        </p>
+                      </div>
+
+                      <Link
+                        href={`/products/${product.slug}`}
+                        className="p-2 rounded-brand-md bg-gray-50 hover:bg-brand-600 text-gray-600 hover:text-white transition-all shadow-3xs"
+                        title="Xem chi tiết"
+                      >
+                        <ShoppingBag className="w-3.5 h-3.5" />
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+      )}
+
+      {/* 4. NEWEST PRODUCTS */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 border-t border-gray-100">
 
         <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-10 pb-4 border-b border-gray-200 gap-4">
           <div className="space-y-1">

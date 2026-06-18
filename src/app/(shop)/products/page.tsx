@@ -5,6 +5,7 @@ import { EmptyState } from '@/components/ui/States';
 import ProductCard from '@/components/ui/ProductCard';
 import Breadcrumb from '@/components/ui/Breadcrumb';
 import PageHeader from '@/components/ui/PageHeader';
+import ProductFilterMobile from '@/components/ui/ProductFilterMobile';
 
 interface ProductsPageProps {
   searchParams: {
@@ -299,6 +300,7 @@ export default async function ProductsCatalogPage({ searchParams }: ProductsPage
 
           {/* MAIN CATALOG GRID (3/4 columns) */}
           <div className="lg:col-span-3 space-y-6">
+            <ProductFilterMobile categories={categories} searchParams={searchParams} />
 
             {/* Sorting Header Bar (pure HTML links to avoid client component complexity) */}
             <div className="flex items-center justify-between bg-white p-4 rounded-brand-lg border border-gray-100/60 shadow-xs flex-wrap gap-4">

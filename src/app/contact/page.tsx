@@ -15,7 +15,7 @@ export default function ContactPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name || !email || !message) return;
+    if (!name || !phone || !message) return;
 
     setLoading(true);
     setSuccess(false);
@@ -40,7 +40,7 @@ export default function ContactPage() {
       <div>
         <h1 className="text-2xl sm:text-3xl font-extrabold text-on-surface tracking-tight">Liên Hệ Với Chúng Tôi</h1>
         <p className="text-xs text-on-surface-variant/70 mt-1">
-          Chúng tôi luôn sẵn sàng tiếp nhận ý kiến đóng góp, giải đáp thắc mắc và hỗ trợ chính sách sỉ/lẻ từ bạn.
+          Chúng tôi luôn sẵn sàng tiếp nhận ý kiến đóng góp, giải đáp thắc mắc và hỗ trợ từ bạn.
         </p>
       </div>
 
@@ -121,7 +121,7 @@ export default function ContactPage() {
               <div className="space-y-0.5">
                 <p className="font-bold text-[13px]">Lời nhắn đã gửi thành công!</p>
                 <p className="text-[11px] text-emerald-600 font-normal">
-                  Cảm ơn bạn đã gửi ý kiến. Nhân viên hỗ trợ của Hoàng Hải Sneaker sẽ phản hồi lại bạn sớm nhất.
+                  Cảm ơn bạn đã gửi yêu cầu. Hoàng Hải Sneaker sẽ liên hệ lại sớm nhất có thể.
                 </p>
               </div>
             </div>
@@ -144,10 +144,9 @@ export default function ContactPage() {
 
               {/* Email field */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Địa chỉ Email *</label>
+                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Địa chỉ Email</label>
                 <input
                   type="email"
-                  required
                   placeholder="name@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -159,9 +158,10 @@ export default function ContactPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {/* Phone field */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Số điện thoại</label>
+                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Số điện thoại *</label>
                 <input
                   type="tel"
+                  required
                   placeholder="0912345678"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
@@ -188,7 +188,7 @@ export default function ContactPage() {
               <textarea
                 required
                 rows={5}
-                placeholder="Vui lòng viết chi tiết câu hỏi hoặc yêu cầu hỗ trợ sỉ..."
+                placeholder="Vui lòng viết chi tiết câu hỏi hoặc yêu cầu hỗ trợ..."
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 className="textarea-standard"
@@ -199,7 +199,7 @@ export default function ContactPage() {
             <div className="pt-2">
               <button
                 type="submit"
-                disabled={loading || !name || !email || !message}
+                disabled={loading || !name || !phone || !message}
                 className="px-6 py-3 bg-primary hover:bg-primary-container text-white font-bold rounded-xl text-xs transition shadow-md flex items-center justify-center gap-1.5 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? (

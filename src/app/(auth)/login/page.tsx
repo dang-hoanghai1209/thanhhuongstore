@@ -174,6 +174,7 @@ export default function LoginPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="pl-10 input-standard"
+                  tabIndex={1}
                 />
                 <span className="material-symbols-outlined text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 text-[18px]">mail</span>
               </div>
@@ -188,6 +189,7 @@ export default function LoginPage() {
                 <Link 
                   href="/forgot-password" 
                   className="text-[10px] font-bold text-primary hover:text-primary-container transition"
+                  tabIndex={4}
                 >
                   Quên mật khẩu?
                 </Link>
@@ -200,6 +202,7 @@ export default function LoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="pl-10 pr-10 input-standard"
+                  tabIndex={2}
                 />
                 <span className="material-symbols-outlined text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 text-[18px]">lock</span>
                 <button
@@ -219,6 +222,7 @@ export default function LoginPage() {
               type="submit"
               disabled={loading || !email || !password}
               className="w-full py-3 bg-primary hover:bg-primary-container text-white rounded-xl text-xs font-bold transition shadow-md disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 active:scale-95"
+              tabIndex={3}
             >
               {loading ? (
                 <>
@@ -274,7 +278,7 @@ export default function LoginPage() {
           {/* Register Link footer */}
           <p className="text-center text-xs text-gray-500 font-medium">
             Chưa có tài khoản?{' '}
-            <Link href="/register" className="font-bold text-primary hover:text-primary-container transition">
+            <Link href="/register" className="font-bold text-primary hover:text-primary-container transition" tabIndex={5}>
               Đăng ký
             </Link>
           </p>

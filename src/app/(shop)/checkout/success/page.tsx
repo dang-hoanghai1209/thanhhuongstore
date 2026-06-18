@@ -68,7 +68,7 @@ function getPaymentMessage(paymentMethod: PaymentMethod | undefined, paymentStat
       : 'Nếu bạn đã thanh toán VNPay, trạng thái sẽ được cập nhật sau khi cổng thanh toán phản hồi.';
   }
 
-  return 'Đơn hàng đã được ghi nhận. Shop sẽ liên hệ xác nhận trước khi giao hàng.';
+  return 'Shop sẽ liên hệ xác nhận đơn hàng sớm nhất, có thể mất từ 15 đến 60 phút.';
 }
 
 function SuccessPageContent() {
@@ -313,7 +313,7 @@ function SuccessPageContent() {
             Các bước tiếp theo:
           </p>
           <p className="pl-5 relative before:content-['•'] before:absolute before:left-1 before:text-brand-500 leading-normal">
-            Nhân viên hỗ trợ sẽ liên hệ trực tiếp với bạn qua số điện thoại để xác nhận thông tin đơn hàng.
+            Shop sẽ liên hệ xác nhận đơn hàng sớm nhất, có thể mất từ 15 đến 60 phút.
           </p>
           {resolvedPaymentMethod === 'BANK_TRANSFER' ? (
             <p className="pl-5 relative before:content-['•'] before:absolute before:left-1 before:text-brand-500 leading-normal">

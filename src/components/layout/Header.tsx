@@ -6,6 +6,7 @@ import MiniCart from '@/components/cart/MiniCart';
 import { useCartStore } from '@/store/useCartStore';
 import { useAuthStore } from '@/store';
 import { useRouter } from 'next/navigation';
+import { User, Heart } from 'lucide-react';
 
 interface DropdownItem {
   name: string;
@@ -322,6 +323,15 @@ export default function Header() {
                 <span className="material-symbols-outlined text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 text-[16px]">search</span>
               </form>
 
+              {/* Wishlist Icon */}
+              <Link
+                href="/wishlist"
+                className="p-2.5 rounded-brand-md text-gray-500 hover:bg-gray-50 hover:text-gray-900 transition flex items-center justify-center"
+                title="Danh sách yêu thích"
+              >
+                <Heart className="w-5 h-5" />
+              </Link>
+
               {/* Account icon */}
               {mounted && user ? (
                 <div className="relative" ref={dropdownRef}>
@@ -329,7 +339,7 @@ export default function Header() {
                     onClick={() => setUserDropdownOpen(!userDropdownOpen)}
                     className="flex items-center gap-1.5 p-2 rounded-brand-md text-gray-500 hover:bg-gray-50 hover:text-gray-900 transition"
                   >
-                    <span className="material-symbols-outlined text-[20px]">person</span>
+                    <User className="w-5 h-5" />
                     <span className="hidden md:inline text-xs font-bold text-gray-700">
                       {user.firstName}
                     </span>
@@ -376,25 +386,12 @@ export default function Header() {
                   )}
                 </div>
               ) : (
-                <div className="hidden sm:flex items-center gap-1.5 text-xs font-bold text-gray-700">
-                  <Link href="/login" className="hover:text-primary transition">
-                    Đăng nhập
-                  </Link>
-                  <span className="text-gray-300">/</span>
-                  <Link href="/register" className="hover:text-primary transition">
-                    Đăng ký
-                  </Link>
-                </div>
-              )}
-
-              {/* Account icon (Mobile fallback trigger or guest fallback) */}
-              {(!mounted || !user) && (
                 <Link
                   href="/login"
-                  className="sm:hidden p-2.5 rounded-brand-md text-gray-500 hover:bg-gray-50 hover:text-gray-900 transition flex items-center justify-center"
-                  title="Tài khoản"
+                  className="p-2.5 rounded-brand-md text-gray-500 hover:bg-gray-50 hover:text-gray-900 transition flex items-center justify-center"
+                  title="Đăng nhập"
                 >
-                  <span className="material-symbols-outlined text-[20px]">person</span>
+                  <User className="w-5 h-5" />
                 </Link>
               )}
 
@@ -515,22 +512,13 @@ export default function Header() {
                   </div>
                 </div>
               ) : (
-                <div className="flex gap-4">
-                  <Link
-                    href="/login"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="flex-1 py-2.5 text-center text-xs font-bold text-gray-700 border border-gray-200 rounded-brand-md bg-white hover:bg-gray-50 transition"
-                  >
-                    Đăng nhập
-                  </Link>
-                  <Link
-                    href="/register"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="flex-1 py-2.5 text-center text-xs font-bold text-white bg-primary rounded-brand-md hover:bg-primary-container transition"
-                  >
-                    Đăng ký
-                  </Link>
-                </div>
+                <Link
+                  href="/login"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block w-full py-2.5 text-center text-xs font-bold text-white bg-primary rounded-brand-md hover:bg-primary-container transition"
+                >
+                  Đăng nhập
+                </Link>
               )}
             </div>
 
@@ -553,6 +541,13 @@ export default function Header() {
                   className="text-sm font-bold text-gray-700 hover:text-primary transition"
                 >
                   Sản phẩm
+                </Link>
+                <Link
+                  href="/wishlist"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-sm font-bold text-gray-700 hover:text-primary transition"
+                >
+                  Yêu thích
                 </Link>
                 <Link
                   href="/categories/tat-vo"
