@@ -32,6 +32,7 @@ const querySchema = z
       .default('newest'),
     page: z.coerce.number().int().positive().default(1),
     limit: z.coerce.number().int().positive().max(100).default(12),
+    slugs: z.string().trim().min(1).max(5000).optional(),
   })
   .superRefine((value, context) => {
     if (
@@ -145,6 +146,7 @@ export async function GET(request: NextRequest) {
       sort: request.nextUrl.searchParams.get('sort') ?? undefined,
       page: request.nextUrl.searchParams.get('page') ?? undefined,
       limit: request.nextUrl.searchParams.get('limit') ?? undefined,
+      slugs: request.nextUrl.searchParams.get('slugs') ?? undefined,
     });
 
     if (!payload.success) {
@@ -158,6 +160,12 @@ export async function GET(request: NextRequest) {
     }
 
     const { minPrice, maxPrice, sort, page, limit } = payload.data;
+    const slugs = payload.data.slugs
+      ?.split(',')
+      .map((slug) => slug.trim())
+      .filter(Boolean)
+      .filter((slug, index, list) => list.indexOf(slug) === index)
+      .slice(0, 200);
     const category = payload.data.category ?? payload.data.categorySlug ?? '';
     const q = payload.data.q ?? payload.data.search ?? '';
     const skip = (page - 1) * limit;
@@ -197,7 +205,25 @@ export async function GET(request: NextRequest) {
     let products: ListedProduct[];
     let total: number;
 
-    if (sort === 'price_asc' || sort === 'price_desc') {
+    if (slugs) {
+      products = await prisma.product.findMany({
+        where: {
+          isActive: true,
+          slug: {
+            in: slugs,
+          },
+          category: {
+            isActive: true,
+          },
+        },
+        include: productInclude,
+      });
+      const productOrder = new Map(slugs.map((slug, index) => [slug, index]));
+      products.sort(
+        (left, right) => (productOrder.get(left.slug) ?? 0) - (productOrder.get(right.slug) ?? 0),
+      );
+      total = products.length;
+    } else if (sort === 'price_asc' || sort === 'price_desc') {
       const priceDirection = sort === 'price_asc' ? 'asc' : 'desc';
       const [groupedVariants, productCount] = await prisma.$transaction([
         prisma.productVariant.groupBy({

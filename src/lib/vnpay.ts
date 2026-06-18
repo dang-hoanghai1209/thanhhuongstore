@@ -33,6 +33,15 @@ function getRequiredEnv(name: 'VNPAY_TMN_CODE' | 'VNPAY_HASH_SECRET' | 'VNPAY_UR
   return value;
 }
 
+export function isVNPayConfigured() {
+  return Boolean(
+    process.env.VNPAY_TMN_CODE?.trim() &&
+      process.env.VNPAY_HASH_SECRET?.trim() &&
+      process.env.VNPAY_URL?.trim() &&
+      process.env.VNPAY_RETURN_URL?.trim(),
+  );
+}
+
 function getVNPayConfig(): VNPayConfig {
   return {
     tmnCode: getRequiredEnv('VNPAY_TMN_CODE'),

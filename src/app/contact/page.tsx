@@ -15,22 +15,46 @@ export default function ContactPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name || !phone || !message) return;
+    if (!name.trim() || !phone.trim() || !message.trim()) {
+      setError('Không gửi được yêu cầu. Vui lòng thử lại sau.');
+      return;
+    }
 
     setLoading(true);
     setSuccess(false);
     setError(null);
 
-    // Mock API call to submit inquiry
-    setTimeout(() => {
-      setLoading(false);
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          phone,
+          subject,
+          message,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Contact inquiry request failed.');
+      }
+
       setSuccess(true);
       setName('');
       setEmail('');
       setPhone('');
       setSubject('');
       setMessage('');
-    }, 1000);
+    } catch (err) {
+      setError('Không gửi được yêu cầu. Vui lòng thử lại sau.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -124,6 +148,13 @@ export default function ContactPage() {
                   Cảm ơn bạn đã gửi yêu cầu. Hoàng Hải Sneaker sẽ liên hệ lại sớm nhất có thể.
                 </p>
               </div>
+            </div>
+          )}
+
+          {error && (
+            <div className="p-4 bg-red-50 border border-red-100 rounded-brand-md text-red-700 text-xs font-semibold flex items-center gap-3 shadow-xs animate-fadeIn">
+              <span className="material-symbols-outlined text-red-600 text-[20px] shrink-0">error</span>
+              <p>{error}</p>
             </div>
           )}
 

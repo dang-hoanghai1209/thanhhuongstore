@@ -9,7 +9,7 @@ generator client {
 }
 
 // ==========================================
-// ENUMS (8)
+// ENUMS (9)
 // ==========================================
 
 enum UserRole {
@@ -66,8 +66,14 @@ enum ChatSenderType {
   SYSTEM
 }
 
+enum ContactInquiryStatus {
+  PENDING
+  READ
+  RESOLVED
+}
+
 // ==========================================
-// MODELS (20)
+// MODELS (21)
 // ==========================================
 
 // USER & AUTH (5 Models)
@@ -256,6 +262,21 @@ model ChatMessage {
   @@index([conversationId, createdAt])
   @@index([senderType])
   @@index([isReadByAdmin])
+}
+
+model ContactInquiry {
+  id        String               @id @default(cuid())
+  name      String
+  phone     String
+  email     String?
+  subject   String?
+  message   String
+  status    ContactInquiryStatus @default(PENDING)
+  createdAt DateTime             @default(now())
+  updatedAt DateTime             @updatedAt
+
+  @@index([status, createdAt])
+  @@index([createdAt])
 }
 
 // COMMERCE (4 Models)

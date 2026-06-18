@@ -41,13 +41,22 @@ export default function ProductCard({ product }: ProductCardProps) {
       if (stored) {
         try {
           const list = JSON.parse(stored) as string[];
-          setIsWishlisted(list.includes(product.id));
+          const isStoredBySlug = list.includes(product.slug);
+          const isStoredByLegacyId = list.includes(product.id);
+          setIsWishlisted(isStoredBySlug || isStoredByLegacyId);
+
+          if (isStoredByLegacyId) {
+            const migratedList = Array.from(
+              new Set([...list.filter((item) => item !== product.id), product.slug]),
+            );
+            localStorage.setItem('hhsneaker_wishlist', JSON.stringify(migratedList));
+          }
         } catch (e) {
           console.error(e);
         }
       }
     }
-  }, [product.id]);
+  }, [product.id, product.slug]);
 
   const toggleWishlist = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -62,11 +71,11 @@ export default function ProductCard({ product }: ProductCardProps) {
           console.error(e);
         }
       }
-      if (list.includes(product.id)) {
-        list = list.filter(id => id !== product.id);
+      if (list.includes(product.slug) || list.includes(product.id)) {
+        list = list.filter(item => item !== product.slug && item !== product.id);
         setIsWishlisted(false);
       } else {
-        list.push(product.id);
+        list.push(product.slug);
         setIsWishlisted(true);
       }
       localStorage.setItem('hhsneaker_wishlist', JSON.stringify(list));

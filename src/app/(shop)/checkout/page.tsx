@@ -43,6 +43,12 @@ type CheckoutResponse = {
   error?: string;
 };
 
+type PaymentMethodsResponse = {
+  methods?: {
+    vnpay?: boolean;
+  };
+};
+
 export default function CheckoutPage() {
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
@@ -55,6 +61,7 @@ export default function CheckoutPage() {
   const [address, setAddress] = useState('');
   const [notes, setNotes] = useState('');
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('COD');
+  const [vnpayEnabled, setVnpayEnabled] = useState(false);
 
   // Submit & Error Handling States
   const [loading, setLoading] = useState(false);
@@ -63,6 +70,31 @@ export default function CheckoutPage() {
   // Avoid Next.js hydration mismatches
   useEffect(() => {
     setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    const loadPaymentMethods = async () => {
+      try {
+        const response = await fetch('/api/payment/methods');
+        if (!response.ok) {
+          setVnpayEnabled(false);
+          return;
+        }
+
+        const data = (await response.json()) as PaymentMethodsResponse;
+        const enabled = Boolean(data.methods?.vnpay);
+        setVnpayEnabled(enabled);
+
+        if (!enabled) {
+          setPaymentMethod((current) => (current === 'VNPAY' ? 'COD' : current));
+        }
+      } catch {
+        setVnpayEnabled(false);
+        setPaymentMethod((current) => (current === 'VNPAY' ? 'COD' : current));
+      }
+    };
+
+    loadPaymentMethods();
   }, []);
 
   // Calculate items cost
@@ -96,6 +128,12 @@ export default function CheckoutPage() {
 
     if (items.length === 0) {
       setError('Giỏ hàng của bạn đang trống.');
+      return;
+    }
+
+    if (paymentMethod === 'VNPAY' && !vnpayEnabled) {
+      setError('VNPay tạm thời chưa khả dụng. Vui lòng chọn phương thức thanh toán khác.');
+      setPaymentMethod('COD');
       return;
     }
 
@@ -360,26 +398,27 @@ export default function CheckoutPage() {
                   }`} />
                 </div>
 
-                {/* VNPAY Radio */}
-                <div
-                  onClick={() => setPaymentMethod('VNPAY')}
-                  className={`p-4 border rounded-brand-md flex items-center gap-4 relative cursor-pointer transition ${
-                    paymentMethod === 'VNPAY'
-                      ? 'bg-brand-50/50 border-brand-500'
-                      : 'border-gray-200 hover:border-gray-300'
-                  }`}
-                >
-                  <div className="w-8 h-8 rounded-full bg-brand-100 flex items-center justify-center text-brand-600 shrink-0">
-                    <CreditCard className="w-4.5 h-4.5 text-brand-600" />
+                {vnpayEnabled && (
+                  <div
+                    onClick={() => setPaymentMethod('VNPAY')}
+                    className={`p-4 border rounded-brand-md flex items-center gap-4 relative cursor-pointer transition ${
+                      paymentMethod === 'VNPAY'
+                        ? 'bg-brand-50/50 border-brand-500'
+                        : 'border-gray-200 hover:border-gray-300'
+                    }`}
+                  >
+                    <div className="w-8 h-8 rounded-full bg-brand-100 flex items-center justify-center text-brand-600 shrink-0">
+                      <CreditCard className="w-4.5 h-4.5 text-brand-600" />
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="text-xs font-extrabold text-gray-900">Cổng thanh toán VNPay (VNPAY)</h4>
+                      <p className="text-[10px] text-gray-400 font-semibold mt-0.5">Thanh toán trực tuyến bằng thẻ ATM, Mobile Banking hoặc QR Code qua VNPay.</p>
+                    </div>
+                    <span className={`w-4.5 h-4.5 rounded-full border-4 ${
+                      paymentMethod === 'VNPAY' ? 'border-brand-600 bg-white' : 'border-gray-300 bg-white'
+                    }`} />
                   </div>
-                  <div className="flex-1">
-                    <h4 className="text-xs font-extrabold text-gray-900">Cổng thanh toán VNPay (VNPAY)</h4>
-                    <p className="text-[10px] text-gray-400 font-semibold mt-0.5">Thanh toán trực tuyến bằng thẻ ATM, Mobile Banking hoặc QR Code qua VNPay.</p>
-                  </div>
-                  <span className={`w-4.5 h-4.5 rounded-full border-4 ${
-                    paymentMethod === 'VNPAY' ? 'border-brand-600 bg-white' : 'border-gray-300 bg-white'
-                  }`} />
-                </div>
+                )}
               </div>
             </div>
 

@@ -6,6 +6,7 @@ import { z } from 'zod';
 import { optionalAuth } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 import { FREE_SHIPPING_THRESHOLD, SHIPPING_FEE, BANK_CONFIG } from '@/lib/constants';
+import { isVNPayConfigured } from '@/lib/vnpay';
 
 class CheckoutError extends Error {}
 
@@ -86,6 +87,15 @@ export async function POST(request: NextRequest) {
     const phoneNumber = payload.data.phoneNumber ?? payload.data.phone;
     const { address, paymentMethod, items } = payload.data;
     const notes = payload.data.notes ?? payload.data.note;
+
+    if (paymentMethod === 'VNPAY' && !isVNPayConfigured()) {
+      return NextResponse.json(
+        {
+          message: 'VNPay is temporarily unavailable.',
+        },
+        { status: 503 },
+      );
+    }
 
     if (!customerName || !phoneNumber) {
       return NextResponse.json(

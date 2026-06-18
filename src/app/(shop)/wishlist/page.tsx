@@ -1,83 +1,88 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { Heart, ShoppingBag } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { Heart } from 'lucide-react';
 import ProductCard from '@/components/ui/ProductCard';
 import Breadcrumb from '@/components/ui/Breadcrumb';
 import PageHeader from '@/components/ui/PageHeader';
 import { EmptyState } from '@/components/ui/States';
 
+const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/i;
+
+function readWishlistSlugs() {
+  const stored = localStorage.getItem('hhsneaker_wishlist');
+  if (!stored) return [];
+
+  try {
+    const parsed = JSON.parse(stored);
+    if (!Array.isArray(parsed)) return [];
+
+    return Array.from(
+      new Set(
+        parsed
+          .filter((item): item is string => typeof item === 'string')
+          .map((item) => item.trim())
+          .filter((item) => item && !UUID_PATTERN.test(item) && SLUG_PATTERN.test(item)),
+      ),
+    );
+  } catch (error) {
+    console.error('Failed to parse wishlist localStorage:', error);
+    return [];
+  }
+}
+
 export default function WishlistPage() {
   const [mounted, setMounted] = useState(false);
-  const [wishlistIds, setWishlistIds] = useState<string[]>([]);
+  const [wishlistSlugs, setWishlistSlugs] = useState<string[]>([]);
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [refreshKey, setRefreshKey] = useState(0);
 
-  // Sync mounted status
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  // Load wishlist IDs and fetch products from API
   useEffect(() => {
     if (!mounted) return;
 
-    const loadWishlistAndProducts = async () => {
+    const loadWishlistProducts = async () => {
       setLoading(true);
       setError(null);
 
-      // 1. Get wishlist IDs from localStorage
-      const stored = localStorage.getItem('hhsneaker_wishlist');
-      let ids: string[] = [];
-      if (stored) {
-        try {
-          ids = JSON.parse(stored) as string[];
-        } catch (e) {
-          console.error('Failed to parse wishlist localStorage:', e);
-        }
-      }
-      setWishlistIds(ids);
+      const slugs = readWishlistSlugs();
+      setWishlistSlugs(slugs);
 
-      if (ids.length === 0) {
+      if (slugs.length === 0) {
         setProducts([]);
         setLoading(false);
         return;
       }
 
-      // 2. Fetch products from API
       try {
-        const response = await fetch('/api/products?limit=100');
+        const response = await fetch(`/api/products?slugs=${encodeURIComponent(slugs.join(','))}`);
         if (!response.ok) {
-          throw new Error('Không thể lấy danh sách sản phẩm.');
+          throw new Error('Khong the lay danh sach san pham.');
         }
-        const data = await response.json();
-        const allProducts = data.items || data.products || [];
 
-        // 3. Filter wishlisted items
-        const wishlisted = allProducts.filter((p: any) => ids.includes(p.id));
-        setProducts(wishlisted);
+        const data = await response.json();
+        setProducts(data.items || data.products || []);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Đã có lỗi xảy ra.');
+        setError(err instanceof Error ? err.message : 'Da co loi xay ra.');
       } finally {
         setLoading(false);
       }
     };
 
-    loadWishlistAndProducts();
+    loadWishlistProducts();
+  }, [mounted, refreshKey]);
 
-    // Listen to storage events to update wishlist if changed on other tabs/modals
+  useEffect(() => {
+    if (!mounted) return;
+
     const handleStorageChange = () => {
-      const stored = localStorage.getItem('hhsneaker_wishlist');
-      if (stored) {
-        try {
-          const ids = JSON.parse(stored) as string[];
-          setWishlistIds(ids);
-        } catch (e) {
-          console.error(e);
-        }
-      }
+      setRefreshKey((value) => value + 1);
     };
 
     window.addEventListener('storage', handleStorageChange);
@@ -86,12 +91,11 @@ export default function WishlistPage() {
     };
   }, [mounted]);
 
-  // Handle local storage removal and state update
-  const handleRemoveFromWishlist = (productId: string) => {
-    const updatedIds = wishlistIds.filter((id) => id !== productId);
-    setWishlistIds(updatedIds);
-    localStorage.setItem('hhsneaker_wishlist', JSON.stringify(updatedIds));
-    setProducts((prev) => prev.filter((p) => p.id !== productId));
+  const handleRemoveFromWishlist = (productSlug: string) => {
+    const updatedSlugs = wishlistSlugs.filter((slug) => slug !== productSlug);
+    setWishlistSlugs(updatedSlugs);
+    localStorage.setItem('hhsneaker_wishlist', JSON.stringify(updatedSlugs));
+    setProducts((prev) => prev.filter((product) => product.slug !== productSlug));
     window.dispatchEvent(new Event('storage'));
   };
 
@@ -127,7 +131,7 @@ export default function WishlistPage() {
           </div>
         ) : error ? (
           <div className="py-16 text-center text-xs font-bold text-red-500 bg-red-50 rounded-brand-lg border border-red-100">
-            ⚠️ Có lỗi xảy ra: {error}
+            Có lỗi xảy ra: {error}
           </div>
         ) : products.length === 0 ? (
           <div className="py-12 max-w-lg mx-auto">
@@ -144,15 +148,14 @@ export default function WishlistPage() {
             <div className="text-xs text-gray-500 font-medium pb-2 border-b border-gray-100">
               Bạn đang lưu <span className="font-bold text-gray-800">{products.length}</span> sản phẩm yêu thích
             </div>
-            
+
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 sm:gap-8">
               {products.map((product) => (
                 <div key={product.id} className="relative group/wish">
                   <ProductCard product={product} />
-                  
-                  {/* Remove overlay quick shortcut */}
+
                   <button
-                    onClick={() => handleRemoveFromWishlist(product.id)}
+                    onClick={() => handleRemoveFromWishlist(product.slug)}
                     className="absolute top-12 right-2 z-10 p-1.5 rounded-full bg-white/90 hover:bg-red-50 text-gray-400 hover:text-red-600 shadow-xs border border-gray-100 opacity-0 group-hover/wish:opacity-100 transition-all duration-200"
                     title="Xóa nhanh khỏi yêu thích"
                   >

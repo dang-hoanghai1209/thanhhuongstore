@@ -3,7 +3,7 @@ import { z } from 'zod';
 
 import { optionalAuth } from '@/lib/auth';
 import prisma from '@/lib/prisma';
-import { createVNPayUrl } from '@/lib/vnpay';
+import { createVNPayUrl, isVNPayConfigured } from '@/lib/vnpay';
 
 export const dynamic = 'force-dynamic';
 
@@ -17,6 +17,10 @@ function getClientIp(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
+    if (!isVNPayConfigured()) {
+      return NextResponse.json({ error: 'VNPay is temporarily unavailable.' }, { status: 503 });
+    }
+
     const authResult = await optionalAuth(request);
 
     if (authResult instanceof NextResponse) {
