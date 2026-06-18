@@ -1,4 +1,4 @@
-﻿import bcrypt from 'bcrypt';
+import bcrypt from 'bcrypt';
 import { PrismaClient, SizeType, UserRole } from '@prisma/client';
 
 const directDatabaseUrl = process.env.DIRECT_URL ?? process.env.DATABASE_URL;
@@ -37,25 +37,25 @@ const PRODUCT_IMAGE_BASE = '/uploads/products';
 
 const categories = [
   {
-    name: 'Bao tay lao Ä‘á»™ng',
+    name: 'Bao tay lao động',
     slug: 'bao-tay-lao-dong',
     sizeType: SizeType.ACCESSORY,
     sortOrder: 1,
   },
   {
-    name: 'Táº¥t nam',
+    name: 'Tất nam',
     slug: 'tat-nam',
     sizeType: SizeType.SOCK,
     sortOrder: 2,
   },
   {
-    name: 'Táº¥t bÃ´ng / táº¥t dÃ y',
+    name: 'Tất bông / tất dày',
     slug: 'tat-bong-tat-day',
     sizeType: SizeType.SOCK,
     sortOrder: 3,
   },
   {
-    name: 'Táº¥t / Vá»›',
+    name: 'Tất / Vớ',
     slug: 'tat-vo',
     sizeType: SizeType.SOCK,
     sortOrder: 4,
@@ -70,47 +70,47 @@ const categories = [
 
 const products: ProductSeed[] = [
   {
-    name: 'Bao tay lao Ä‘á»™ng Ä‘en xÃ¡m',
+    name: 'Bao tay lao động đen xám',
     slug: 'bao-tay-lao-dong-den-xam',
     categorySlug: 'bao-tay-lao-dong',
     sizeType: SizeType.ACCESSORY,
     retailPrice: 6000,
     wholesalePrice: 4000,
-    colors: [{ color: 'Äen xÃ¡m', colorHex: '#4B5563' }],
+    colors: [{ color: 'Đen xám', colorHex: '#4B5563' }],
     images: [`${PRODUCT_IMAGE_BASE}/bao-tay-lao-dong-den-xam.jpg`],
     isFeatured: true,
   },
   {
-    name: 'Bao tay lao Ä‘á»™ng Ä‘en',
+    name: 'Bao tay lao động đen',
     slug: 'bao-tay-lao-dong-den',
     categorySlug: 'bao-tay-lao-dong',
     sizeType: SizeType.ACCESSORY,
     retailPrice: 6000,
     wholesalePrice: 4000,
-    colors: [{ color: 'Äen', colorHex: '#111827' }],
+    colors: [{ color: 'Đen', colorHex: '#111827' }],
     images: [`${PRODUCT_IMAGE_BASE}/bao-tay-lao-dong-den.jpg`],
   },
   {
-    name: 'Bao tay lao Ä‘á»™ng tráº¯ng',
+    name: 'Bao tay lao động trắng',
     slug: 'bao-tay-lao-dong-trang',
     categorySlug: 'bao-tay-lao-dong',
     sizeType: SizeType.ACCESSORY,
     retailPrice: 5000,
     wholesalePrice: 3500,
-    colors: [{ color: 'Tráº¯ng', colorHex: '#F8FAFC' }],
+    colors: [{ color: 'Trắng', colorHex: '#F8FAFC' }],
     images: [`${PRODUCT_IMAGE_BASE}/bao-tay-lao-dong-trang.jpg`],
   },
   {
-    name: 'Táº¥t nam 5 Ä‘Ã´i cÃ³ bao bÃ¬',
+    name: 'Tất nam 5 đôi có bao bì',
     slug: 'tat-nam-5-doi-co-bao-bi',
     categorySlug: 'tat-nam',
     sizeType: SizeType.SOCK,
     retailPrice: 35000,
     wholesalePrice: 28000,
     colors: [
-      { color: 'Nhiá»u mÃ u', colorHex: '#64748B' },
-      { color: 'SÃ¡ng mÃ u', colorHex: '#E5E7EB' },
-      { color: 'Tá»‘i mÃ u', colorHex: '#1F2937' },
+      { color: 'Nhiều màu', colorHex: '#64748B' },
+      { color: 'Sáng màu', colorHex: '#E5E7EB' },
+      { color: 'Tối màu', colorHex: '#1F2937' },
     ],
     images: [
       `${PRODUCT_IMAGE_BASE}/tat-nam-5-bo-bao-bi.jpg`,
@@ -120,7 +120,7 @@ const products: ProductSeed[] = [
     isFeatured: true,
   },
   {
-    name: 'Táº¥t A Nam',
+    name: 'Tất A Nam',
     slug: 'tat-a-nam',
     categorySlug: 'tat-nam',
     sizeType: SizeType.SOCK,
@@ -130,16 +130,16 @@ const products: ProductSeed[] = [
     images: [`${PRODUCT_IMAGE_BASE}/tat-a-nam.jpg`],
   },
   {
-    name: 'Táº¥t bÃ´ng 999',
+    name: 'Tất bông 999',
     slug: 'tat-bong-999',
     categorySlug: 'tat-bong-tat-day',
     sizeType: SizeType.SOCK,
     retailPrice: 18000,
     wholesalePrice: 14000,
     colors: [
-      { color: 'Nhiá»u mÃ u', colorHex: '#64748B' },
-      { color: 'SÃ¡ng mÃ u', colorHex: '#E5E7EB' },
-      { color: 'Tá»‘i mÃ u', colorHex: '#1F2937' },
+      { color: 'Nhiều màu', colorHex: '#64748B' },
+      { color: 'Sáng màu', colorHex: '#E5E7EB' },
+      { color: 'Tối màu', colorHex: '#1F2937' },
     ],
     images: [
       `${PRODUCT_IMAGE_BASE}/tat-bong-999.jpg`,
@@ -149,15 +149,15 @@ const products: ProductSeed[] = [
     isFeatured: true,
   },
   {
-    name: 'Táº¥t xÃ¹ bÃ´ng',
+    name: 'Tất xù bông',
     slug: 'tat-xu-bong',
     categorySlug: 'tat-bong-tat-day',
     sizeType: SizeType.SOCK,
     retailPrice: 20000,
     wholesalePrice: 16000,
     colors: [
-      { color: 'SÃ¡ng mÃ u', colorHex: '#E5E7EB' },
-      { color: 'Tá»‘i mÃ u', colorHex: '#1F2937' },
+      { color: 'Sáng màu', colorHex: '#E5E7EB' },
+      { color: 'Tối màu', colorHex: '#1F2937' },
     ],
     images: [
       `${PRODUCT_IMAGE_BASE}/tat-xu-bong-sang.jpg`,
@@ -165,7 +165,7 @@ const products: ProductSeed[] = [
     ],
   },
   {
-    name: 'Táº¥t da má»‹n',
+    name: 'Tất da mịn',
     slug: 'tat-da-min',
     categorySlug: 'tat-vo',
     sizeType: SizeType.SOCK,
@@ -173,7 +173,7 @@ const products: ProductSeed[] = [
     wholesalePrice: 11000,
     colors: [
       { color: 'Da', colorHex: '#E7C6A5' },
-      { color: 'Nhiá»u mÃ u', colorHex: '#64748B' },
+      { color: 'Nhiều màu', colorHex: '#64748B' },
     ],
     images: [
       `${PRODUCT_IMAGE_BASE}/tat-da-min.jpg`,
@@ -181,7 +181,7 @@ const products: ProductSeed[] = [
     ],
   },
   {
-    name: 'Táº¥t Háº£o Li',
+    name: 'Tất Hảo Li',
     slug: 'tat-hao-li',
     categorySlug: 'tat-vo',
     sizeType: SizeType.SOCK,
@@ -191,7 +191,7 @@ const products: ProductSeed[] = [
     images: [`${PRODUCT_IMAGE_BASE}/tat-hao-li.jpg`],
   },
   {
-    name: 'Táº¥t T&T',
+    name: 'Tất T&T',
     slug: 'tat-t-and-t',
     categorySlug: 'tat-vo',
     sizeType: SizeType.SOCK,
@@ -199,7 +199,7 @@ const products: ProductSeed[] = [
     wholesalePrice: 11000,
     colors: [
       { color: 'Da', colorHex: '#E7C6A5' },
-      { color: 'SÃ¡ng mÃ u', colorHex: '#E5E7EB' },
+      { color: 'Sáng màu', colorHex: '#E5E7EB' },
     ],
     images: [
       `${PRODUCT_IMAGE_BASE}/tat-t-and-t.jpg`,
@@ -207,13 +207,13 @@ const products: ProductSeed[] = [
     ],
   },
   {
-    name: 'Táº¥t trÆ¡n má»‹n mÃ u sÃ¡ng',
+    name: 'Tất trơn mịn màu sáng',
     slug: 'tat-tron-min-mau-sang',
     categorySlug: 'tat-vo',
     sizeType: SizeType.SOCK,
     retailPrice: 13000,
     wholesalePrice: 10000,
-    colors: [{ color: 'SÃ¡ng mÃ u', colorHex: '#E5E7EB' }],
+    colors: [{ color: 'Sáng màu', colorHex: '#E5E7EB' }],
     images: [`${PRODUCT_IMAGE_BASE}/tat-tron-min-mausang.jpg`],
   },
   {
@@ -224,9 +224,9 @@ const products: ProductSeed[] = [
     retailPrice: 18000,
     wholesalePrice: 13000,
     colors: [
-      { color: 'Nhiá»u mÃ u', colorHex: '#64748B' },
-      { color: 'SÃ¡ng mÃ u', colorHex: '#E5E7EB' },
-      { color: 'Tá»‘i mÃ u', colorHex: '#1F2937' },
+      { color: 'Nhiều màu', colorHex: '#64748B' },
+      { color: 'Sáng màu', colorHex: '#E5E7EB' },
+      { color: 'Tối màu', colorHex: '#1F2937' },
     ],
     images: [
       `${PRODUCT_IMAGE_BASE}/mau-2205.jpg`,
@@ -244,8 +244,8 @@ const products: ProductSeed[] = [
     retailPrice: 18000,
     wholesalePrice: 13000,
     colors: [
-      { color: 'Nhiá»u mÃ u', colorHex: '#64748B' },
-      { color: 'Phá»‘i mÃ u', colorHex: '#A855F7' },
+      { color: 'Nhiều màu', colorHex: '#64748B' },
+      { color: 'Phối màu', colorHex: '#A855F7' },
     ],
     images: [
       `${PRODUCT_IMAGE_BASE}/mau-802.jpg`,
@@ -256,15 +256,15 @@ const products: ProductSeed[] = [
     ],
   },
   {
-    name: 'Táº¥t vá»› nhiá»u mÃ u tÃ¹y lÃ´ hÃ ng',
+    name: 'Tất vớ nhiều màu tùy lô hàng',
     slug: 'tat-vo-nhieu-mau-tuy-lo-hang',
     categorySlug: 'san-pham-nhieu-mau',
     sizeType: SizeType.SOCK,
     retailPrice: 18000,
     wholesalePrice: 13000,
     colors: [
-      { color: 'Nhiá»u mÃ u', colorHex: '#64748B' },
-      { color: 'TÃ¹y lÃ´ hÃ ng', colorHex: '#0F766E' },
+      { color: 'Nhiều màu', colorHex: '#64748B' },
+      { color: 'Tùy lô hàng', colorHex: '#0F766E' },
     ],
     images: [
       `${PRODUCT_IMAGE_BASE}/mau-939.jpg`,

@@ -1,4 +1,4 @@
-﻿import { ShoppingBag, Sparkles, ArrowRight, ShieldCheck, Truck, RotateCcw, Flame } from 'lucide-react';
+import { ShoppingBag, Sparkles, ArrowRight, ShieldCheck, Truck, RotateCcw, Flame } from 'lucide-react';
 import Link from 'next/link';
 import prisma from '@/lib/prisma';
 
@@ -99,34 +99,34 @@ export default async function HomePage() {
   // Categories fallback if DB is empty or fails
   const fallbackCategories = [
     {
-      name: "Táº¥t / Vá»›",
+      name: "Tất / Vớ",
       slug: "tat-vo",
       imageUrl: CATEGORY_IMAGE_FALLBACKS[0],
-      description: "Cotton khÃ¡ng khuáº©n"
+      description: "Sản phẩm chọn lọc"
     },
     {
-      name: "Bao tay lao Ä‘á»™ng",
+      name: "Bao tay lao động",
       slug: "bao-tay-lao-dong",
       imageUrl: CATEGORY_IMAGE_FALLBACKS[1],
-      description: "Sá»£i bá»n bá»‰, chá»‘ng trÆ°á»£t"
+      description: "Dệt sợi bền bỉ, chống trượt"
     },
     {
-      name: "Táº¥t bÃ´ng / táº¥t dÃ y",
+      name: "Tất bông / tất dày",
       slug: "tat-bong-tat-day",
       imageUrl: CATEGORY_IMAGE_FALLBACKS[2],
-      description: "Má»m máº¡i áº¥m Ã¡p"
+      description: "Mềm mại ấm áp"
     },
     {
-      name: "Táº¥t nam",
+      name: "Tất nam",
       slug: "tat-nam",
       imageUrl: CATEGORY_IMAGE_FALLBACKS[3],
-      description: "Lá»‹ch lÃ£m thoáº£i mÃ¡i"
+      description: "Lịch lãm thoải mái"
     }
   ];
 
   // Map local product thumbnails dynamically if we have category items from DB
   const mappedCategories = categories.length > 0 ? categories.map((cat, idx) => {
-    const desc = ["Cotton khÃ¡ng khuáº©n", "Bá»n bá»‰ chá»‘ng trÆ°á»£t", "Sản phẩm chọn lọc", "Äa dáº¡ng máº«u mÃ£"];
+    const desc = ["Sản phẩm chọn lọc", "Dệt sợi bền bỉ", "Sản phẩm chọn lọc", "Đa dạng mẫu mã"];
     return {
       name: cat.name,
       slug: cat.slug,
@@ -145,22 +145,22 @@ export default async function HomePage() {
         <div className="absolute bottom-0 left-0 w-[350px] h-[350px] bg-accent-pink rounded-full filter blur-3xl opacity-15 -ml-20 -mb-20" />
 
         <div className="relative max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-12">
-          {/* Hero Content */}
-          <div className="flex-1 space-y-7 text-center lg:text-left">
+          
+          <div className="text-center lg:text-left space-y-6">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-brand-200 text-xs font-black uppercase tracking-widest mx-auto lg:mx-0">
               <Flame className="w-3.5 h-3.5 text-accent-pink animate-pulse" />
-              Sáº£n Pháº©m Cháº¥t LÆ°á»£ng
+              Sản Phẩm Chất Lượng
             </div>
 
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight leading-none text-white uppercase">
-              HoÃ ng Háº£i Sneaker <br />
+              Hoàng Hải Sneaker <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent-gold via-accent-pink to-brand-300 text-2xl sm:text-3xl md:text-4xl block mt-2">
-                Bá»™ sÆ°u táº­p táº¥t, vá»›, bao tay cháº¥t lÆ°á»£ng cao
+                Bộ sưu tập tất, vớ, bao tay chất lượng
               </span>
             </h1>
 
             <p className="text-sm sm:text-base text-brand-100 max-w-xl font-medium leading-relaxed mx-auto lg:mx-0">
-              HoÃ ng Háº£i Sneaker giá»›i thiá»‡u bá»™ sÆ°u táº­p táº¥t, vá»› thá»i trang nam ná»¯, bao tay báº£o há»™ lao Ä‘á»™ng dá»‡t sá»£i tá»± nhiÃªn vÃ  cÃ¡c phá»¥ kiá»‡n thá»i trang cao cáº¥p.
+              Hoàng Hải Sneaker giới thiệu bộ sưu tập tất, vớ thời trang nam nữ, bao tay bảo hộ lao động dệt sợi tự nhiên và các phụ kiện thời trang.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-2">
@@ -168,14 +168,14 @@ export default async function HomePage() {
                 href="/products"
                 className="px-8 py-4 rounded-brand-md bg-white text-gray-950 hover:bg-gray-100 font-extrabold text-xs uppercase tracking-wider transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 flex items-center justify-center gap-2"
               >
-                Xem sáº£n pháº©m
+                Xem sản phẩm
                 <ArrowRight className="w-4 h-4 text-brand-600" />
               </Link>
               <Link
                 href="/contact"
                 className="px-8 py-4 rounded-brand-md bg-white/10 hover:bg-white/15 text-white font-extrabold text-xs uppercase tracking-wider transition-all border border-white/20 backdrop-blur-xs flex items-center justify-center"
               >
-                LiÃªn há»‡ tÆ° váº¥n
+                Liên hệ tư vấn
               </Link>
             </div>
           </div>
@@ -183,8 +183,8 @@ export default async function HomePage() {
           {/* Quick Marketing Grid */}
           <div className="grid grid-cols-2 gap-4 w-full lg:w-auto min-w-[280px] sm:min-w-[400px]">
             {[
-              { title: "Thiáº¿t Káº¿ Äáº¹p", desc: "Máº«u mÃ£ thá»i trang Ä‘a dáº¡ng" },
-              { title: "Sáº£n pháº©m chá»n lá»c", desc: "Táº¥t vá»›, bao tay cháº¥t lÆ°á»£ng" }
+              { title: "Thiết Kế Đẹp", desc: "Mẫu mã thời trang đa dạng" },
+              { title: "Sản phẩm chọn lọc", desc: "Tất vớ, bao tay chất lượng" }
             ].map((box, idx) => (
               <div key={idx} className="p-6 rounded-brand-lg bg-white/5 backdrop-blur-md border border-white/10 hover:border-white/30 hover:bg-white/10 transition-all duration-300">
                 <span className="w-5 h-5 rounded bg-brand-500/20 text-brand-300 flex items-center justify-center text-[10px] font-black mb-3">
@@ -206,8 +206,8 @@ export default async function HomePage() {
               <Truck className="w-5 h-5" />
             </div>
             <div className="text-left">
-              <h4 className="text-xs font-extrabold text-gray-900 uppercase tracking-wider">Miá»…n PhÃ­ Váº­n Chuyá»ƒn</h4>
-              <p className="text-[10px] text-gray-400 font-semibold mt-0.5">Ãp dá»¥ng cho má»i Ä‘Æ¡n hÃ ng tá»« 500,000Ä‘</p>
+              <h4 className="text-xs font-extrabold text-gray-900 uppercase tracking-wider">Miễn Phí Vận Chuyển</h4>
+              <p className="text-[10px] text-gray-400 font-semibold mt-0.5">Áp dụng cho mọi đơn hàng từ 500.000đ</p>
             </div>
           </div>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 border-y md:border-y-0 md:border-x border-gray-100 py-4 md:py-0">
@@ -215,8 +215,8 @@ export default async function HomePage() {
               <RotateCcw className="w-5 h-5" />
             </div>
             <div className="text-left">
-              <h4 className="text-xs font-extrabold text-gray-900 uppercase tracking-wider">15 NgÃ y Äá»•i Tráº£</h4>
-              <p className="text-[10px] text-gray-400 font-semibold mt-0.5">Há»— trá»£ Ä‘á»•i size vÃ  kiá»ƒu dÃ¡ng thoáº£i mÃ¡i</p>
+              <h4 className="text-xs font-extrabold text-gray-900 uppercase tracking-wider">15 Ngày Đổi Trả</h4>
+              <p className="text-[10px] text-gray-400 font-semibold mt-0.5">Hỗ trợ đổi size và kiểu dáng thoải mái</p>
             </div>
           </div>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
@@ -224,8 +224,8 @@ export default async function HomePage() {
               <ShieldCheck className="w-5 h-5" />
             </div>
             <div className="text-left">
-              <h4 className="text-xs font-extrabold text-gray-900 uppercase tracking-wider">Äáº£m báº£o cháº¥t lÆ°á»£ng</h4>
-              <p className="text-[10px] text-gray-400 font-semibold mt-0.5">Sáº£n pháº©m tuyá»ƒn chá»n, Ä‘á»™ bá»n vÆ°á»£t trá»™i</p>
+              <h4 className="text-xs font-extrabold text-gray-900 uppercase tracking-wider">Đảm bảo chất lượng</h4>
+              <p className="text-[10px] text-gray-400 font-semibold mt-0.5">Sản phẩm tuyển chọn, phù hợp sử dụng hằng ngày</p>
             </div>
           </div>
         </div>
@@ -234,8 +234,8 @@ export default async function HomePage() {
       {/* 3. CATEGORY SHOWCASE */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="text-center max-w-xl mx-auto mb-12 space-y-2">
-          <h2 className="text-xl sm:text-2xl font-black text-gray-900 uppercase tracking-tight">Danh Má»¥c Ná»•i Báº­t</h2>
-          <p className="text-xs text-gray-400 font-bold">KhÃ¡m phÃ¡ cÃ¡c dÃ²ng sáº£n pháº©m táº¥t vá»› vÃ  phá»¥ kiá»‡n thá»i trang ná»•i báº­t.</p>
+          <h2 className="text-xl sm:text-2xl font-black text-gray-900 uppercase tracking-tight">Danh Mục Nổi Bật</h2>
+          <p className="text-xs text-gray-400 font-bold">Khám phá các dòng sản phẩm tất vớ và phụ kiện thời trang nổi bật.</p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -274,16 +274,16 @@ export default async function HomePage() {
           <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-10 pb-4 border-b border-gray-200 gap-4">
             <div className="space-y-1">
               <h2 className="text-xl sm:text-2xl font-black text-gray-900 uppercase tracking-tight flex items-center gap-2">
-                Sáº£n Pháº©m Ná»•i Báº­t
+                Sản Phẩm Nổi Bật
                 <span className="w-2.5 h-2.5 rounded-full bg-brand-600 animate-pulse" />
               </h2>
-              <p className="text-xs text-gray-400 font-bold">CÃ¡c sáº£n pháº©m tiÃªu biá»ƒu bÃ¡n cháº¡y nháº¥t táº¡i HoÃ ng Háº£i Sneaker.</p>
+              <p className="text-xs text-gray-400 font-bold">Các sản phẩm tiêu biểu được quan tâm tại Hoàng Hải Sneaker.</p>
             </div>
             <Link
               href="/products?featured=true"
               className="text-xs font-bold text-brand-600 hover:text-brand-700 flex items-center gap-1.5 group shrink-0"
             >
-              Xem sáº£n pháº©m ná»•i báº­t
+              Xem sản phẩm nổi bật
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
@@ -307,14 +307,14 @@ export default async function HomePage() {
                       className="w-full h-full object-cover object-center group-hover:scale-103 transition-transform duration-500"
                     />
                     <span className="absolute top-3 left-3 px-2 py-0.5 rounded bg-brand-600 text-white text-[8px] font-black uppercase tracking-widest shadow-xs">
-                      Ná»•i báº­t
+                      Nổi bật
                     </span>
                   </div>
 
                   <div className="p-4 flex-1 flex flex-col justify-between space-y-4">
                     <div className="space-y-1">
                       <span className="text-[9px] font-black text-brand-600 uppercase tracking-widest block">
-                        {product.category?.name || 'Sáº£n pháº©m'}
+                        {product.category?.name || 'Sản phẩm'}
                       </span>
                       <h3 className="text-xs font-bold text-gray-900 group-hover:text-brand-600 transition-colors line-clamp-2 leading-tight">
                         {product.name}
@@ -323,16 +323,16 @@ export default async function HomePage() {
 
                     <div className="flex items-center justify-between pt-1">
                       <div>
-                        <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest block">GiÃ¡ bÃ¡n</span>
+                        <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest block">Giá bán</span>
                         <p className="text-sm font-black text-gray-900 mt-0.5">
-                          {price > 0 ? `${price.toLocaleString('vi-VN')} Ä‘` : 'LiÃªn há»‡'}
+                          {price > 0 ? `${price.toLocaleString('vi-VN')} đ` : 'Liên hệ'}
                         </p>
                       </div>
 
                       <Link
                         href={`/products/${product.slug}`}
                         className="p-2 rounded-brand-md bg-gray-50 hover:bg-brand-600 text-gray-600 hover:text-white transition-all shadow-3xs"
-                        title="Xem chi tiáº¿t"
+                        title="Xem chi tiết"
                       >
                         <ShoppingBag className="w-3.5 h-3.5" />
                       </Link>
@@ -351,16 +351,16 @@ export default async function HomePage() {
         <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-10 pb-4 border-b border-gray-200 gap-4">
           <div className="space-y-1">
             <h2 className="text-xl sm:text-2xl font-black text-gray-900 uppercase tracking-tight flex items-center gap-2">
-              Sáº£n Pháº©m Má»›i Nháº¥t
+              Sản Phẩm Mới Nhất
               <span className="w-2.5 h-2.5 rounded-full bg-brand-600 animate-pulse" />
             </h2>
-            <p className="text-xs text-gray-400 font-bold">Cáº­p nháº­t cÃ¡c máº«u táº¥t vá»› vÃ  bao tay má»›i nháº¥t.</p>
+            <p className="text-xs text-gray-400 font-bold">Cập nhật các mẫu tất vớ và bao tay mới nhất.</p>
           </div>
           <Link
             href="/products"
             className="text-xs font-bold text-brand-600 hover:text-brand-700 flex items-center gap-1.5 group shrink-0"
           >
-            Xem táº¥t cáº£ sáº£n pháº©m
+            Xem tất cả sản phẩm
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
@@ -369,8 +369,8 @@ export default async function HomePage() {
           /* Empty state fallback */
           <div className="text-center py-20 bg-white rounded-brand-lg border border-gray-100 shadow-sm max-w-md mx-auto space-y-4">
             <ShoppingBag className="w-12 h-12 text-gray-300 mx-auto" />
-            <h3 className="text-sm font-bold text-gray-700">ChÆ°a cÃ³ sáº£n pháº©m nÃ o</h3>
-            <p className="text-xs text-gray-400 leading-relaxed">CSDL hiá»‡n chÆ°a cÃ³ sáº£n pháº©m kÃ­ch hoáº¡t. Vui lÃ²ng quay láº¡i sau.</p>
+            <h3 className="text-sm font-bold text-gray-700">Chưa có sản phẩm nào</h3>
+            <p className="text-xs text-gray-400 leading-relaxed">CSDL hiện chưa có sản phẩm kích hoạt. Vui lòng quay lại sau.</p>
           </div>
         ) : (
           /* Products Grid */
@@ -400,7 +400,7 @@ export default async function HomePage() {
                     {/* Badges indicators overlay */}
                     {product.isFeatured && (
                       <span className="absolute top-3 left-3 px-2 py-0.5 rounded bg-brand-600 text-white text-[8px] font-black uppercase tracking-widest shadow-xs">
-                        Ná»•i báº­t
+                        Nổi bật
                       </span>
                     )}
 
@@ -410,7 +410,7 @@ export default async function HomePage() {
                   <div className="p-4 flex-1 flex flex-col justify-between space-y-4">
                     <div className="space-y-1">
                       <span className="text-[9px] font-black text-brand-600 uppercase tracking-widest block">
-                        {product.category?.name || 'Sáº£n pháº©m'}
+                        {product.category?.name || 'Sản phẩm'}
                       </span>
                       <h3 className="text-xs font-bold text-gray-900 group-hover:text-brand-600 transition-colors line-clamp-2 leading-tight">
                         {product.name}
@@ -420,9 +420,9 @@ export default async function HomePage() {
                     {/* Cost block */}
                     <div className="flex items-center justify-between pt-1">
                       <div>
-                        <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest block">GiÃ¡ bÃ¡n</span>
+                        <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest block">Giá bán</span>
                         <p className="text-sm font-black text-gray-900 mt-0.5">
-                          {price > 0 ? `${price.toLocaleString('vi-VN')} Ä‘` : 'LiÃªn há»‡'}
+                          {price > 0 ? `${price.toLocaleString('vi-VN')} đ` : 'Liên hệ'}
                         </p>
                       </div>
 
@@ -430,7 +430,7 @@ export default async function HomePage() {
                       <Link
                         href={`/products/${product.slug}`}
                         className="p-2 rounded-brand-md bg-gray-50 hover:bg-brand-600 text-gray-600 hover:text-white transition-all shadow-3xs"
-                        title="Xem chi tiáº¿t"
+                        title="Xem chi tiết"
                       >
                         <ShoppingBag className="w-3.5 h-3.5" />
                       </Link>
@@ -457,10 +457,10 @@ export default async function HomePage() {
             <div className="absolute inset-0 bg-gradient-to-r from-brand-950 via-brand-900/30 to-transparent" />
 
             <div className="relative z-10 space-y-2">
-              <span className="text-[9px] text-accent-gold font-extrabold uppercase tracking-widest block">Sáº£n Pháº©m Má»›i</span>
-              <h3 className="text-xl sm:text-2xl font-black uppercase tracking-tight">Táº¥t Vá»› Nam Há»a Tiáº¿t</h3>
+              <span className="text-[9px] text-accent-gold font-extrabold uppercase tracking-widest block">Sản Phẩm Mới</span>
+              <h3 className="text-xl sm:text-2xl font-black uppercase tracking-tight">Tất Vớ Nam Họa Tiết</h3>
               <p className="text-xs text-brand-200 max-w-xs leading-relaxed">
-                KhÃ¡m phÃ¡ bá»™ sÆ°u táº­p táº¥t vá»› nam cao cáº¥p, cháº¥t liá»‡u cotton má»m máº¡i, thoÃ¡ng khÃ­ vÃ  Ãªm chÃ¢n.
+                Khám phá bộ sưu tập tất vớ nam dệt sợi tự nhiên, chất liệu cotton mềm mại, thoáng khí và êm chân.
               </p>
             </div>
 
@@ -469,7 +469,7 @@ export default async function HomePage() {
                 href="/products?featured=true"
                 className="inline-flex items-center gap-1.5 text-xs font-bold text-accent-gold hover:text-white transition"
               >
-                Xem hÃ ng ná»•i báº­t
+                Xem hàng nổi bật
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
@@ -485,10 +485,10 @@ export default async function HomePage() {
             <div className="absolute inset-0 bg-gradient-to-r from-accent-pink via-accent-pink/50 to-transparent" />
 
             <div className="relative z-10 space-y-2">
-              <span className="text-[9px] text-white font-extrabold uppercase tracking-widest block">HÃ ng Tá»“n Xáº£ Kho</span>
-              <h3 className="text-xl sm:text-2xl font-black uppercase tracking-tight">Thanh LÃ½ Bikini Äá»“ BÆ¡i</h3>
+              <span className="text-[9px] text-white font-extrabold uppercase tracking-widest block">Sản Phẩm Mới</span>
+              <h3 className="text-xl sm:text-2xl font-black uppercase tracking-tight">Tất Vớ Nhiều Mẫu</h3>
               <p className="text-xs text-white/90 max-w-xs leading-relaxed">
-                CÃ¡c lÃ´ hÃ ng bikini Ä‘á»“ bÆ¡i nam ná»¯ xáº£ kho vá»›i má»©c giÃ¡ thanh lÃ½ sáº­p sÃ n, phÃ¹ há»£p mua kÃ¨m giÃ¡ tá»‘t.
+                Khám phá các mẫu tất vớ, bao tay được chọn lọc, phù hợp sử dụng hằng ngày.
               </p>
             </div>
 
@@ -497,7 +497,7 @@ export default async function HomePage() {
                 href="/products"
                 className="inline-flex items-center gap-1.5 text-xs font-bold text-white hover:text-gray-900 hover:bg-white px-4 py-2 rounded-brand-sm bg-white/10 border border-white/20 transition-all"
               >
-                Xem lÃ´ xáº£ kho
+                Xem tất cả sản phẩm
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
