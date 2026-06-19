@@ -1,6 +1,7 @@
 import { ShoppingBag, Sparkles, ArrowRight, ShieldCheck, Truck, RotateCcw, Flame } from 'lucide-react';
 import Link from 'next/link';
 import prisma from '@/lib/prisma';
+import WishlistButton from '@/components/ui/WishlistButton';
 
 const DEFAULT_PRODUCT_IMAGE = '/uploads/products/tat-da-min.jpg';
 const CATEGORY_IMAGE_FALLBACKS = [
@@ -309,6 +310,11 @@ export default async function HomePage() {
                     <span className="absolute top-3 left-3 px-2 py-0.5 rounded bg-brand-600 text-white text-[8px] font-black uppercase tracking-widest shadow-xs">
                       Nổi bật
                     </span>
+                    <WishlistButton
+                      productSlug={product.slug}
+                      productId={product.id}
+                      className="absolute top-3 right-3 z-10"
+                    />
                   </div>
 
                   <div className="p-4 flex-1 flex flex-col justify-between space-y-4">
@@ -404,6 +410,11 @@ export default async function HomePage() {
                       </span>
                     )}
 
+                    <WishlistButton
+                      productSlug={product.slug}
+                      productId={product.id}
+                      className="absolute top-3 right-3 z-10"
+                    />
                   </div>
 
                   {/* Body Text */}

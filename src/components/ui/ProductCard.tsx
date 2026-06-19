@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import { useCart } from '@/hooks';
-import { Heart } from 'lucide-react';
+import WishlistButton from '@/components/ui/WishlistButton';
 
 const DEFAULT_PRODUCT_IMAGE = '/uploads/products/tat-da-min.jpg';
 
@@ -32,55 +32,6 @@ export interface ProductCardProps {
 
 export default function ProductCard({ product }: ProductCardProps) {
   const { addItem } = useCart();
-  const [isWishlisted, setIsWishlisted] = useState(false);
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const stored = localStorage.getItem('hhsneaker_wishlist');
-      if (stored) {
-        try {
-          const list = JSON.parse(stored) as string[];
-          const isStoredBySlug = list.includes(product.slug);
-          const isStoredByLegacyId = list.includes(product.id);
-          setIsWishlisted(isStoredBySlug || isStoredByLegacyId);
-
-          if (isStoredByLegacyId) {
-            const migratedList = Array.from(
-              new Set([...list.filter((item) => item !== product.id), product.slug]),
-            );
-            localStorage.setItem('hhsneaker_wishlist', JSON.stringify(migratedList));
-          }
-        } catch (e) {
-          console.error(e);
-        }
-      }
-    }
-  }, [product.id, product.slug]);
-
-  const toggleWishlist = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (typeof window !== 'undefined') {
-      const stored = localStorage.getItem('hhsneaker_wishlist');
-      let list: string[] = [];
-      if (stored) {
-        try {
-          list = JSON.parse(stored) as string[];
-        } catch (e) {
-          console.error(e);
-        }
-      }
-      if (list.includes(product.slug) || list.includes(product.id)) {
-        list = list.filter(item => item !== product.slug && item !== product.id);
-        setIsWishlisted(false);
-      } else {
-        list.push(product.slug);
-        setIsWishlisted(true);
-      }
-      localStorage.setItem('hhsneaker_wishlist', JSON.stringify(list));
-      window.dispatchEvent(new Event('storage'));
-    }
-  };
 
   const firstVariant = product.variants?.[0];
   const price = firstVariant ? Number(firstVariant.retailPrice) : 0;
@@ -125,13 +76,11 @@ export default function ProductCard({ product }: ProductCardProps) {
         )}
 
         {/* Wishlist Heart Overlay */}
-        <button
-          onClick={toggleWishlist}
-          className="absolute top-2 right-2 z-10 p-2 rounded-full bg-white/80 hover:bg-white text-gray-500 hover:text-red-500 shadow-xs transition-all duration-200"
-          title={isWishlisted ? 'Xóa khỏi yêu thích' : 'Thêm vào yêu thích'}
-        >
-          <Heart className={`w-4 h-4 transition-colors ${isWishlisted ? 'text-red-500 fill-red-500' : 'text-gray-400'}`} />
-        </button>
+        <WishlistButton
+          productSlug={product.slug}
+          productId={product.id}
+          className="absolute top-2 right-2 z-10"
+        />
 
         {isOutOfStock && (
           <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
