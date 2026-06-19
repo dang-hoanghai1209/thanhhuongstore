@@ -177,18 +177,22 @@ export default function Header() {
   return (
     <>
       {/* Top Banner Message */}
-      <div className="bg-primary-container text-white py-2 px-4 text-center text-[10px] font-extrabold uppercase tracking-widest border-b border-white/5 flex justify-between items-center max-w-7xl mx-auto sm:px-8 lg:px-12 rounded-t-lg">
-        <div className="hidden sm:flex items-center gap-1">
-          <span className="material-symbols-outlined text-accent-gold text-[14px]">phone</span>
-          Hotline: 0794601209
-        </div>
-        <div className="mx-auto sm:mx-0 flex items-center gap-1.5 justify-center">
-          <span className="material-symbols-outlined text-accent-pink text-[14px] animate-pulse">auto_awesome</span>
-          <span>Freeship cho đơn từ 500.000đ</span>
-        </div>
-        <div className="hidden md:flex items-center gap-1">
-          <span className="material-symbols-outlined text-white/70 text-[14px]">fiber_new</span>
-          Xem sản phẩm mới mỗi ngày
+      <div className="bg-brand-950 text-white py-3 px-4 border-b border-white/5 shadow-2xs">
+        <div className="max-w-7xl mx-auto flex flex-wrap justify-center items-center gap-x-6 gap-y-2 text-[10px] sm:text-xs font-black uppercase tracking-wider text-center">
+          <div className="flex items-center gap-1.5">
+            <span className="bg-accent-gold text-brand-950 text-[9px] font-black px-1.5 py-0.5 rounded-sm uppercase tracking-wide shrink-0">HOT</span>
+            <span>Freeship cho đơn từ 500.000đ</span>
+          </div>
+          <span className="text-white/30 hidden sm:inline">•</span>
+          <div className="flex items-center gap-1.5">
+            <span className="bg-accent-pink text-white text-[9px] font-black px-1.5 py-0.5 rounded-sm uppercase tracking-wide shrink-0">MỚI</span>
+            <span>Tất vớ, bao tay cập nhật liên tục</span>
+          </div>
+          <span className="text-white/30 hidden md:inline">•</span>
+          <div className="flex items-center gap-1.5">
+            <span className="bg-accent-teal text-white text-[9px] font-black px-1.5 py-0.5 rounded-sm uppercase tracking-wide shrink-0">SẢN PHẨM MỚI</span>
+            <span>Xem sản phẩm mới mỗi ngày</span>
+          </div>
         </div>
       </div>
 
@@ -604,8 +608,8 @@ export default function Header() {
             {/* Mobile Footer Area */}
             <div className="pt-6 border-t border-gray-100 text-xs text-gray-400 space-y-2 font-medium">
               <p className="flex items-center gap-1">
-                <span className="material-symbols-outlined text-primary text-[16px]">phone</span>
-                Hotline: 0794601209
+                <span className="material-symbols-outlined text-primary text-[16px]">chat</span>
+                Hỗ trợ: Chat trực tuyến trên website
               </p>
               <p className="flex items-center gap-1">
                 <span className="material-symbols-outlined text-primary text-[16px]">mail</span>

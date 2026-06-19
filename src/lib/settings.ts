@@ -49,9 +49,9 @@ export interface SystemSettings {
 const DEFAULT_SETTINGS: SystemSettings = {
   storeInfo: {
     name: "Hoàng Hải Sneaker",
-    phone: "0794601209",
+    phone: "",
     email: "contact@hhsneaker.id.vn",
-    address: "Tổ 15 Ngọc Sơn, Ngọc Hiệp, Nha Trang, Khánh Hoà",
+    address: "Đang cập nhật...",
     businessHours: "08:00 - 22:00 (Hàng ngày)",
     footerDescription: "Hoàng Hải Sneaker chuyên sỉ tất, vớ, bao tay và phụ kiện thời trang giá tốt."
   },
@@ -69,10 +69,10 @@ const DEFAULT_SETTINGS: SystemSettings = {
     estimatedDelivery: "Từ 2 - 4 ngày làm việc tùy thuộc vào địa điểm của bạn."
   },
   supportSettings: {
-    hotline: "0794601209",
+    hotline: "",
     supportEmail: "support@hhsneaker.id.vn",
     facebookLink: "https://facebook.com/hhsneaker.id.vn",
-    zaloLink: "https://zalo.me/0794601209"
+    zaloLink: ""
   },
   policySummary: {
     shipping: "Giao hàng toàn quốc với phí ship đồng giá 30,000đ. Miễn phí vận chuyển cho đơn hàng từ 500,000đ trở lên.",

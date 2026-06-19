@@ -140,7 +140,7 @@ export default function OrderLookupPage() {
               <input
                 type="text"
                 required
-                placeholder="Ví dụ: 0794601209 hoặc support@hhsneaker.id.vn"
+                placeholder="Ví dụ: support@hhsneaker.id.vn hoặc 09xxxxxxxx"
                 value={phoneOrEmail}
                 onChange={(e) => setPhoneOrEmail(e.target.value)}
                 className="input-standard text-xs font-semibold"

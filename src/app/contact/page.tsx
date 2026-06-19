@@ -81,15 +81,15 @@ export default function ContactPage() {
             </h3>
             
             <div className="space-y-4">
-              {/* Phone info */}
+              {/* Chat support info */}
               <div className="flex gap-3">
                 <div className="w-8 h-8 rounded-lg bg-primary/5 text-primary flex items-center justify-center shrink-0">
-                  <span className="material-symbols-outlined text-[18px]">phone</span>
+                  <span className="material-symbols-outlined text-[18px]">chat</span>
                 </div>
                 <div className="text-xs font-medium text-on-surface-variant">
-                  <span className="text-[10px] text-gray-400 font-bold uppercase block">Hotline hỗ trợ</span>
-                  <p className="text-on-surface font-bold">0794601209</p>
-                  <p>Hỗ trợ khẩn cấp từ 08:00 - 21:00</p>
+                  <span className="text-[10px] text-gray-400 font-bold uppercase block">Hỗ trợ trực tuyến</span>
+                  <p className="text-on-surface font-bold">Chat trên website</p>
+                  <p>Hỗ trợ giải đáp nhanh từ 08:00 - 21:30</p>
                 </div>
               </div>
 
@@ -112,8 +112,7 @@ export default function ContactPage() {
                 </div>
                 <div className="text-xs font-medium text-on-surface-variant">
                   <span className="text-[10px] text-gray-400 font-bold uppercase block">Địa chỉ kho hàng</span>
-                  <p className="text-on-surface font-bold">Tổ 15 Ngọc Sơn, Ngọc Hiệp</p>
-                  <p>Nha Trang, Khánh Hoà</p>
+                  <p className="text-on-surface font-bold">Đang cập nhật...</p>
                 </div>
               </div>
 
@@ -193,7 +192,7 @@ export default function ContactPage() {
                 <input
                   type="tel"
                   required
-                  placeholder="0794601209"
+                  placeholder="Ví dụ: 09xxxxxxxx"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   className="input-standard"

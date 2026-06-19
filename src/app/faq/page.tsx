@@ -37,7 +37,7 @@ export default function FAQPage() {
         {
           id: 3,
           question: 'Tôi có được thay đổi thông tin đơn hàng sau khi đặt mua không?',
-          answer: 'Nếu đơn hàng đang ở trạng thái "Chờ xử lý" (Pending), bạn có thể liên hệ ngay hotline 0794601209 để nhờ nhân viên hỗ trợ thay đổi size, màu sắc hoặc địa chỉ giao nhận. Trường hợp đơn hàng đã chuyển sang trạng thái đóng gói hoặc vận chuyển thì thông tin sản phẩm không thể chỉnh sửa.'
+          answer: 'Nếu đơn hàng đang ở trạng thái "Chờ xử lý" (Pending), bạn có thể liên hệ ngay qua kênh chatbox trực tuyến hoặc gửi thông tin qua biểu mẫu liên hệ để nhờ nhân viên hỗ trợ thay đổi size, màu sắc hoặc địa chỉ giao nhận. Trường hợp đơn hàng đã chuyển sang trạng thái đóng gói hoặc vận chuyển thì thông tin sản phẩm không thể chỉnh sửa.'
         }
       ]
     },
