@@ -306,7 +306,7 @@ export default function CheckoutPage() {
                     type="tel"
                     id="phone"
                     required
-                    placeholder="0912345678"
+                    placeholder="0794601209"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     className="w-full px-4 py-3 border border-gray-200 rounded-brand-md text-xs font-bold focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/10 transition"

@@ -2,6 +2,7 @@ import { ShoppingBag, Sparkles, ArrowRight, ShieldCheck, Truck, RotateCcw, Flame
 import Link from 'next/link';
 import prisma from '@/lib/prisma';
 import WishlistButton from '@/components/ui/WishlistButton';
+import HeroCarousel from '@/components/home/HeroCarousel';
 
 const DEFAULT_PRODUCT_IMAGE = '/uploads/products/tat-da-min.jpg';
 const CATEGORY_IMAGE_FALLBACKS = [
@@ -139,65 +140,8 @@ export default async function HomePage() {
   return (
     <main className="min-h-screen bg-[#FAF9F6] text-gray-900 pb-20">
 
-      {/* 1. HERO BANNER SECTION */}
-      <section className="relative overflow-hidden bg-gradient-to-r from-brand-950 via-brand-900 to-brand-850 text-white py-24 sm:py-32 px-6 sm:px-12 md:px-20 border-b border-white/5">
-        {/* Glowing Ambient Backdrops */}
-        <div className="absolute top-0 right-0 w-[450px] h-[450px] bg-brand-500 rounded-full filter blur-3xl opacity-20 -mr-20 -mt-20 animate-float" />
-        <div className="absolute bottom-0 left-0 w-[350px] h-[350px] bg-accent-pink rounded-full filter blur-3xl opacity-15 -ml-20 -mb-20" />
-
-        <div className="relative max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-12">
-          
-          <div className="text-center lg:text-left space-y-6">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-brand-200 text-xs font-black uppercase tracking-widest mx-auto lg:mx-0">
-              <Flame className="w-3.5 h-3.5 text-accent-pink animate-pulse" />
-              Sản Phẩm Chất Lượng
-            </div>
-
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight leading-none text-white uppercase">
-              Hoàng Hải Sneaker <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-accent-gold via-accent-pink to-brand-300 text-2xl sm:text-3xl md:text-4xl block mt-2">
-                Bộ sưu tập tất, vớ, bao tay chất lượng
-              </span>
-            </h1>
-
-            <p className="text-sm sm:text-base text-brand-100 max-w-xl font-medium leading-relaxed mx-auto lg:mx-0">
-              Hoàng Hải Sneaker giới thiệu bộ sưu tập tất, vớ thời trang nam nữ, bao tay bảo hộ lao động dệt sợi tự nhiên và các phụ kiện thời trang.
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-2">
-              <Link
-                href="/products"
-                className="px-8 py-4 rounded-brand-md bg-white text-gray-950 hover:bg-gray-100 font-extrabold text-xs uppercase tracking-wider transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 flex items-center justify-center gap-2"
-              >
-                Xem sản phẩm
-                <ArrowRight className="w-4 h-4 text-brand-600" />
-              </Link>
-              <Link
-                href="/contact"
-                className="px-8 py-4 rounded-brand-md bg-white/10 hover:bg-white/15 text-white font-extrabold text-xs uppercase tracking-wider transition-all border border-white/20 backdrop-blur-xs flex items-center justify-center"
-              >
-                Liên hệ tư vấn
-              </Link>
-            </div>
-          </div>
-
-          {/* Quick Marketing Grid */}
-          <div className="grid grid-cols-2 gap-4 w-full lg:w-auto min-w-[280px] sm:min-w-[400px]">
-            {[
-              { title: "Thiết Kế Đẹp", desc: "Mẫu mã thời trang đa dạng" },
-              { title: "Sản phẩm chọn lọc", desc: "Tất vớ, bao tay chất lượng" }
-            ].map((box, idx) => (
-              <div key={idx} className="p-6 rounded-brand-lg bg-white/5 backdrop-blur-md border border-white/10 hover:border-white/30 hover:bg-white/10 transition-all duration-300">
-                <span className="w-5 h-5 rounded bg-brand-500/20 text-brand-300 flex items-center justify-center text-[10px] font-black mb-3">
-                  0{idx+1}
-                </span>
-                <h4 className="text-xs font-black text-white uppercase tracking-wider">{box.title}</h4>
-                <p className="text-[10px] text-brand-200 mt-1">{box.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* 1. HERO CAROUSEL SECTION */}
+      <HeroCarousel />
 
       {/* 2. TRUST HIGHLIGHT BAR */}
       <section className="bg-white border-b border-gray-100 py-6">

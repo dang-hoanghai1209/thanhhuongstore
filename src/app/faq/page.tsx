@@ -37,7 +37,7 @@ export default function FAQPage() {
         {
           id: 3,
           question: 'Tôi có được thay đổi thông tin đơn hàng sau khi đặt mua không?',
-          answer: 'Nếu đơn hàng đang ở trạng thái "Chờ xử lý" (Pending), bạn có thể liên hệ ngay hotline 0987.654.321 để nhờ nhân viên hỗ trợ thay đổi size, màu sắc hoặc địa chỉ giao nhận. Trường hợp đơn hàng đã chuyển sang trạng thái đóng gói hoặc vận chuyển thì thông tin sản phẩm không thể chỉnh sửa.'
+          answer: 'Nếu đơn hàng đang ở trạng thái "Chờ xử lý" (Pending), bạn có thể liên hệ ngay hotline 0794601209 để nhờ nhân viên hỗ trợ thay đổi size, màu sắc hoặc địa chỉ giao nhận. Trường hợp đơn hàng đã chuyển sang trạng thái đóng gói hoặc vận chuyển thì thông tin sản phẩm không thể chỉnh sửa.'
         }
       ]
     },
@@ -48,7 +48,7 @@ export default function FAQPage() {
         {
           id: 4,
           question: 'Thời gian giao nhận hàng thường mất bao lâu?',
-          answer: 'Đối với khu vực nội thành TP. Hồ Chí Minh và Hà Nội, thời gian giao hàng dao động từ 1 - 2 ngày làm việc. Đối với các tỉnh thành khác, đơn hàng thường được giao từ 3 - 5 ngày. Chúng tôi cũng hỗ trợ giao hàng hỏa tốc trong ngày tại TP.HCM nếu có yêu cầu.'
+          answer: 'Đối với khu vực nội thành Nha Trang, thời gian giao hàng dao động từ 1 - 2 ngày làm việc. Đối với các tỉnh thành khác, đơn hàng thường được giao từ 3 - 5 ngày. Chúng tôi cũng hỗ trợ giao hàng hỏa tốc trong ngày tại Nha Trang nếu có yêu cầu.'
         },
         {
           id: 5,

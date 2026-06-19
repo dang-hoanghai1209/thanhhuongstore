@@ -25,7 +25,7 @@ export default function ShippingPolicyPage() {
           </p>
           <ul className="list-disc pl-5 space-y-1">
             <li>**Giao hàng tiêu chuẩn toàn quốc**: Hợp tác với các đơn vị vận chuyển lớn (GHTK, Viettel Post, GHN).</li>
-            <li>**Giao hàng hỏa tốc trong ngày**: Chỉ áp dụng cho khu vực nội thành TP. Hồ Chí Minh với các đơn hàng cần gấp.</li>
+            <li>**Giao hàng hỏa tốc trong ngày**: Chỉ áp dụng cho khu vực nội thành Nha Trang với các đơn hàng cần gấp.</li>
             <li>**Giao qua xe khách/Chành xe**: Áp dụng đối với các đơn hàng số lượng lớn theo yêu cầu của khách hàng.</li>
           </ul>
         </div>
@@ -49,7 +49,7 @@ export default function ShippingPolicyPage() {
             3. Thời gian nhận hàng dự kiến
           </h3>
           <ul className="list-disc pl-5 space-y-1">
-            <li>**Nội thành TP.HCM**: 1 - 2 ngày làm việc kể từ thời điểm xác nhận đơn hàng thành công.</li>
+            <li>**Nội thành Nha Trang**: 1 - 2 ngày làm việc kể từ thời điểm xác nhận đơn hàng thành công.</li>
             <li>**Khu vực trung tâm Tỉnh/Thành khác**: 2 - 3 ngày làm việc.</li>
             <li>**Khu vực Huyện/Xã vùng sâu vùng xa**: 3 - 5 ngày làm việc.</li>
           </ul>

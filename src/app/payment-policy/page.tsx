@@ -34,10 +34,10 @@ export default function PaymentPolicyPage() {
           <p>Dành cho khách hàng muốn chuyển khoản thanh toán trước đơn hàng:</p>
           <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3 text-xs font-mono text-on-surface max-w-md">
             <div>
-              <p className="font-bold text-[10px] text-gray-400 uppercase">Tài khoản Ngân hàng Techcombank</p>
+              <p className="font-bold text-[10px] text-gray-400 uppercase">Thông tin chuyển khoản</p>
+              <p>Ngân hàng: **Techcombank**</p>
               <p>Số tài khoản: **3988899979**</p>
               <p>Chủ tài khoản: **DANG HOANG HAI**</p>
-              <p>Chi nhánh: TP. Hồ Chí Minh</p>
             </div>
             <div className="pt-2 border-t border-slate-200/60">
               <p className="font-bold text-[10px] text-gray-400 uppercase">Cú pháp chuyển khoản bắt buộc</p>

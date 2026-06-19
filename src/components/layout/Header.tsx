@@ -180,7 +180,7 @@ export default function Header() {
       <div className="bg-primary-container text-white py-2 px-4 text-center text-[10px] font-extrabold uppercase tracking-widest border-b border-white/5 flex justify-between items-center max-w-7xl mx-auto sm:px-8 lg:px-12 rounded-t-lg">
         <div className="hidden sm:flex items-center gap-1">
           <span className="material-symbols-outlined text-accent-gold text-[14px]">phone</span>
-          Hotline: 0987.654.321
+          Hotline: 0794601209
         </div>
         <div className="mx-auto sm:mx-0 flex items-center gap-1.5 justify-center">
           <span className="material-symbols-outlined text-accent-pink text-[14px] animate-pulse">auto_awesome</span>
@@ -605,7 +605,7 @@ export default function Header() {
             <div className="pt-6 border-t border-gray-100 text-xs text-gray-400 space-y-2 font-medium">
               <p className="flex items-center gap-1">
                 <span className="material-symbols-outlined text-primary text-[16px]">phone</span>
-                Hotline: 0987.654.321
+                Hotline: 0794601209
               </p>
               <p className="flex items-center gap-1">
                 <span className="material-symbols-outlined text-primary text-[16px]">mail</span>

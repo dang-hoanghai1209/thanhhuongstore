@@ -10,7 +10,7 @@ export default function Footer() {
             <span className="material-symbols-outlined text-primary text-[18px]">home_pin</span>
             Địa chỉ kho hàng
           </h4>
-          <p className="text-xs text-gray-500 font-medium">123 Đường Ba Tháng Hai, Phường 11, Quận 10, TP. Hồ Chí Minh</p>
+          <p className="text-xs text-gray-500 font-medium">Tổ 15 Ngọc Sơn, Ngọc Hiệp, Nha Trang, Khánh Hoà</p>
         </div>
         <div className="flex flex-col items-center md:items-start space-y-2">
           <h4 className="text-xs font-bold text-gray-900 uppercase tracking-wider flex items-center gap-1">
@@ -74,7 +74,7 @@ export default function Footer() {
           <div className="space-y-2.5 text-xs font-semibold text-gray-500">
             <p className="flex items-center gap-2">
               <span className="material-symbols-outlined text-primary text-[16px]">phone</span>
-              0987.654.321
+              0794601209
             </p>
             <p className="flex items-center gap-2">
               <span className="material-symbols-outlined text-primary text-[16px]">mail</span>

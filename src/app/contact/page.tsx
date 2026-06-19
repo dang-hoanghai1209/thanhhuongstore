@@ -88,7 +88,7 @@ export default function ContactPage() {
                 </div>
                 <div className="text-xs font-medium text-on-surface-variant">
                   <span className="text-[10px] text-gray-400 font-bold uppercase block">Hotline hỗ trợ</span>
-                  <p className="text-on-surface font-bold">0987.654.321</p>
+                  <p className="text-on-surface font-bold">0794601209</p>
                   <p>Hỗ trợ khẩn cấp từ 08:00 - 21:00</p>
                 </div>
               </div>
@@ -112,8 +112,8 @@ export default function ContactPage() {
                 </div>
                 <div className="text-xs font-medium text-on-surface-variant">
                   <span className="text-[10px] text-gray-400 font-bold uppercase block">Địa chỉ kho hàng</span>
-                  <p className="text-on-surface font-bold">123 Đường Ba Tháng Hai</p>
-                  <p>Phường 11, Quận 10, TP. Hồ Chí Minh</p>
+                  <p className="text-on-surface font-bold">Tổ 15 Ngọc Sơn, Ngọc Hiệp</p>
+                  <p>Nha Trang, Khánh Hoà</p>
                 </div>
               </div>
 
@@ -193,7 +193,7 @@ export default function ContactPage() {
                 <input
                   type="tel"
                   required
-                  placeholder="0912345678"
+                  placeholder="0794601209"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   className="input-standard"
