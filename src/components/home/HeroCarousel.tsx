@@ -6,7 +6,7 @@ import { Flame, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface SlideData {
   id: number;
-  type: 'purple' | 'image';
+  type: 'purple' | 'image' | 'banner-only';
   imageUrl?: string;
   label: string;
   title: string;
@@ -48,6 +48,17 @@ const slides: SlideData[] = [
     description: 'Chuyên cung cấp các loại tất vớ thời trang và bao tay lao động dệt sợi tự nhiên chất lượng cao.',
     ctaUrl: '/products',
     ctaText: 'Khám phá ngay',
+  },
+  {
+    id: 4,
+    type: 'banner-only',
+    imageUrl: '/uploads/banners/sneaker-coming-soon-carousel.png',
+    label: '',
+    title: 'Sắp ra mắt sneaker mới',
+    subtitle: '',
+    description: '',
+    ctaUrl: '/products',
+    ctaText: 'Xem sản phẩm hiện có',
   },
 ];
 
@@ -168,6 +179,29 @@ export default function HeroCarousel() {
                       ))}
                     </div>
                   </div>
+                </div>
+              ) : slide.type === 'banner-only' ? (
+                /* Slide 4 - Banner Only Slide (Text is already in the image) */
+                <div className="relative w-full h-full bg-[#FAF9F6]">
+                  {/* Background Image */}
+                  <img
+                    src={slide.imageUrl}
+                    alt={slide.title}
+                    className="absolute inset-0 w-full h-full object-cover object-center"
+                  />
+                  
+                  {/* Render CTA button if defined */}
+                  {slide.ctaText && (
+                    <div className="absolute bottom-10 left-6 sm:left-12 md:left-20 z-20">
+                      <Link
+                        href={slide.ctaUrl}
+                        className="inline-flex items-center justify-center gap-2 px-5 py-3 sm:px-6 sm:py-3.5 rounded-brand-md bg-brand-950 hover:bg-brand-900 text-white font-extrabold text-xs uppercase tracking-wider transition-all shadow-md active:scale-95"
+                      >
+                        {slide.ctaText}
+                        <ArrowRight className="w-4 h-4 text-accent-gold" />
+                      </Link>
+                    </div>
+                  )}
                 </div>
               ) : (
                 /* Slide 2 & 3 - Image Slides */
