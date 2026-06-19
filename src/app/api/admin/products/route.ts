@@ -32,9 +32,17 @@ const wholesaleTierSchema = z.object({
   discount: z.coerce.number().min(0).max(100, 'Chiết khấu không được vượt quá 100'),
 });
 
+const optionalTrimmedText = (maxLength: number) =>
+  z.preprocess(
+    (value) => (typeof value === 'string' ? value.trim() || undefined : value),
+    z.string().max(maxLength).optional(),
+  );
+
 const productFieldsSchema = z.object({
   name: z.string().trim().min(1, 'Tên sản phẩm không được để trống'),
   slug: z.string().trim().min(1).optional(),
+  shortDescription: optionalTrimmedText(300),
+  description: optionalTrimmedText(3000),
   categoryId: z.string().trim().min(1, 'Danh mục không được để trống'),
   sizeType: z.enum(['SOCK', 'SWIMWEAR', 'UNDERWEAR', 'SHOE', 'ACCESSORY']),
   wholesaleTiers: z.array(wholesaleTierSchema).optional(),

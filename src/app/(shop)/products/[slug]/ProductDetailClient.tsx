@@ -47,6 +47,8 @@ interface Product {
   id: string;
   name: string;
   slug: string;
+  shortDescription?: string | null;
+  description?: string | null;
   category: Category;
   images: Image[];
   variants: Variant[];
@@ -58,6 +60,10 @@ interface ProductDetailClientProps {
 
 export default function ProductDetailClient({ product }: ProductDetailClientProps) {
   const { name, category, images, variants } = product;
+  const fallbackDescription =
+    'Liên hệ Hoàng Hải Sneaker để được tư vấn mẫu còn sẵn, màu sắc và thông tin sản phẩm phù hợp.';
+  const shortDescription = product.shortDescription?.trim() || '';
+  const detailDescription = product.description?.trim() || fallbackDescription;
 
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [isAsking, setIsAsking] = useState(false);
@@ -297,6 +303,11 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
               <p className="text-[11px] font-bold text-gray-450 uppercase tracking-wider">
                 Mã sản phẩm: {product.slug}
               </p>
+              {shortDescription && (
+                <p className="text-sm text-gray-600 leading-relaxed pt-2">
+                  {shortDescription}
+                </p>
+              )}
             </div>
 
             {/* Display Retail Price */}
@@ -485,49 +496,38 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
               <div className="text-[11px] sm:text-xs text-gray-500 leading-relaxed space-y-2">
                 {activeTab === 'desc' && (
                   <div className="space-y-3">
-                    <p>
-                      Sản phẩm được gia công dệt sợi tỉ mỉ trên chất liệu thun cotton organic và thun Ý mềm mại dẻo dai. Dáng thiết kế thoải mái nâng niu cơ thể, thấm hút mồ hôi và cực kỳ thoáng khí, thích hợp mặc hàng ngày.
+                    {shortDescription && (
+                      <p className="font-semibold text-gray-700">
+                        {shortDescription}
+                      </p>
+                    )}
+                    <p className="whitespace-pre-line">
+                      {detailDescription}
                     </p>
-                    <ul className="list-disc list-inside space-y-1 text-gray-600 font-medium pl-1">
-                      <li>Thoáng khí, giảm mùi hôi tự nhiên.</li>
-                      <li>Co giãn đa chiều, giữ dáng tốt sau nhiều lần giặt.</li>
-                      <li>Sợi vải mềm mại, thân thiện với làn da.</li>
-                    </ul>
                   </div>
                 )}
 
                 {activeTab === 'size' && (
                   <div className="space-y-2">
-                    <p>Bảng gợi ý lựa chọn kích thước phù hợp tiêu chuẩn vóc dáng Việt Nam:</p>
+                    <p>Các lựa chọn kích thước và màu sắc đang có theo từng biến thể sản phẩm:</p>
                     <table className="w-full text-center border-collapse border border-gray-200 font-medium">
                       <thead>
                         <tr className="bg-gray-50 text-gray-700 font-bold">
                           <th className="border border-gray-200 py-1.5">Size</th>
-                          <th className="border border-gray-200 py-1.5">Vòng ngực / eo</th>
-                          <th className="border border-gray-200 py-1.5">Cân nặng</th>
+                          <th className="border border-gray-200 py-1.5">Màu sắc</th>
+                          <th className="border border-gray-200 py-1.5">Tình trạng</th>
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
-                          <td className="border border-gray-200 py-1.5">S / 34</td>
-                          <td className="border border-gray-200 py-1.5">78 - 84 cm</td>
-                          <td className="border border-gray-200 py-1.5">40 - 48 kg</td>
-                        </tr>
-                        <tr>
-                          <td className="border border-gray-200 py-1.5">M / 36</td>
-                          <td className="border border-gray-200 py-1.5">85 - 90 cm</td>
-                          <td className="border border-gray-200 py-1.5">49 - 55 kg</td>
-                        </tr>
-                        <tr>
-                          <td className="border border-gray-200 py-1.5">L / 38</td>
-                          <td className="border border-gray-200 py-1.5">91 - 96 cm</td>
-                          <td className="border border-gray-200 py-1.5">56 - 62 kg</td>
-                        </tr>
-                        <tr>
-                          <td className="border border-gray-200 py-1.5">XL / 40</td>
-                          <td className="border border-gray-200 py-1.5">97 - 103 cm</td>
-                          <td className="border border-gray-200 py-1.5">63 - 70 kg</td>
-                        </tr>
+                        {variants.map((variant) => (
+                          <tr key={variant.id}>
+                            <td className="border border-gray-200 py-1.5">{variant.size}</td>
+                            <td className="border border-gray-200 py-1.5">{variant.color}</td>
+                            <td className="border border-gray-200 py-1.5">
+                              {variant.stock > 0 ? 'Còn hàng' : 'Tạm hết hàng'}
+                            </td>
+                          </tr>
+                        ))}
                       </tbody>
                     </table>
                   </div>
@@ -547,7 +547,7 @@ export default function ProductDetailClient({ product }: ProductDetailClientProp
               </div>
               <div className="flex flex-col items-center gap-1.5">
                 <ShieldCheck className="w-4 h-4 text-brand-600" />
-                <span>Hàng Chính Hãng</span>
+                <span>Tư Vấn Sản Phẩm</span>
               </div>
             </div>
 

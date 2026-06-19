@@ -18,6 +18,7 @@ export async function generateMetadata({ params }: ProductDetailPageProps) {
     },
     select: {
       name: true,
+      shortDescription: true,
       category: {
         select: {
           name: true
@@ -46,7 +47,9 @@ export async function generateMetadata({ params }: ProductDetailPageProps) {
       : `${baseUrl}${primaryImage.url}`
     : `${baseUrl}/images/default-product.jpg`;
 
-  const metaDescription = `Xem thông tin, hình ảnh và giá bán ${product.name} tại Hoàng Hải Sneaker. Liên hệ để được tư vấn mẫu còn sẵn.`;
+  const metaDescription =
+    product.shortDescription?.trim() ||
+    `Xem thông tin, hình ảnh và giá bán ${product.name} tại Hoàng Hải Sneaker. Liên hệ để được tư vấn mẫu còn sẵn.`;
 
   return {
     title: `${product.name} | Hoàng Hải Sneaker`,

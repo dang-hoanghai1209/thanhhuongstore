@@ -45,6 +45,8 @@ interface Product {
   id: string;
   name: string;
   slug: string;
+  shortDescription?: string | null;
+  description?: string | null;
   categoryId: string;
   sizeType: string;
   isActive: boolean;
@@ -79,7 +81,8 @@ export default function ProductsClient({ initialProducts, categories }: Products
   const [formCategory, setFormCategory] = useState('');
   const [formIsActive, setFormIsActive] = useState(true);
   const [formImageUrl, setFormImageUrl] = useState('');
-  const [formDescription, setFormDescription] = useState(''); // Simulated in UI
+  const [formShortDescription, setFormShortDescription] = useState('');
+  const [formDescription, setFormDescription] = useState('');
   const [formVariants, setFormVariants] = useState<ProductVariant[]>([]);
 
   // Toast state
@@ -159,6 +162,7 @@ export default function ProductsClient({ initialProducts, categories }: Products
     setFormCategory(categories[0]?.id || '');
     setFormIsActive(true);
     setFormImageUrl('');
+    setFormShortDescription('');
     setFormDescription('');
     setUploadError(null);
     setIsUploading(false);
@@ -174,7 +178,8 @@ export default function ProductsClient({ initialProducts, categories }: Products
     setFormCategory(product.categoryId);
     setFormIsActive(product.isActive);
     setFormImageUrl(product.images.find(img => img.isPrimary)?.url || '');
-    setFormDescription(''); // placeholder
+    setFormShortDescription(product.shortDescription || '');
+    setFormDescription(product.description || '');
     setUploadError(null);
     setIsUploading(false);
     setFormVariants(product.variants.map(v => ({
@@ -233,6 +238,14 @@ export default function ProductsClient({ initialProducts, categories }: Products
       showToast('Sản phẩm phải có ít nhất 1 biến thể', 'error');
       return;
     }
+    if (formShortDescription.trim().length > 300) {
+      showToast('Mô tả ngắn không được vượt quá 300 ký tự', 'error');
+      return;
+    }
+    if (formDescription.trim().length > 3000) {
+      showToast('Mô tả chi tiết không được vượt quá 3000 ký tự', 'error');
+      return;
+    }
 
     setSaving(true);
     try {
@@ -244,6 +257,8 @@ export default function ProductsClient({ initialProducts, categories }: Products
         // Edit Mode
         const res = await updateProductAction(editingProduct.id, {
           name: formName,
+          shortDescription: formShortDescription,
+          description: formDescription,
           categoryId: formCategory,
           isActive: formIsActive,
           images: imagesPayload,
@@ -257,6 +272,8 @@ export default function ProductsClient({ initialProducts, categories }: Products
           setProducts(prev => prev.map(p => p.id === editingProduct.id ? {
             ...p,
             name: formName,
+            shortDescription: formShortDescription.trim() || null,
+            description: formDescription.trim() || null,
             categoryId: formCategory,
             isActive: formIsActive,
             category: { name: catName },
@@ -271,6 +288,8 @@ export default function ProductsClient({ initialProducts, categories }: Products
         // Add Mode
         const res = await createProductAction({
           name: formName,
+          shortDescription: formShortDescription,
+          description: formDescription,
           categoryId: formCategory,
           isActive: formIsActive,
           images: imagesPayload,
@@ -284,6 +303,8 @@ export default function ProductsClient({ initialProducts, categories }: Products
             id: res.product.id,
             name: res.product.name,
             slug: res.product.slug,
+            shortDescription: res.product.shortDescription,
+            description: res.product.description,
             categoryId: res.product.categoryId,
             sizeType: res.product.sizeType,
             isActive: res.product.isActive,
@@ -633,10 +654,29 @@ export default function ProductsClient({ initialProducts, categories }: Products
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Mô tả sản phẩm (Simulated)</label>
+                    <div className="flex items-center justify-between gap-3 mb-2">
+                      <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider">Mô tả ngắn</label>
+                      <span className="text-[10px] text-slate-400">{formShortDescription.length}/300</span>
+                    </div>
                     <textarea
-                      placeholder="Mô tả tóm tắt chất liệu, công năng..."
+                      placeholder="Tóm tắt ngắn về kiểu dáng, màu sắc hoặc nhóm sản phẩm để hiển thị nhanh và dùng cho SEO."
                       rows={3}
+                      maxLength={300}
+                      value={formShortDescription}
+                      onChange={(e) => setFormShortDescription(e.target.value)}
+                      className="w-full bg-white border border-slate-200 px-4 py-2.5 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/10/20 focus:border-primary transition-shadow resize-none"
+                    />
+                  </div>
+
+                  <div>
+                    <div className="flex items-center justify-between gap-3 mb-2">
+                      <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider">Mô tả chi tiết</label>
+                      <span className="text-[10px] text-slate-400">{formDescription.length}/3000</span>
+                    </div>
+                    <textarea
+                      placeholder="Mô tả chi tiết thông tin sản phẩm, cách chọn mẫu, gợi ý sử dụng hoặc lưu ý tư vấn. Không ghi claim nếu chưa có dữ liệu xác thực."
+                      rows={6}
+                      maxLength={3000}
                       value={formDescription}
                       onChange={(e) => setFormDescription(e.target.value)}
                       className="w-full bg-white border border-slate-200 px-4 py-2.5 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary/10/20 focus:border-primary transition-shadow resize-none"

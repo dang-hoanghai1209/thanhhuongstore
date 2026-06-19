@@ -3,6 +3,9 @@
 import { randomUUID } from 'crypto';
 import prisma from '@/lib/prisma';
 
+const MAX_SHORT_DESCRIPTION_LENGTH = 300;
+const MAX_DESCRIPTION_LENGTH = 3000;
+
 function slugify(text: string) {
   return text
     .toString()
@@ -16,8 +19,20 @@ function slugify(text: string) {
     .replace(/-+/g, '-');
 }
 
+function normalizeOptionalText(value: string | undefined, maxLength: number, fieldLabel: string) {
+  const normalized = value?.trim() || null;
+
+  if (normalized && normalized.length > maxLength) {
+    throw new Error(`${fieldLabel} không được vượt quá ${maxLength} ký tự`);
+  }
+
+  return normalized;
+}
+
 export async function createProductAction(data: {
   name: string;
+  shortDescription?: string;
+  description?: string;
   categoryId: string;
   isActive: boolean;
   images: { url: string; isPrimary: boolean }[];
@@ -41,12 +56,24 @@ export async function createProductAction(data: {
     }
 
     const slug = `${slugify(data.name)}-${randomUUID().slice(0, 5)}`;
+    const shortDescription = normalizeOptionalText(
+      data.shortDescription,
+      MAX_SHORT_DESCRIPTION_LENGTH,
+      'Mô tả ngắn',
+    );
+    const description = normalizeOptionalText(
+      data.description,
+      MAX_DESCRIPTION_LENGTH,
+      'Mô tả chi tiết',
+    );
 
     const newProduct = await prisma.$transaction(async (tx) => {
       return tx.product.create({
         data: {
-          name: data.name,
+          name: data.name.trim(),
           slug,
+          shortDescription,
+          description,
           categoryId: data.categoryId,
           sizeType: category.sizeType,
           isActive: data.isActive,
@@ -83,6 +110,8 @@ export async function updateProductAction(
   productId: string,
   data: {
     name: string;
+    shortDescription?: string;
+    description?: string;
     categoryId: string;
     isActive: boolean;
     images: { url: string; isPrimary: boolean }[];
@@ -107,12 +136,25 @@ export async function updateProductAction(
       return { success: false, message: 'Danh mục không tồn tại' };
     }
 
+    const shortDescription = normalizeOptionalText(
+      data.shortDescription,
+      MAX_SHORT_DESCRIPTION_LENGTH,
+      'Mô tả ngắn',
+    );
+    const description = normalizeOptionalText(
+      data.description,
+      MAX_DESCRIPTION_LENGTH,
+      'Mô tả chi tiết',
+    );
+
     await prisma.$transaction(async (tx) => {
       // 1. Update basic info
       await tx.product.update({
         where: { id: productId },
         data: {
-          name: data.name,
+          name: data.name.trim(),
+          shortDescription,
+          description,
           categoryId: data.categoryId,
           sizeType: category.sizeType,
           isActive: data.isActive,
