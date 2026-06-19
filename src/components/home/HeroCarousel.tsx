@@ -52,7 +52,7 @@ const slides: SlideData[] = [
   {
     id: 4,
     type: 'banner-only',
-    imageUrl: '/uploads/banners/sneaker-coming-soon-carousel.png',
+    imageUrl: '/uploads/products/cap-nhat-carousel.jpg',
     label: '',
     title: 'Sắp ra mắt sneaker mới',
     subtitle: '',
